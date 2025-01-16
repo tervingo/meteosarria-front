@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import TemperatureBackground from './TemperatureBackground';
-import Typography from '@mui/material/Typography';
+// import GetTempColour from './GetTempColour';
+import { Typography, Card, CardMedia } from '@mui/material';
+// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import TemperatureBackground from './TemperatureBackground';
+import GetWindDir from './GetWindDir';
+import WindDirectionIndicator from './WindDirectionIndicator';
 
 const theme = createTheme();
 
@@ -18,6 +22,7 @@ function App() {
       try {
         const response = await axios.get('http://localhost:5000/api/live');
         setWeatherData(response.data);
+        console.log('Weather data:', response.data);
         setError(null);
       } catch (error) {
         console.error("Error fetching weather data:", error);
@@ -63,7 +68,17 @@ function App() {
             {formatDate(currentTime)}
           </Typography>
         </div>
-
+        <br/>
+        <Card>
+                <CardMedia
+                  component="img"
+                  width="200"
+                  height="200"
+                  image="/images/nubes.jpg"
+                  alt="Sample image"
+                  sx={{ objectFit: 'cover', }}
+                />
+              </Card>
         <div className="App">
           {loading && <p>Loading weather data...</p>}
           {error && <p className="error">{error}</p>}
@@ -71,30 +86,41 @@ function App() {
           {weatherData && (
             <div className="weather-container">
               <div className="weather-item">
-                <Typography variant="h1" style={{ fontSize: '8rem', background: 'none' }}>
+                <Typography variant="h1" style={{ fontSize: '10rem', background: 'none' }}>
                   {weatherData.external_temperature}°
                 </Typography>
                 <Typography variant="h6" style={{ fontSize: '6rem', background: 'none' }}>
                   {weatherData.humidity}%
                 </Typography>
+                <Typography variant="h6" style={{ fontSize: '4rem', background: 'none' }}>
+                  {weatherData.wind_speed} km/h - {GetWindDir(weatherData.wind_direction)}
+                </Typography>
+                <br/>
+                <WindDirectionIndicator direction={weatherData.wind_direction} />
+
+                
+                {/*                 <TableContainer component={Paper}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        {Array.from({ length: 12 }).map((_, index) => (
+                          <TableCell key={index}>Header {index + 1}</TableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {Array.from({ length: 2 }).map((_, rowIndex) => (
+                        <TableRow key={rowIndex}>
+                          {Array.from({ length: 12 }).map((_, colIndex) => (
+                            <TableCell sx={{ backgroundColor: GetTempColour(-12 + colIndex*5) }}> TEMP </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+ */}              
               </div>
-              {/* Uncomment and add other weather parameters as needed */}
-              {/* <div className="weather-item">
-                <h2>Internal Temperature</h2>
-                <h3>{weatherData.internal_temperature}°C</h3>
-              </div>
-              <div className="weather-item">
-                <h2>Humidity</h2>
-                <h3>{weatherData.humidity}%</h3>
-              </div>
-              <div className="weather-item">
-                <h2>Wind Speed</h2>
-                <h3>{weatherData.wind_speed} km/h</h3>
-              </div>
-              <div className="weather-item">
-                <h2>Wind Direction</h2>
-                <h3>{weatherData.wind_direction}°</h3>
-              </div> */}
             </div>
           )}
         </div>

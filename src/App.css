@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  min-height: 40vh;
   text-align: center;
 }
 
@@ -47,4 +47,76 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+}
+
+.wind-direction-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: 200px;
+  position: relative;
+}
+
+.wind-direction-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.circle {
+  height: 200px;
+  width: 200px;
+  border: 4px solid black;
+  border-radius: 50%;
+  position: relative;
+}
+
+.label {
+  position: absolute;
+  font-size: 1.5rem;
+}
+
+.north {
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.east {
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.south {
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.west {
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid red;
+  position: absolute;
+}
+
+.center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
 }
