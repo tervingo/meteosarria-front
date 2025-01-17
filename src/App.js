@@ -20,7 +20,8 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/live');
+//        const response = await axios.get('http://localhost:5000/api/live');
+        const response = await axios.get('https://meteosarria-back.onrender.com/api/live');
         setWeatherData(response.data);
         console.log('Weather data:', response.data);
         setError(null);
@@ -72,8 +73,8 @@ function App() {
         <Card>
                 <CardMedia
                   component="img"
-                  width="200"
-                  height="200"
+                  width="180"
+                  height="180"
                   image="/images/nubes.jpg"
                   alt="Sample image"
                   sx={{ objectFit: 'cover', }}
@@ -86,11 +87,14 @@ function App() {
           {weatherData && (
             <div className="weather-container">
               <div className="weather-item">
-                <Typography variant="h1" style={{ fontSize: '10rem', background: 'none' }}>
+                <Typography variant="h1" style={{ fontSize: '9rem', background: 'none' }}>
                   {weatherData.external_temperature}°
                 </Typography>
-                <Typography variant="h6" style={{ fontSize: '6rem', background: 'none' }}>
+                <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
                   {weatherData.humidity}%
+                </Typography>
+                <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
+                  {weatherData.pressure} hPa
                 </Typography>
                 <Typography variant="h6" style={{ fontSize: '4rem', background: 'none' }}>
                   {weatherData.wind_speed} km/h - {GetWindDir(weatherData.wind_direction)}

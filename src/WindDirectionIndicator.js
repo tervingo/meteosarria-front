@@ -5,10 +5,10 @@ import './App.css';
 const WindDirectionIndicator = ({ direction }) => {
   const angleInRadians = (direction * Math.PI) / 180;
   const radius = 100; // Radius of the circle
-  const triangleSize = 5; // Size of the triangle
+  const triangleSize = 10; // Size of the triangle
 
-  const x = radius + radius * Math.cos(angleInRadians) - triangleSize / 2;
-  const y = radius + radius * Math.sin(angleInRadians) - triangleSize / 2;
+  const x = radius + radius * Math.sin(angleInRadians) - triangleSize / 2;
+  const y = radius - radius * Math.cos(angleInRadians) - triangleSize / 2;
 
   return (
     <div className='wind-direction-container'>
