@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-// import GetTempColour from './GetTempColour';
+//import GetTempColour from './GetTempColour';
 import { Typography, Card, CardMedia } from '@mui/material';
-// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+//import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TemperatureBackground from './TemperatureBackground';
 import GetWindDir from './GetWindDir';
@@ -101,9 +101,8 @@ function App() {
                 </Typography>
                 <br/>
                 <WindDirectionIndicator direction={weatherData.wind_direction} />
-
-                
-                {/*                 <TableContainer component={Paper}>
+{/*         
+                <TableContainer component={Paper}>
                   <Table>
                     <TableHead>
                       <TableRow>
@@ -116,15 +115,15 @@ function App() {
                       {Array.from({ length: 2 }).map((_, rowIndex) => (
                         <TableRow key={rowIndex}>
                           {Array.from({ length: 12 }).map((_, colIndex) => (
-                            <TableCell sx={{ backgroundColor: GetTempColour(-12 + colIndex*5) }}> TEMP </TableCell>
+                            <TableCell sx={{ backgroundColor: GetTempColour(-12 + colIndex*5) }}> {-12 + colIndex*5 } </TableCell>
                           ))}
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
- */}              
-              </div>
+             
+ */}              </div>
             </div>
           )}
         </div>
