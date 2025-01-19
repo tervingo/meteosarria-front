@@ -20,14 +20,14 @@ const TemperatureChart = () => {
           const time = dateParts[1];
           const dateTime = `${date}T${time}:00`;
           const timestamp = new Date(dateTime).getTime();
-          console.log(`Original: ${entry.timestamp}, Converted: ${timestamp}`);
+//          console.log(`Original: ${entry.timestamp}, Converted: ${timestamp}`);
           return {
             ...entry,
             timestamp
           };
         });
 
-        console.log('Formatted data:', formattedData); // Log the formatted data
+ //       console.log('Formatted data:', formattedData); // Log the formatted data
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
