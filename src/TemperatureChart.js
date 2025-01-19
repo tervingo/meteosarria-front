@@ -13,21 +13,21 @@ const TemperatureChart = () => {
         const response = await axios.get('https://meteosarria-back.onrender.com/api/temperature-data');
         const fetchedData = response.data;
 
-        // Convert timestamp to Unix timestamp for recharts
+        // Format the data with proper date parsing
         const formattedData = fetchedData.map(entry => {
-          const dateParts = entry.timestamp.split(' ');
-          const date = dateParts[0].split('-').reverse().join('-');
-          const time = dateParts[1];
-          const dateTime = `${date}T${time}:00`;
-          const timestamp = new Date(dateTime).getTime();
-//          console.log(`Original: ${entry.timestamp}, Converted: ${timestamp}`);
+          // Split the date and time
+          const [date, time] = entry.timestamp.split(' ');
+          // Split the date components
+          const [day, month, year] = date.split('-');
+          // Create a proper ISO date string
+          const isoDate = `${year}-${month}-${day}T${time}`;
+          
           return {
             ...entry,
-            timestamp
+            timestamp: new Date(isoDate).getTime()
           };
-        });
+        }).sort((a, b) => a.timestamp - b.timestamp); // Sort by timestamp
 
- //       console.log('Formatted data:', formattedData); // Log the formatted data
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
@@ -46,16 +46,45 @@ const TemperatureChart = () => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis
+        <XAxis 
           dataKey="timestamp"
           type="number"
-          domain={['dataMin', 'dataMax']}
-          tickFormatter={(tick) => new Date(tick).toLocaleTimeString()}
+          scale="time"
+          domain={['auto', 'auto']}
+          tickFormatter={(unixTime) => {
+            const date = new Date(unixTime);
+            return date.toLocaleTimeString([], { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            });
+          }}
         />
-        <YAxis domain={[-10, 40]} />
-        <Tooltip labelFormatter={(label) => new Date(label).toLocaleString()} />
+        <YAxis 
+          domain={[-10, 40]} 
+          label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }}
+        />
+        <Tooltip 
+          labelFormatter={(unixTime) => {
+            const date = new Date(unixTime);
+            return date.toLocaleString([], {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+          }}
+          formatter={(value) => [`${value}°C`, 'Temperature']}
+        />
         <Legend />
-        <Line type="monotone" dataKey="external_temperature" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line 
+          type="monotone" 
+          dataKey="external_temperature" 
+          name="External Temperature"
+          stroke="#8884d8" 
+          dot={false} // Remove dots for cleaner look with many data points
+          activeDot={{ r: 6 }} 
+        />
       </LineChart>
     </ResponsiveContainer>
   );
