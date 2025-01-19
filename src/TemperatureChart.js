@@ -16,9 +16,10 @@ const TemperatureChart = () => {
         // Convert timestamp to Date object for recharts
         const formattedData = fetchedData.map(entry => ({
           ...entry,
-          timestamp: new Date(entry.timestamp)
+          timestamp: new Date(entry.timestamp.split('-').reverse().join('-')) // Convert "DD-MM-YYYY hh:mm" to "YYYY-MM-DD hh:mm"
         }));
 
+        console.log('Formatted data:', formattedData); // Add this line to log the data
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
@@ -37,7 +38,12 @@ const TemperatureChart = () => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="timestamp" type="number" domain={['dataMin', 'dataMax']} tickFormatter={(tick) => new Date(tick).toLocaleTimeString()} />
+        <XAxis
+          dataKey="timestamp"
+          type="number"
+          domain={['dataMin', 'dataMax']}
+          tickFormatter={(tick) => new Date(tick).toLocaleTimeString()}
+        />
         <YAxis domain={[-10, 40]} />
         <Tooltip labelFormatter={(label) => new Date(label).toLocaleString()} />
         <Legend />
