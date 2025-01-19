@@ -12,8 +12,9 @@ const TemperatureChart = () => {
       try {
         const response = await axios.get('https://meteosarria-back.onrender.com/api/temperature-data');
         const fetchedData = response.data;
+        
+        console.log('Raw data from API:', fetchedData);
 
-        // Format the data with proper date parsing
         const formattedData = fetchedData.map(entry => {
           // Split the date and time
           const [date, time] = entry.timestamp.split(' ');
@@ -22,12 +23,22 @@ const TemperatureChart = () => {
           // Create a proper ISO date string
           const isoDate = `${year}-${month}-${day}T${time}`;
           
-          return {
+          const formatted = {
             ...entry,
             timestamp: new Date(isoDate).getTime()
           };
-        }).sort((a, b) => a.timestamp - b.timestamp); // Sort by timestamp
+          
+          console.log('Formatted entry:', {
+            original: entry.timestamp,
+            isoDate,
+            timestamp: formatted.timestamp,
+            temp: formatted.external_temperature
+          });
+          
+          return formatted;
+        }).sort((a, b) => a.timestamp - b.timestamp);
 
+        console.log('Final formatted data:', formattedData);
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
@@ -36,6 +47,9 @@ const TemperatureChart = () => {
 
     fetchData();
   }, []);
+
+  // Let's also log what data is being used for rendering
+  console.log('Data being rendered:', data);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -50,7 +64,7 @@ const TemperatureChart = () => {
           dataKey="timestamp"
           type="number"
           scale="time"
-          domain={['auto', 'auto']}
+          domain={['dataMin', 'dataMax']}
           tickFormatter={(unixTime) => {
             const date = new Date(unixTime);
             return date.toLocaleTimeString([], { 
@@ -60,19 +74,12 @@ const TemperatureChart = () => {
           }}
         />
         <YAxis 
-          domain={[-10, 40]} 
+          domain={['dataMin', 'dataMax']} 
           label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }}
         />
         <Tooltip 
           labelFormatter={(unixTime) => {
-            const date = new Date(unixTime);
-            return date.toLocaleString([], {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit'
-            });
+            return new Date(unixTime).toLocaleString();
           }}
           formatter={(value) => [`${value}°C`, 'Temperature']}
         />
@@ -82,8 +89,7 @@ const TemperatureChart = () => {
           dataKey="external_temperature" 
           name="External Temperature"
           stroke="#8884d8" 
-          dot={false} // Remove dots for cleaner look with many data points
-          activeDot={{ r: 6 }} 
+          dot={true}  // Temporarily enable dots for debugging
         />
       </LineChart>
     </ResponsiveContainer>
