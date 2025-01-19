@@ -17,12 +17,12 @@ const TemperatureChart = () => {
         const formattedData = fetchedData
           .map(entry => ({
             timestamp: entry.timestamp,
-            external_temperature: Number(entry.external_temperature) // Ensure temperature is a number
+            external_temperature: Number(entry.external_temperature)
           }))
           .sort((a, b) => {
             // Sort by parsing the timestamp strings directly
-            const dateA = new Date(entry.timestamp.split(' ')[0].split('-').reverse().join('-') + 'T' + entry.timestamp.split(' ')[1]);
-            const dateB = new Date(entry.timestamp.split(' ')[0].split('-').reverse().join('-') + 'T' + entry.timestamp.split(' ')[1]);
+            const dateA = new Date(a.timestamp.split(' ')[0].split('-').reverse().join('-') + 'T' + a.timestamp.split(' ')[1]);
+            const dateB = new Date(b.timestamp.split(' ')[0].split('-').reverse().join('-') + 'T' + b.timestamp.split(' ')[1]);
             return dateA - dateB;
           });
 
