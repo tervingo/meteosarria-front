@@ -13,17 +13,11 @@ const TemperatureChart = () => {
         const response = await axios.get('https://meteosarria-back.onrender.com/api/temperature-data');
         const fetchedData = response.data;
         
-        // Convert the timestamp format and ensure temperature is a number
-        const formattedData = fetchedData.map(entry => {
-          const [datePart, timePart] = entry.timestamp.split(' ');
-          return {
-            time: timePart, // Keep original time string for X-axis
-            external_temperature: Number(entry.external_temperature)
-          };
-        }).sort((a, b) => {
-          // Sort by time string
-          return a.time.localeCompare(b.time);
-        });
+        // Only extract time and temperature
+        const formattedData = fetchedData.map(entry => ({
+          time: entry.timestamp.split(' ')[1], // Get just the time part
+          external_temperature: Number(entry.external_temperature)
+        })).sort((a, b) => a.time.localeCompare(b.time));
 
         setData(formattedData);
       } catch (error) {
@@ -40,16 +34,13 @@ const TemperatureChart = () => {
     return <div>Loading...</div>;
   }
 
-  console.log('Sample of data being rendered:', {
+  console.log('Chart data check:', {
+    numberOfPoints: data.length,
     firstPoint: data[0],
     lastPoint: data[data.length - 1],
-    numberOfPoints: data.length,
-    yRange: {
-      min: Math.min(...data.map(d => d.external_temperature)),
-      max: Math.max(...data.map(d => d.external_temperature))
-    }
+    samplePoints: data.slice(0, 3)
   });
-
+  
   return (
     <div style={{ width: '100%', height: '400px' }}>
       <ResponsiveContainer>
@@ -65,7 +56,7 @@ const TemperatureChart = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="time"
-            interval={Math.floor(data.length / 10)} // Show ~10 ticks
+            interval={Math.floor(data.length / 10)}
             angle={-45}
             textAnchor="end"
             height={60}
