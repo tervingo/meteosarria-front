@@ -21,8 +21,8 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/live');
-//        const response = await axios.get('https://meteosarria-back.onrender.com/api/live');
+//        const response = await axios.get('http://localhost:5000/api/live');
+        const response = await axios.get('https://meteosarria-back.onrender.com/api/live');
         setWeatherData(response.data);
         console.log('Weather data:', response.data);
         setError(null);
