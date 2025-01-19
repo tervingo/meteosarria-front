@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -13,12 +13,20 @@ const TemperatureChart = () => {
         const response = await axios.get('https://meteosarria-back.onrender.com/api/temperature-data');
         const fetchedData = response.data;
         
-        // Only extract time and temperature
-        const formattedData = fetchedData.map(entry => ({
-          time: entry.timestamp.split(' ')[1], // Get just the time part
-          external_temperature: Number(entry.external_temperature)
-        })).sort((a, b) => a.time.localeCompare(b.time));
+        // Convert timestamp to proper date objects for sorting
+        const formattedData = fetchedData.map(entry => {
+          const [datePart, timePart] = entry.timestamp.split(' ');
+          const [day, month, year] = datePart.split('-');
+          return {
+            fullTimestamp: entry.timestamp,
+            dateTime: new Date(`${year}-${month}-${day}T${timePart}`),
+            external_temperature: Number(entry.external_temperature)
+          };
+        });
 
+        // Sort by dateTime
+        formattedData.sort((a, b) => a.dateTime - b.dateTime);
+        
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
@@ -30,39 +38,46 @@ const TemperatureChart = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  if (data.length === 0) {
-    return <div>Loading...</div>;
-  }
+  // Memoize the chart to prevent unnecessary re-renders
+  const chart = useMemo(() => {
+    if (data.length === 0) {
+      return <div>Loading...</div>;
+    }
+    console.log('Data structure check:', {
+      firstPoint: data[0]?.dateTime?.toISOString(),
+      lastPoint: data[data.length-1]?.dateTime?.toISOString(),
+      totalPoints: data.length
+    });
 
-  console.log('Chart data check:', {
-    numberOfPoints: data.length,
-    firstPoint: data[0],
-    lastPoint: data[data.length - 1],
-    samplePoints: data.slice(0, 3)
-  });
-  
-  return (
-    <div style={{ width: '100%', height: '400px' }}>
-      <ResponsiveContainer>
+    return (
+      <ResponsiveContainer width="100%" height={400}>
         <LineChart
           data={data}
           margin={{
-            top: 5,
+            top: 20,
             right: 30,
             left: 20,
-            bottom: 25,
+            bottom: 65,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            dataKey="time"
-            interval={Math.floor(data.length / 10)}
+            dataKey="dateTime"
+            type="number"
+            scale="time"
+            domain={['dataMin', 'dataMax']}
+            tickFormatter={(timeStr) => {
+              return new Date(timeStr).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+            }}
             angle={-45}
             textAnchor="end"
             height={60}
+            tickCount={8}
           />
           <YAxis
-            type="number"
             domain={['auto', 'auto']}
             label={{
               value: 'Temperature (°C)',
@@ -72,20 +87,36 @@ const TemperatureChart = () => {
             }}
           />
           <Tooltip
+            labelFormatter={(value) => {
+              return new Date(value).toLocaleString([], {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+            }}
             formatter={(value) => [`${value}°C`, 'Temperature']}
           />
-          <Legend verticalAlign="top" />
+          <Legend verticalAlign="top" height={36}/>
           <Line
             type="monotone"
             dataKey="external_temperature"
             name="External Temperature"
             stroke="#8884d8"
+            strokeWidth={2}
             dot={false}
             activeDot={{ r: 6 }}
             isAnimationActive={false}
           />
         </LineChart>
       </ResponsiveContainer>
+    );
+  }, [data]);
+
+  return (
+    <div style={{ width: '100%', height: '400px', padding: '20px' }}>
+      {chart}
     </div>
   );
 };
