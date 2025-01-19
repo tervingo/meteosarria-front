@@ -13,14 +13,13 @@ const TemperatureChart = () => {
         const response = await axios.get('https://meteosarria-back.onrender.com/api/temperature-data');
         const fetchedData = response.data;
 
-        // Convert timestamp to Date object for recharts
+        // Convert timestamp to Unix timestamp for recharts
         const formattedData = fetchedData.map(entry => ({
           ...entry,
-          timestamp: new Date(entry.timestamp.split('-').reverse().join('-')) // Convert "DD-MM-YYYY hh:mm" to "YYYY-MM-DD hh:mm"
+          timestamp: new Date(entry.timestamp.split('-').reverse().join('-')).getTime() // Convert "DD-MM-YYYY hh:mm" to Unix timestamp
         }));
 
         console.log('Formatted data:', formattedData); // Log the formatted data
-        console.log('timestamp: ', formattedData.timestamp); // Log the timestamp values
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
@@ -29,9 +28,6 @@ const TemperatureChart = () => {
 
     fetchData();
   }, []);
-
-  const domain = ['dataMin', 'dataMax'];
-  console.log('Domain:', domain); // Log the domain values
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -45,7 +41,7 @@ const TemperatureChart = () => {
         <XAxis
           dataKey="timestamp"
           type="number"
-          domain={domain}
+          domain={['dataMin', 'dataMax']}
           tickFormatter={(tick) => new Date(tick).toLocaleTimeString()}
         />
         <YAxis domain={[-10, 40]} />
