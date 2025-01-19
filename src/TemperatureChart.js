@@ -13,6 +13,8 @@ const TemperatureChart = () => {
         const response = await axios.get('https://meteosarria-back.onrender.com/api/temperature-data');
         const fetchedData = response.data;
         
+        console.log('Raw data from API:', fetchedData);
+
         // Process the data
         const formattedData = fetchedData
           .map(entry => ({
