@@ -8,6 +8,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TemperatureBackground from './TemperatureBackground';
 import GetWindDir from './GetWindDir';
 import WindDirectionIndicator from './WindDirectionIndicator';
+import TemperatureChart from './TemperatureChart';
 
 const theme = createTheme();
 
@@ -20,8 +21,8 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-//        const response = await axios.get('http://localhost:5000/api/live');
-        const response = await axios.get('https://meteosarria-back.onrender.com/api/live');
+        const response = await axios.get('http://localhost:5000/api/live');
+//        const response = await axios.get('https://meteosarria-back.onrender.com/api/live');
         setWeatherData(response.data);
         console.log('Weather data:', response.data);
         setError(null);
@@ -87,9 +88,12 @@ function App() {
           {weatherData && (
             <div className="weather-container">
               <div className="weather-item">
-                <Typography variant="h1" style={{ fontSize: '9rem', background: 'none' }}>
-                  {weatherData.external_temperature}°
-                </Typography>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h1" style={{ fontSize: '9rem', background: 'none' }}>
+                    {weatherData.external_temperature}°
+                  </Typography>
+                  <TemperatureChart />
+                </div>
                 <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
                   {weatherData.humidity}%
                 </Typography>
