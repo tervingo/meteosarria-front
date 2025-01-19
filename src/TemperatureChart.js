@@ -13,31 +13,26 @@ const TemperatureChart = () => {
         const response = await axios.get('https://meteosarria-back.onrender.com/api/temperature-data');
         const fetchedData = response.data;
         
+        console.log('Number of records fetched:', fetchedData.length);
+
         // Convert the timestamp format and ensure temperature is a number
         const formattedData = fetchedData.map(entry => {
           // Convert DD-MM-YYYY HH:mm to YYYY-MM-DD HH:mm for proper date parsing
           const [datePart, timePart] = entry.timestamp.split(' ');
           const [day, month, year] = datePart.split('-');
+          const dateObj = new Date(`${year}-${month}-${day} ${timePart}`);
+          
           return {
-            timestamp: new Date(`${year}-${month}-${day} ${timePart}`).getTime(),
+            timestamp: dateObj.getTime(),
             external_temperature: Number(entry.external_temperature)
           };
-        });
+        }).sort((a, b) => b.timestamp - a.timestamp); // Sort in descending order (newest first)
 
-        // Sort data by timestamp
-        const sortedData = formattedData.sort((a, b) => a.timestamp - b.timestamp);
-        
-        console.log('Data range:', {
-          start: new Date(sortedData[0]?.timestamp).toLocaleString(),
-          end: new Date(sortedData[sortedData.length - 1]?.timestamp).toLocaleString(),
-          tempRange: {
-            min: Math.min(...sortedData.map(d => d.external_temperature)),
-            max: Math.max(...sortedData.map(d => d.external_temperature))
-          }
-        });
+        console.log('Full formatted data length:', formattedData.length);
+        console.log('First few records:', formattedData.slice(0, 3));
+        console.log('Last few records:', formattedData.slice(-3));
 
-        console.log('Sorted and formatted data:', sortedData.slice(0, 3)); // Log first 3 entries for debugging
-        setData(sortedData);
+        setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
       }
@@ -47,6 +42,15 @@ const TemperatureChart = () => {
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
+
+  if (data.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  const minTemp = Math.floor(Math.min(...data.map(d => d.external_temperature)));
+  const maxTemp = Math.ceil(Math.max(...data.map(d => d.external_temperature)));
+  const paddedMin = minTemp - 1;
+  const paddedMax = maxTemp + 1;
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -60,8 +64,8 @@ const TemperatureChart = () => {
         <XAxis 
           dataKey="timestamp"
           type="number"
-          scale="time"
           domain={['dataMin', 'dataMax']}
+          scale="time"
           tickFormatter={(timestamp) => {
             return new Date(timestamp).toLocaleTimeString([], { 
               hour: '2-digit', 
@@ -71,15 +75,17 @@ const TemperatureChart = () => {
           angle={-45}
           textAnchor="end"
           height={60}
+          minTickGap={50}
         />
         <YAxis 
-          domain={['auto', 'auto']}
+          domain={[paddedMin, paddedMax]}
           label={{ 
             value: 'Temperature (°C)', 
             angle: -90, 
             position: 'insideLeft',
             offset: -5
           }}
+          ticks={Array.from({ length: paddedMax - paddedMin + 1 }, (_, i) => paddedMin + i)}
         />
         <Tooltip 
           labelFormatter={(timestamp) => {
@@ -101,7 +107,7 @@ const TemperatureChart = () => {
           stroke="#8884d8" 
           dot={false}
           activeDot={{ r: 6 }}
-          isAnimationActive={false}  // Disable animation for better initial render
+          isAnimationActive={false}
         />
       </LineChart>
     </ResponsiveContainer>
