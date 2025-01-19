@@ -20,7 +20,7 @@ const TemperatureChart = () => {
         }));
 
         console.log('Formatted data:', formattedData); // Log the formatted data
-        console.log('timestamp: ', timestamp); // Log the timestamp values
+        console.log('timestamp: ', formattedData.timestamp); // Log the timestamp values
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
