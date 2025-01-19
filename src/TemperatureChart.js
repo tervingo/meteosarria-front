@@ -14,10 +14,18 @@ const TemperatureChart = () => {
         const fetchedData = response.data;
 
         // Convert timestamp to Unix timestamp for recharts
-        const formattedData = fetchedData.map(entry => ({
-          ...entry,
-          timestamp: new Date(entry.timestamp.split('-').reverse().join('-')).getTime() // Convert "DD-MM-YYYY hh:mm" to Unix timestamp
-        }));
+        const formattedData = fetchedData.map(entry => {
+          const dateParts = entry.timestamp.split(' ');
+          const date = dateParts[0].split('-').reverse().join('-');
+          const time = dateParts[1];
+          const dateTime = `${date}T${time}:00`;
+          const timestamp = new Date(dateTime).getTime();
+          console.log(`Original: ${entry.timestamp}, Converted: ${timestamp}`);
+          return {
+            ...entry,
+            timestamp
+          };
+        });
 
         console.log('Formatted data:', formattedData); // Log the formatted data
         setData(formattedData);
