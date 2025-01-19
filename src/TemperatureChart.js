@@ -19,7 +19,7 @@ const TemperatureChart = () => {
           timestamp: new Date(entry.timestamp.split('-').reverse().join('-')) // Convert "DD-MM-YYYY hh:mm" to "YYYY-MM-DD hh:mm"
         }));
 
-        console.log('Formatted data:', formattedData); // Add this line to log the data
+        console.log('Formatted data:', formattedData); // Log the formatted data
         setData(formattedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
@@ -28,6 +28,9 @@ const TemperatureChart = () => {
 
     fetchData();
   }, []);
+
+  const domain = ['dataMin', 'dataMax'];
+  console.log('Domain:', domain); // Log the domain values
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -41,7 +44,7 @@ const TemperatureChart = () => {
         <XAxis
           dataKey="timestamp"
           type="number"
-          domain={['dataMin', 'dataMax']}
+          domain={domain}
           tickFormatter={(tick) => new Date(tick).toLocaleTimeString()}
         />
         <YAxis domain={[-10, 40]} />
