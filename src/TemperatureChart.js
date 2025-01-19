@@ -43,12 +43,6 @@ const TemperatureChart = () => {
     if (data.length === 0) {
       return <div>Loading...</div>;
     }
-    console.log('Data structure check:', {
-      firstPoint: data[0]?.dateTime?.toISOString(),
-      lastPoint: data[data.length-1]?.dateTime?.toISOString(),
-      totalPoints: data.length
-    });
-
     return (
       <ResponsiveContainer width="100%" height={400}>
         <LineChart
