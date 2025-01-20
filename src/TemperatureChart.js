@@ -74,6 +74,7 @@ const TemperatureChart = () => {
     const maxTemp = Math.ceil(Math.max(...data.map(d => d.external_temperature)));
     const padding = 1;
 
+
     return (
       <LineChart
         width={500}
@@ -114,7 +115,7 @@ const TemperatureChart = () => {
         <Line
           type="monotone"
           dataKey="external_temperature"
-          stroke="#8884d8"
+          stroke="red"
           name="Temperature"
           dot={false}
           strokeWidth={2}
