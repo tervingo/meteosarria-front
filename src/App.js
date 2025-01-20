@@ -88,12 +88,12 @@ function App() {
           {weatherData && (
             <div className="weather-container">
               <div className="weather-item">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography variant="h1" style={{ fontSize: '9rem', background: 'none' }}>
-                    {weatherData.external_temperature}°
-                  </Typography>
-                  <TemperatureChart />
-                </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
+                <Typography variant="h1" style={{ fontSize: '9rem', background: 'none' }}>
+                  {weatherData.external_temperature}°
+                </Typography>
+                <TemperatureChart />
+              </div>
                 <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
                   {weatherData.humidity}%
                 </Typography>
