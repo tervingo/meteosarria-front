@@ -11,7 +11,7 @@ import {
   ReferenceLine, // Import ReferenceLine
 } from 'recharts';
 
-const TemperatureChart = () => {
+const PressChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const TemperatureChart = () => {
         const fetchedData = response.data;
         
         // Process the data with outlier handling
-        let lastValidTemperature = null;
+        let lastValidPressure = null;
         const formattedData = fetchedData.map(entry => {
           const [datePart, timePart] = entry.timestamp.split(' ');
           const [day, month, year] = datePart.split('-');
@@ -29,25 +29,25 @@ const TemperatureChart = () => {
           const dateObj = new Date(formattedDate);
           
           // Get the current temperature
-          let currentTemp = Number(entry.external_temperature);
+          let currentPress = Number(entry.pressure);
           
           // Check if current temperature is valid
-          if (currentTemp <= 45) {
-            lastValidTemperature = currentTemp;
+          if (currentPress <= 1100) {
+            lastValidPressure = currentPress;
           } else {
             // If invalid, use last valid temperature
-            currentTemp = lastValidTemperature !== null ? lastValidTemperature : null;
-            console.log(`Replaced anomalous temperature (${entry.external_temperature}) with last valid temperature: ${currentTemp}`);
+            currentPress = lastValidPressure !== null ? lastValidPressure : null;
+            console.log(`Replaced anomalous pressure (${entry.pressure}) with last valid pressure: ${currentPress}`);
           }
           
           return {
             fullTimestamp: entry.timestamp,
             dateTime: dateObj,
-            external_temperature: currentTemp
+            pressure: currentPress
           };
         })
         // Filter out any null temperatures (in case the first readings were invalid)
-        .filter(item => item.external_temperature !== null);
+        .filter(item => item.pressure !== null);
         
         const sortedData = formattedData
           .filter(item => !isNaN(item.dateTime))
@@ -56,7 +56,7 @@ const TemperatureChart = () => {
         console.log('Final data for chart:', sortedData);
         setData(sortedData);
       } catch (error) {
-        console.error('Error fetching temperature data:', error);
+        console.error('Error fetching pressure data:', error);
       }
     };
 
@@ -72,20 +72,19 @@ const TemperatureChart = () => {
 
     // Calculate min and max temperatures with a small padding
 
-    const absMinTemp = (Math.min(...data.map(d => d.external_temperature)));
-    const absMaxTemp = (Math.max(...data.map(d => d.external_temperature)));
-    const minTemp = Math.floor(absMinTemp);
-    const maxTemp = Math.ceil(absMaxTemp);
+    const absMinPress = (Math.min(...data.map(d => d.pressure)));
+    const absMaxPress = (Math.max(...data.map(d => d.pressure)));
+    const minPress = Math.floor(absMinPress);
+    const maxPress = Math.ceil(absMaxPress);
     const padding = 1;
 
     // Find the timestamps of min and max temperatures
-    const minTempData = data.find(d => d.external_temperature === absMinTemp);
-    const maxTempData = data.find(d => d.external_temperature === absMaxTemp);
-    const minTempTime = minTempData ? minTempData.fullTimestamp.split(' ')[1] : 'N/A';
-    const maxTempTime = maxTempData ? maxTempData.fullTimestamp.split(' ')[1] : 'N/A';
-    
+    const minPressData = data.find(d => d.pressure === absMinPress);
+    const maxPressData = data.find(d => d.pressure === absMaxPress);
+    const minPressTime = minPressData ? minPressData.fullTimestamp.split(' ')[1] : 'N/A';
+    const maxPressTime = maxPressData ? maxPressData.fullTimestamp.split(' ')[1] : 'N/A';
 
-    return (
+     return (
       <LineChart
         width={500}
         height={300}
@@ -110,25 +109,26 @@ const TemperatureChart = () => {
           interval="preserveStartEnd"
         />
         <YAxis
-          domain={[minTemp - padding, maxTemp + padding]}
+          domain={[minPress - padding, maxPress + padding]}
           label={{
-            value: 'Temperature (°C)',
+            value: 'Pressure (hPa)',
             angle: -90,
             position: 'insideLeft',
             offset: 10
           }}
         />
-        <ReferenceLine y={maxTemp} label={`${absMaxTemp}°C at ${maxTempTime}`}  stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minTemp} label={`${absMinTemp}°C at ${minTempTime}`} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxPress} label={`${absMaxPress}hPa at ${maxPressTime}`}  stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minPress} label={`${absMinPress}hPa at ${minPressTime}`} stroke="blue" strokeDasharray="1 1" />
+
         <Tooltip
-          formatter={(value) => [`${value}°C`, 'Temperature']}
+          formatter={(value) => [`${value}hPa`, 'Pressure']}
         />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
-          dataKey="external_temperature"
-          stroke="red"
-          name="Temperature"
+          dataKey="pressure"
+          stroke="yellow"
+          name="Pressure"
           dot={false}
           strokeWidth={2}
         />
@@ -147,4 +147,4 @@ const TemperatureChart = () => {
   );
 };
 
-export default TemperatureChart;
+export default PressChart;
