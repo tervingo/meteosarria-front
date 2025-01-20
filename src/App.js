@@ -10,6 +10,7 @@ import GetWindDir from './GetWindDir';
 import WindDirectionIndicator from './WindDirectionIndicator';
 import TemperatureChart from './TemperatureChart';
 import PressChart from './PressChart';
+import HumChart from './HumChart';
 
 const theme = createTheme();
 
@@ -95,9 +96,12 @@ function App() {
                 </Typography>
                 <TemperatureChart />
               </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
                 <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
                   {weatherData.humidity}%
                 </Typography>
+                <HumChart />
+              </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
                   <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
                     {weatherData.pressure} hPa
