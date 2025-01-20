@@ -7,7 +7,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend
+  Legend,
+  ReferenceLine, // Import ReferenceLine
 } from 'recharts';
 
 const TemperatureChart = () => {
@@ -70,10 +71,19 @@ const TemperatureChart = () => {
     }
 
     // Calculate min and max temperatures with a small padding
-    const minTemp = Math.floor(Math.min(...data.map(d => d.external_temperature)));
-    const maxTemp = Math.ceil(Math.max(...data.map(d => d.external_temperature)));
+
+    const absMinTemp = (Math.min(...data.map(d => d.external_temperature)));
+    const absMaxTemp = (Math.max(...data.map(d => d.external_temperature)));
+    const minTemp = Math.floor(absMinTemp);
+    const maxTemp = Math.ceil(absMaxTemp);
     const padding = 1;
 
+    // Find the timestamps of min and max temperatures
+    const minTempData = data.find(d => d.external_temperature === absMinTemp);
+    const maxTempData = data.find(d => d.external_temperature === absMaxTemp);
+    const minTempTime = minTempData ? minTempData.fullTimestamp.split(' ')[1] : 'N/A';
+    const maxTempTime = maxTempData ? maxTempData.fullTimestamp.split(' ')[1] : 'N/A';
+    
 
     return (
       <LineChart
@@ -108,6 +118,8 @@ const TemperatureChart = () => {
             offset: 10
           }}
         />
+        <ReferenceLine y={maxTemp} label={`${absMaxTemp}°C at ${maxTempTime}`}  stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minTemp} label={`${absMinTemp}°C at ${minTempTime}`} stroke="blue" strokeDasharray="1 1" />
         <Tooltip
           formatter={(value) => [`${value}°C`, 'Temperature']}
         />
