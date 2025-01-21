@@ -67,23 +67,25 @@ function App() {
 
         <div className="App-header">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
-            <Typography variant="h1" style={{ fontSize: '6rem', marginRight: '50px' }}>
-              #meteosarria
-            </Typography>
+            <div>
+              <Typography variant="h1" style={{ fontSize: '6rem', marginRight: '50px' }}>
+                #meteosarria
+              </Typography>
+              <Typography variant="h6" style={{ fontSize: '3rem' }}>
+                {formatDate(currentTime)}
+              </Typography>
+            </div>
             <Card>
                 <CardMedia
                   component="img"
-                  width="100"
-                  height="100"
+                  width="180"
+                  height="180"
                   image="/images/nubes.jpg"
                   alt="Sample image"
-                  sx={{ objectFit: 'cover', }}
+                  sx={{ objectFit: 'cover'}}
                 />
               </Card>
           </div>
-          <Typography variant="h6" style={{ fontSize: '3rem' }}>
-            {formatDate(currentTime)}
-          </Typography>
         </div>
         <br/>
 
