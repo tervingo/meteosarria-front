@@ -11,6 +11,7 @@ import WindDirectionIndicator from './WindDirectionIndicator';
 import TemperatureChart from './TemperatureChart';
 import PressChart from './PressChart';
 import HumChart from './HumChart';
+import ShowTempDiffs from './ShowTempDiffs';
 
 const theme = createTheme();
 
@@ -65,24 +66,27 @@ function App() {
         {weatherData && <TemperatureBackground temperature={weatherData.external_temperature} />}
 
         <div className="App-header">
-          <Typography variant="h1" style={{ fontSize: '6rem' }}>
-            #meteosarria
-          </Typography>
-          <Typography variant="h6" style={{ fontSize: '3rem' }}>
-            {formatDate(currentTime)}
-          </Typography>
-        </div>
-        <br/>
-        <Card>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
+            <Typography variant="h1" style={{ fontSize: '6rem', marginRight: '50px' }}>
+              #meteosarria
+            </Typography>
+            <Card>
                 <CardMedia
                   component="img"
-                  width="180"
-                  height="180"
+                  width="100"
+                  height="100"
                   image="/images/nubes.jpg"
                   alt="Sample image"
                   sx={{ objectFit: 'cover', }}
                 />
               </Card>
+          </div>
+          <Typography variant="h6" style={{ fontSize: '3rem' }}>
+            {formatDate(currentTime)}
+          </Typography>
+        </div>
+        <br/>
+
         <div className="App">
           {loading && <p>Loading weather data...</p>}
           {error && <p className="error">{error}</p>}
@@ -91,7 +95,8 @@ function App() {
             <div className="weather-container">
               <div className="weather-item">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
-                <Typography variant="h1" style={{ fontSize: '9rem', background: 'none' }}>
+                <ShowTempDiffs />
+                <Typography variant="h1" style={{ fontSize: '7rem', background: 'none' }}>
                   {weatherData.external_temperature}°
                 </Typography>
                 <TemperatureChart />

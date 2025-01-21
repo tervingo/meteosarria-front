@@ -120,3 +120,10 @@
   transform: translate(-50%, -50%);
   font-size: 1.5rem;
 }
+
+.differences {
+  display: flex;
+  flex-direction: column;
+  margin-right: 30px; /* Add some space between the differences and the current temperature */
+  font-size: 1.5rem;
+}
