@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-//import GetTempColour from './GetTempColour';
+// import GetTempColour from './GetTempColour';
+// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { Typography, Card, CardMedia } from '@mui/material';
-//import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TemperatureBackground from './TemperatureBackground';
 import GetWindDir from './GetWindDir';
@@ -108,6 +108,7 @@ function App() {
                   {weatherData.humidity}%
                 </Typography>
                 <HumChart />
+                <WindDirectionIndicator direction={weatherData.wind_direction} speed={weatherData.wind_speed} rose= {GetWindDir(weatherData.wind_direction)} />
               </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
                   <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
@@ -115,12 +116,8 @@ function App() {
                   </Typography>
                   <PressChart />
                 </div>
-                <Typography variant="h6" style={{ fontSize: '4rem', background: 'none' }}>
-                  {weatherData.wind_speed} km/h - {GetWindDir(weatherData.wind_direction)}
-                </Typography>
-                <br/>
-                <WindDirectionIndicator direction={weatherData.wind_direction} />
-{/*         
+
+ {/*         
                 <TableContainer component={Paper}>
                   <Table>
                     <TableHead>
@@ -140,9 +137,9 @@ function App() {
                       ))}
                     </TableBody>
                   </Table>
-                </TableContainer>
-             
- */}              </div>
+                </TableContainer>       
+  */}              
+              </div>
             </div>
           )}
         </div>

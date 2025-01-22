@@ -127,7 +127,7 @@ const PressChart = () => {
         <Line
           type="monotone"
           dataKey="pressure"
-          stroke="yellow"
+          stroke="salmon"
           name="Pressure"
           dot={false}
           strokeWidth={2}

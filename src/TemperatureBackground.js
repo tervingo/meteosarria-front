@@ -14,11 +14,11 @@ const TemperatureBackground = ({ temperature }) => {
     } else if (temperature >= 10 && temperature < 15) {
       color = 'DeepSkyBlue'; // Deep Sky Blue
     } else if (temperature >= 15 && temperature < 20) {
-      color = '#7FFF00'; // Chartreuse
+      color = 'YellowGreen'; // Chartreuse
     } else if (temperature >= 20 && temperature < 25) {
-      color = '#FFFF00'; // Yellow
+      color = 'Yellow'; // Yellow
     } else if (temperature >= 25 && temperature < 30) {
-      color = '#FFA500'; // Orange
+      color = 'Orange'; // Orange
     } else if (temperature >= 30 && temperature < 35) {
       color = '#FF0000'; // Red
     } else if (temperature >= 35 && temperature <= 40) {

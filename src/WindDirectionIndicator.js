@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import './App.css';
 
-const WindDirectionIndicator = ({ direction }) => {
+const WindDirectionIndicator = ({ direction, speed, rose }) => {
   const angleInRadians = (direction * Math.PI) / 180;
   const radius = 100; // Radius of the circle
   const triangleSize = 10; // Size of the triangle
@@ -25,9 +25,17 @@ const WindDirectionIndicator = ({ direction }) => {
                 left: `${x}px`,
             }}
             ></div>
-            <Typography variant="h4" className="center-label">
-            {direction}°
-            </Typography>
+            <div className="center-labels">
+              <Typography variant="h5">
+                {speed} km/h
+              </Typography>
+              <Typography variant="h5">
+              {direction}°
+              </Typography>
+              <Typography variant="h5">
+              {rose}
+              </Typography>            
+            </div>
         </div>
         </div>
     </div>
