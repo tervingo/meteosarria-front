@@ -150,3 +150,20 @@
 .arrow-container {
   /* No specific styles needed here, but you can add if required */
 }
+
+nav {
+  display: flex;
+  justify-content: space-around; /* Distribute items evenly */
+  margin-bottom: 20px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  margin: 0 20px; /* Add 10px margin on left and right of each item */
+}
+
+nav a:hover {
+  color: #000;
+}

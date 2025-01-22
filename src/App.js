@@ -60,6 +60,27 @@ function App() {
     return `${hours}:${minutes} (${day}.${month}.${year})`;
   };
 
+// Menu bar
+
+  function Menu({ items }) {
+    return (
+      <nav>
+        {items.map(item => (
+          <a key={item.label} href={item.url} target="_blank" rel="noreferrer">
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    );
+  }
+
+  const menuItems = [
+    { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
+    { label: 'Meteocat', url: 'https://www.meteo.cat/' },
+    { label: 'Renuncio', url: 'https://renuncio.com/meteorologia/actual' },
+    { label: 'Meteociel', url: 'https://meteociel.fr' }
+  ];
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -88,6 +109,8 @@ function App() {
           </div>
         </div>
         <br/>
+
+        <Menu items={menuItems} />
 
         <div className="App">
           {loading && <p>Loading weather data...</p>}
