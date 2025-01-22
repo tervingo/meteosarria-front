@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ArrowUpward from '@mui/icons-material/ArrowUpward';
-import ArrowDownward from '@mui/icons-material/ArrowDownward';
-import ArrowForward from '@mui/icons-material/ArrowForward';
 
 import EastIcon from '@mui/icons-material/East';
 import NorthIcon from '@mui/icons-material/North';
