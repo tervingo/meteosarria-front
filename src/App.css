@@ -130,3 +130,17 @@
   margin-right: 30px; /* Add some space between the differences and the current temperature */
   font-size: 1.5rem;
 }
+
+.diff-container { /* Styles for the new container */
+  display: flex;
+  align-items: center; /* Vertically align the diffs and arrow */
+}
+
+.temp-diffs {
+  /* Add some margin to separate the diffs from the arrow */
+  margin-right: 10px; 
+}
+
+.arrow-container {
+  /* No specific styles needed here, but you can add if required */
+}
