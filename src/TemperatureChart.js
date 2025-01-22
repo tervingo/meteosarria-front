@@ -85,6 +85,7 @@ const TemperatureChart = () => {
     const maxTempTime = maxTempData ? maxTempData.fullTimestamp.split(' ')[1] : 'N/A';
     
 
+
     return (
       <LineChart
         width={500}

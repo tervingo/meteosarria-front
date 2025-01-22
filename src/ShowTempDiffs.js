@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import EastIcon from '@mui/icons-material/East';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
-
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 
 const ShowTempDiffs = () => {
@@ -108,7 +107,7 @@ const ShowTempDiffs = () => {
           {temperatureTrend === 'up-45' && <NorthEastIcon style={{ color: 'orangeRed'  }} />}
           {temperatureTrend === 'down-90' && <SouthIcon style={{ color: 'slateBlue' }} />}
           {temperatureTrend === 'down-45' && <SouthEastIcon style={{  color: 'royalBlue'  }} />}
-          {temperatureTrend === 'right' && <EastIcon style={{ color: 'salmon' }}/>}
+          {temperatureTrend === 'right' && <DragHandleIcon style={{ color: 'darkslategray' }}/>}
         </div>
       </div>
     </div>

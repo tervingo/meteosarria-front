@@ -4,12 +4,13 @@ import './App.css';
 
 const WindDirectionIndicator = ({ direction, speed, rose }) => {
   const angleInRadians = (direction * Math.PI) / 180;
-  const radius = 100; // Radius of the circle
-  const triangleSize = 10; // Size of the triangle
+  const radius = 75; // Radius of the circle
+  const circleRadius = 7; // Radius of the inner circle
+  const borderwidth = 4; // Width of the border
 
-  const x = radius + radius * Math.sin(angleInRadians) - triangleSize / 2;
-  const y = radius - radius * Math.cos(angleInRadians) - triangleSize / 2;
-  const circleRadius = 10; // Radius of the inner circle
+  const x = radius + radius * Math.sin(angleInRadians) - circleRadius - borderwidth; 
+  const y = radius - radius * Math.cos(angleInRadians) - circleRadius - borderwidth;
+
 
   return (
     <div className='wind-direction-container'>
