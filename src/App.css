@@ -113,6 +113,12 @@
   position: absolute;
 }
 
+.circle-indicator { /* Styles for the new circle indicator */
+  position: absolute;
+  background-color: navy; /* Or any color you prefer */
+  border-radius: 50%; /* Make it a circle */
+}
+
 .center-labels {  /* Styles for the new container */
   position: absolute;
   top: 50%;
