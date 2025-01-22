@@ -4,6 +4,13 @@ import ArrowUpward from '@mui/icons-material/ArrowUpward';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 
+import EastIcon from '@mui/icons-material/East';
+import NorthIcon from '@mui/icons-material/North';
+import SouthIcon from '@mui/icons-material/South';
+import NorthEastIcon from '@mui/icons-material/NorthEast';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
+
+
 
 const ShowTempDiffs = () => {
   const [hourlyDifference, setHourlyDifference] = useState(null);
@@ -100,11 +107,11 @@ const ShowTempDiffs = () => {
           )}
         </div>
         <div className="arrow-container"> {/* Container for the arrow */}
-          {temperatureTrend === 'up-90' && <ArrowUpward style={{ transform: 'rotate(0deg)',  color: 'red'  }} />}
-          {temperatureTrend === 'up-45' && <ArrowUpward style={{ transform: 'rotate(45deg)',  color: 'orangeRed'  }} />}
-          {temperatureTrend === 'down-90' && <ArrowDownward style={{ transform: 'rotate(0deg)',  color: 'slateBlue'   }} />}
-          {temperatureTrend === 'down-45' && <ArrowDownward style={{ transform: 'rotate(-45deg)',  color: 'royalBlue'  }} />}
-          {temperatureTrend === 'right' && <ArrowForward style={{ color: 'salmon' }}/>}
+          {temperatureTrend === 'up-90' && <NorthIcon style={{ color: 'red'  }} />}
+          {temperatureTrend === 'up-45' && <NorthEastIcon style={{ color: 'orangeRed'  }} />}
+          {temperatureTrend === 'down-90' && <SouthIcon style={{ color: 'slateBlue' }} />}
+          {temperatureTrend === 'down-45' && <SouthEastIcon style={{  color: 'royalBlue'  }} />}
+          {temperatureTrend === 'right' && <EastIcon style={{ color: 'salmon' }}/>}
         </div>
       </div>
     </div>
