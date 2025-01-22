@@ -98,8 +98,8 @@ function App() {
               <div className="weather-item">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
                 <ShowTempDiffs />
-                <Typography variant="h1" style={{ fontSize: '7rem', background: 'none' }}>
-                  {weatherData.external_temperature}°
+                <Typography variant="h1" style={{ fontSize: '6rem', background: 'none' }}>
+                  {weatherData.external_temperature.toFixed(1)}°
                 </Typography>
                 <TemperatureChart />
               </div>
