@@ -12,6 +12,7 @@ import TemperatureChart from './TemperatureChart';
 import PressChart from './PressChart';
 import HumChart from './HumChart';
 import ShowTempDiffs from './ShowTempDiffs';
+import ShowPressTrend from './ShowPressTrend';
 
 const theme = createTheme();
 
@@ -134,6 +135,7 @@ function App() {
                 <WindDirectionIndicator direction={weatherData.wind_direction} speed={weatherData.wind_speed} rose= {GetWindDir(weatherData.wind_direction)} />
               </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
+                  <ShowPressTrend />
                   <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
                     {weatherData.pressure} hPa
                   </Typography>
