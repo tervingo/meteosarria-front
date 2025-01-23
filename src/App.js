@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-// import GetTempColour from './GetTempColour';
-// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { Typography, Card, CardMedia } from '@mui/material';
+import { Typography } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TemperatureBackground from './TemperatureBackground';
 import GetWindDir from './GetWindDir';
@@ -13,6 +11,7 @@ import PressChart from './PressChart';
 import HumChart from './HumChart';
 import ShowTempDiffs from './ShowTempDiffs';
 import ShowPressTrend from './ShowPressTrend';
+import RadChart from './RadChart';
 
 const theme = createTheme();
 
@@ -25,7 +24,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-//        const response = await axios.get('http://localhost:5000/api/live');
+        // const response = await axios.get('http://localhost:5000/api/live');
         const response = await axios.get('https://meteosarria-back.onrender.com/api/live');
         setWeatherData(response.data);
         console.log('Weather data:', response.data);
@@ -61,8 +60,7 @@ function App() {
     return `${hours}:${minutes} (${day}.${month}.${year})`;
   };
 
-// Menu bar
-
+  // Menu bar
   function Menu({ items }) {
     return (
       <nav>
@@ -88,7 +86,7 @@ function App() {
         {weatherData && <TemperatureBackground temperature={weatherData.external_temperature} />}
 
         <div className="App-header">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <div>
               <Typography variant="h1" style={{ fontSize: '6rem', marginRight: '50px' }}>
                 #meteosarria
@@ -97,19 +95,9 @@ function App() {
                 {formatDate(currentTime)}
               </Typography>
             </div>
-            <Card>
-                <CardMedia
-                  component="img"
-                  width="180"
-                  height="180"
-                  image="/images/nubes.jpg"
-                  alt="Sample image"
-                  sx={{ objectFit: 'cover'}}
-                />
-              </Card>
           </div>
         </div>
-        <br/>
+        <br />
 
         <Menu items={menuItems} />
 
@@ -119,52 +107,81 @@ function App() {
 
           {weatherData && (
             <div className="weather-container">
-              <div className="weather-item">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
-                <ShowTempDiffs />
-                <Typography variant="h1" style={{ fontSize: '6rem', background: 'none' }}>
-                  {weatherData.external_temperature.toFixed(1)}°
-                </Typography>
-                <TemperatureChart />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
-                <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
-                  {weatherData.humidity}%
-                </Typography>
-                <HumChart />
-                <WindDirectionIndicator direction={weatherData.wind_direction} speed={weatherData.wind_speed} rose= {GetWindDir(weatherData.wind_direction)} />
-              </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
-                  <ShowPressTrend />
-                  <Typography variant="h6" style={{ fontSize: '5rem', background: 'none' }}>
-                    {weatherData.pressure} hPa
-                  </Typography>
-                  <PressChart />
-                </div>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <tbody>
+                  {/* Temperature Row */}
+                  <tr>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="h1" style={{ fontSize: '4rem', background: 'none', marginLeft: '10px' }}>
+                          {weatherData.external_temperature.toFixed(1)}°
+                        </Typography>
+                        <ShowTempDiffs />
+                      </div>
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%' }}>
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%' }}>
+                      <TemperatureChart />
+                    </td>
+                  </tr>
 
- {/*         
-                <TableContainer component={Paper}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        {Array.from({ length: 12 }).map((_, index) => (
-                          <TableCell key={index}>Header {index + 1}</TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {Array.from({ length: 2 }).map((_, rowIndex) => (
-                        <TableRow key={rowIndex}>
-                          {Array.from({ length: 12 }).map((_, colIndex) => (
-                            <TableCell sx={{ backgroundColor: GetTempColour(-12 + colIndex*5) }}> {-12 + colIndex*5 } </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>       
-  */}              
-              </div>
+                  {/* Humidity Row */}
+                  <tr>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
+                          {weatherData.humidity}%
+                        </Typography>
+                      </div>
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                        <WindDirectionIndicator direction={weatherData.wind_direction} speed={weatherData.wind_speed} rose={GetWindDir(weatherData.wind_direction)} />
+                      </div>
+                      {/* (Placeholder - you might add something here in the future) */}
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      <HumChart />
+                    </td>
+                  </tr>
+
+                  {/* Pressure Row */}
+                  <tr>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none', marginLeft: '10px' }}>
+                          {weatherData.pressure} hPa
+                        </Typography>
+                        <ShowPressTrend />
+                      </div>
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      {/* (Placeholder - you might add something here in the future) */}
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      <PressChart />
+                    </td>
+                  </tr>
+
+                  {/* Radiation Row */}
+                  <tr>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
+                          {weatherData.solar_radiation} W/m2
+                        </Typography>
+                      </div>
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      {/* (Placeholder - you might add something here in the future) */}
+                    </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                      <RadChart />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           )}
         </div>

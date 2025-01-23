@@ -11,7 +11,7 @@ import {
   ReferenceLine, // Import ReferenceLine
 } from 'recharts';
 
-const PressChart = () => {
+const RadChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -21,42 +21,42 @@ const PressChart = () => {
         const fetchedData = response.data;
         
         // Process the data with outlier handling
-        let lastValidPressure = null;
+        let lastValidRadiation = null;
         const formattedData = fetchedData.map(entry => {
           const [datePart, timePart] = entry.timestamp.split(' ');
           const [day, month, year] = datePart.split('-');
           const formattedDate = `${year}-${month}-${day}T${timePart}`;
           const dateObj = new Date(formattedDate);
           
-          // Get the current temperature
-          let currentPress = Number(entry.pressure);
+          // Get the current radiation
+          let currentRad = Number(entry.solar_radiation);
           
-          // Check if current temperature is valid
-          if (currentPress <= 1100) {
-            lastValidPressure = currentPress;
+          // Check if current radiation is valid
+          if (currentRad <= 2000) {
+            lastValidRadiation = currentRad;
           } else {
-            // If invalid, use last valid temperature
-            currentPress = lastValidPressure !== null ? lastValidPressure : null;
-            console.log(`Replaced anomalous pressure (${entry.pressure}) with last valid pressure: ${currentPress}`);
+            // If invalid, use last valid radiation
+            currentRad = lastValidRadiation !== null ? lastValidRadiation : null;
+            console.log(`Replaced anomalous radiation (${entry.solar_radiation}) with last valid radiation: ${currentRad}`);
           }
           
           return {
             fullTimestamp: entry.timestamp,
             dateTime: dateObj,
-            pressure: currentPress
+            solar_radiation: currentRad
           };
         })
-        // Filter out any null temperatures (in case the first readings were invalid)
-        .filter(item => item.pressure !== null);
+        // Filter out any null radiations (in case the first readings were invalid)
+        .filter(item => item.solar_radiation !== null);
         
         const sortedData = formattedData
           .filter(item => !isNaN(item.dateTime))
           .sort((a, b) => a.dateTime - b.dateTime);
         
-        console.log('Final data for chart:', sortedData);
+        console.log('Final data for rad chart:', sortedData);
         setData(sortedData);
       } catch (error) {
-        console.error('Error fetching pressure data:', error);
+        console.error('Error fetching radiation data:', error);
       }
     };
 
@@ -70,19 +70,19 @@ const PressChart = () => {
       return <div className="text-center p-4">Loading...</div>;
     }
 
-    // Calculate min and max temperatures with a small padding
+    // Calculate min and max radiations with a small padding
 
-    const absMinPress = (Math.min(...data.map(d => d.pressure)));
-    const absMaxPress = (Math.max(...data.map(d => d.pressure)));
-    const minPress = Math.floor(absMinPress);
-    const maxPress = Math.ceil(absMaxPress);
+    const absMinRad = (Math.min(...data.map(d => d.solar_radiation)));
+    const absMaxRad = (Math.max(...data.map(d => d.solar_radiation)));
+    const minRad = Math.floor(absMinRad);
+    const maxRad = Math.ceil(absMaxRad);
     const padding = 1;
 
-    // Find the timestamps of min and max temperatures
-    const minPressData = data.find(d => d.pressure === absMinPress);
-    const maxPressData = data.find(d => d.pressure === absMaxPress);
-    const minPressTime = minPressData ? minPressData.fullTimestamp.split(' ')[1] : 'N/A';
-    const maxPressTime = maxPressData ? maxPressData.fullTimestamp.split(' ')[1] : 'N/A';
+    // Find the timestamps of min and max radiations
+    const minRadData = data.find(d => d.solar_radiation === absMinRad);
+    const maxRadData = data.find(d => d.solar_radiation === absMaxRad);
+    const minRadTime = minRadData ? minRadData.fullTimestamp.split(' ')[1] : 'N/A';
+    const maxRadTime = maxRadData ? maxRadData.fullTimestamp.split(' ')[1] : 'N/A';
 
      return (
       <LineChart
@@ -93,7 +93,7 @@ const PressChart = () => {
           top: 20,
           right: 30,
           left: 20,
-          bottom: 40
+          bottom: 60
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
@@ -109,26 +109,26 @@ const PressChart = () => {
           interval="preserveStartEnd"
         />
         <YAxis
-          domain={[minPress - padding, maxPress + padding]}
+          domain={[minRad - padding, maxRad + padding]}
           label={{
-            value: 'Pressure (hPa)',
+            value: 'Radiation (W/m2)',
             angle: -90,
             position: 'insideLeft',
             offset: 10
           }}
         />
-        <ReferenceLine y={maxPress} label={`${absMaxPress}hPa at ${maxPressTime}`}  stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minPress} label={`${absMinPress}hPa at ${minPressTime}`} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxRad} label={`${absMaxRad}% at ${maxRadTime}`}  stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minRad} label={`${absMinRad}% at ${minRadTime}`} stroke="blue" strokeDasharray="1 1" />
 
         <Tooltip
-          formatter={(value) => [`${value}hPa`, 'Pressure']}
+          formatter={(value) => [`${value}%`, 'Radidity']}
         />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
-          dataKey="pressure"
-          stroke="salmon"
-          name="Pressure"
+          dataKey="solar_radiation"
+          stroke="white"s
+          name="Radiation"
           dot={false}
           strokeWidth={2}
         />
@@ -147,4 +147,4 @@ const PressChart = () => {
   );
 };
 
-export default PressChart;
+export default RadChart;

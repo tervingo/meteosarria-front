@@ -95,7 +95,7 @@ const TemperatureChart = () => {
           top: 20,
           right: 30,
           left: 20,
-          bottom: 60
+          bottom: 40
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
