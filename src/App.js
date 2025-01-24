@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 import { Typography } from '@mui/material';
+import { Card, CardMedia } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TemperatureBackground from './TemperatureBackground';
 import GetWindDir from './GetWindDir';
@@ -76,7 +77,8 @@ function App() {
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
     { label: 'Meteocat', url: 'https://www.meteo.cat/' },
-    { label: 'Renuncio', url: 'https://renuncio.com/meteorologia/actual' },
+    { label: 'Burgos Meteo', url: 'https://renuncio.com/meteorologia/actual' },
+    { label: 'Burgos Webcam', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
     { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe' }
   ];
@@ -95,7 +97,20 @@ function App() {
               <Typography variant="h6" style={{ fontSize: '3rem' }}>
                 {formatDate(currentTime)}
               </Typography>
+              <Typography variant="h6" style={{ fontSize: '1rem', color: 'dimGray' }}>
+              Sarrià - Barcelona (41º 23' 42" N, 2º 7' 21" E - 110m) 
+            </Typography>          
             </div>
+            <Card>
+                <CardMedia
+                  component="img"
+                  width="180"
+                  height="180"
+                  image="/images/nubes.jpg"
+                  alt="Sample image"
+                  sx={{ objectFit: 'cover'}}
+                />
+              </Card>
           </div>
         </div>
         <br />
@@ -117,7 +132,7 @@ function App() {
                      </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%', textAlign: 'center'}}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Typography variant="h1" style={{ fontSize: '10rem', color: 'dimGray', background: 'none', marginLeft: '10px'}}>
+                        <Typography variant="h1" style={{ fontSize: '10rem', color: 'dimGray', background: 'none', marginLeft: '1px'}}>
                           {weatherData.external_temperature.toFixed(1)}°
                         </Typography>
                         <ShowTempDiffs />
