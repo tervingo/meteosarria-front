@@ -80,7 +80,7 @@ function App() {
     { label: 'Burgos Meteo', url: 'https://renuncio.com/meteorologia/actual' },
     { label: 'Burgos Webcam', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
-    { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe' }
+    { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe/temperature-850hpa.html' }
   ];
 
   return (
