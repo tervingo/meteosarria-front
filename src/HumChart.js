@@ -32,7 +32,7 @@ const HumChart = () => {
           let currentHum = Number(entry.humidity);
           
           // Check if current temperature is valid
-          if (currentHum <= 1100) {
+          if (currentHum < 100) {
             lastValidHumidity = currentHum;
           } else {
             // If invalid, use last valid temperature
@@ -76,7 +76,7 @@ const HumChart = () => {
     const absMaxHum = (Math.max(...data.map(d => d.humidity)));
     const minHum = Math.floor(absMinHum);
     const maxHum = Math.ceil(absMaxHum);
-    const padding = 1;
+    const padding = 10;
 
     // Find the timestamps of min and max temperatures
     const minHumData = data.find(d => d.humidity === absMinHum);
@@ -109,7 +109,7 @@ const HumChart = () => {
           interval="preserveStartEnd"
         />
         <YAxis
-          domain={[minHum - padding, maxHum + padding]}
+          domain={[minHum-padding, 100]}
           label={{
             value: 'Humidity (%)',
             angle: -90,

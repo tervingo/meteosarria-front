@@ -77,7 +77,8 @@ function App() {
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
     { label: 'Meteocat', url: 'https://www.meteo.cat/' },
     { label: 'Renuncio', url: 'https://renuncio.com/meteorologia/actual' },
-    { label: 'Meteociel', url: 'https://meteociel.fr' }
+    { label: 'Meteociel', url: 'https://meteociel.fr' },
+    { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe' }
   ];
 
   return (
@@ -107,79 +108,57 @@ function App() {
 
           {weatherData && (
             <div className="weather-container">
+
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <tbody>
-                  {/* Temperature Row */}
                   <tr>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="h1" style={{ fontSize: '4rem', background: 'none', marginLeft: '10px' }}>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%', textAlign: 'center'}}>
+                       <WindDirectionIndicator direction={weatherData.wind_direction} speed={weatherData.wind_speed} rose={GetWindDir(weatherData.wind_direction)} />
+                     </td>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%', textAlign: 'center'}}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Typography variant="h1" style={{ fontSize: '10rem', color: 'dimGray', background: 'none', marginLeft: '10px'}}>
                           {weatherData.external_temperature.toFixed(1)}°
                         </Typography>
                         <ShowTempDiffs />
                       </div>
                     </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%' }}>
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%' }}>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%', textAlign: 'center'}}>
                       <TemperatureChart />
                     </td>
                   </tr>
-
-                  {/* Humidity Row */}
                   <tr>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
-                          {weatherData.humidity}%
-                        </Typography>
-                      </div>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
+                      <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
+                        {weatherData.humidity}%
+                      </Typography>
                     </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                        <WindDirectionIndicator direction={weatherData.wind_direction} speed={weatherData.wind_speed} rose={GetWindDir(weatherData.wind_direction)} />
-                      </div>
-                      {/* (Placeholder - you might add something here in the future) */}
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                      <HumChart />
-                    </td>
-                  </tr>
-
-                  {/* Pressure Row */}
-                  <tr>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none', marginLeft: '10px' }}>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
+                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none', marginRight: '10px' }}>
                           {weatherData.pressure} hPa
                         </Typography>
                         <ShowPressTrend />
                       </div>
                     </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                      {/* (Placeholder - you might add something here in the future) */}
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                      <PressChart />
+                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
+                      <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
+                        {weatherData.solar_radiation} W/m2
+                      </Typography>
                     </td>
                   </tr>
-
-                  {/* Radiation Row */}
                   <tr>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
-                          {weatherData.solar_radiation} W/m2
-                        </Typography>
-                      </div>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
+                      <HumChart />
                     </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
-                      {/* (Placeholder - you might add something here in the future) */}
+                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
+                      <PressChart />  
                     </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px' }}>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
                       <RadChart />
                     </td>
                   </tr>
+
                 </tbody>
               </table>
             </div>
