@@ -8,18 +8,23 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine, // Import ReferenceLine
+  ReferenceLine,
 } from 'recharts';
 
-const PressChart = () => {
+const PressChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://meteosarria-back.onrender.com/api/meteo-data');
+        const response = await axios.get(
+          'https://meteosarria-back.onrender.com/api/meteo-data',
+          {
+            params: { timeRange }, // Pass timeRange as a query parameter
+          }
+        );
         const fetchedData = response.data;
-        
+
         // Process the data with outlier handling
         let lastValidPressure = null;
         const formattedData = fetchedData.map(entry => {
@@ -27,32 +32,33 @@ const PressChart = () => {
           const [day, month, year] = datePart.split('-');
           const formattedDate = `${year}-${month}-${day}T${timePart}`;
           const dateObj = new Date(formattedDate);
-          
-          // Get the current temperature
+
+          // Get the current pressure
           let currentPress = Number(entry.pressure);
-          
-          // Check if current temperature is valid
+
+          // Check if current pressure is valid
           if (currentPress <= 1100) {
             lastValidPressure = currentPress;
           } else {
-            // If invalid, use last valid temperature
+            // If invalid, use last valid pressure
             currentPress = lastValidPressure !== null ? lastValidPressure : null;
             console.log(`Replaced anomalous pressure (${entry.pressure}) with last valid pressure: ${currentPress}`);
           }
-          
+
           return {
             fullTimestamp: entry.timestamp,
             dateTime: dateObj,
             pressure: currentPress
           };
         })
-        // Filter out any null temperatures (in case the first readings were invalid)
+        // Filter out any null pressures (in case the first readings were invalid)
         .filter(item => item.pressure !== null);
-        
+
+        // Sort data by dateTime
         const sortedData = formattedData
           .filter(item => !isNaN(item.dateTime))
           .sort((a, b) => a.dateTime - b.dateTime);
-        
+
         console.log('Final data for chart:', sortedData);
         setData(sortedData);
       } catch (error) {
@@ -63,28 +69,27 @@ const PressChart = () => {
     fetchData();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [timeRange]); // Add timeRange to the dependency array
 
   const chart = useMemo(() => {
     if (data.length === 0) {
       return <div className="text-center p-4">Loading...</div>;
     }
 
-    // Calculate min and max temperatures with a small padding
-
-    const absMinPress = (Math.min(...data.map(d => d.pressure)));
-    const absMaxPress = (Math.max(...data.map(d => d.pressure)));
+    // Calculate min and max pressures with padding
+    const absMinPress = Math.min(...data.map(d => d.pressure));
+    const absMaxPress = Math.max(...data.map(d => d.pressure));
     const minPress = Math.floor(absMinPress);
     const maxPress = Math.ceil(absMaxPress);
-    const padding = 1;
+    const padding = 1; // Padding for pressure
 
-    // Find the timestamps of min and max temperatures
+    // Find the timestamps of min and max pressures
     const minPressData = data.find(d => d.pressure === absMinPress);
     const maxPressData = data.find(d => d.pressure === absMaxPress);
     const minPressTime = minPressData ? minPressData.fullTimestamp.split(' ')[1] : 'N/A';
     const maxPressTime = maxPressData ? maxPressData.fullTimestamp.split(' ')[1] : 'N/A';
 
-     return (
+    return (
       <LineChart
         width={500}
         height={300}
@@ -100,8 +105,13 @@ const PressChart = () => {
         <XAxis
           dataKey="fullTimestamp"
           tickFormatter={(timeStr) => {
-            const [, timePart] = timeStr.split(' ');
-            return timePart;
+            const [datePart, timePart] = timeStr.split(' ');
+            if (timeRange === '7d') {
+              const [day, month] = datePart.split('-');
+              return `${day}/${month}`; // Format as DD/MM for 7 days
+            } else {
+              return timePart; // Format as HH:MM for 24h and 48h
+            }
           }}
           angle={-45}
           textAnchor="end"
@@ -111,34 +121,31 @@ const PressChart = () => {
         <YAxis
           domain={[minPress - padding, maxPress + padding]}
           label={{
-            value: 'Pressure (hPa)',
+            value: 'Presión (hPa)',
             angle: -90,
             position: 'insideLeft',
             offset: 10
           }}
         />
-        <ReferenceLine y={maxPress} label={`${absMaxPress}hPa at ${maxPressTime}`}  stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={maxPress} label={`${absMaxPress}hPa at ${maxPressTime}`} stroke="red" strokeDasharray="1 1" />
         <ReferenceLine y={minPress} label={`${absMinPress}hPa at ${minPressTime}`} stroke="blue" strokeDasharray="1 1" />
-
-        <Tooltip
-          formatter={(value) => [`${value}hPa`, 'Pressure']}
-        />
+        <Tooltip formatter={(value) => [`${value}hPa`, 'Pressure']} />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
           dataKey="pressure"
           stroke="salmon"
-          name="Pressure"
+          name="Presión"
           dot={false}
           strokeWidth={2}
         />
       </LineChart>
     );
-  }, [data]);
+  }, [data, timeRange]); // Add timeRange to the dependency array
 
   return (
-    <div style={{ 
-      width: '500px', 
+    <div style={{
+      width: '500px',
       height: '300px',
       margin: '0 auto'
     }}>

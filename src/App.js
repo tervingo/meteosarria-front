@@ -22,6 +22,12 @@ function App() {
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
 
+  const [timeRange, setTimeRange] = useState('24h'); // Default to 24 hours
+
+  const handleTimeRangeChange = (event) => {
+    setTimeRange(event.target.value);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -117,6 +123,9 @@ function App() {
 
         <Menu items={menuItems} />
 
+       {/* radio buttons to select chart scope (24h, 48h, 7d) */}
+
+
         <div className="App">
           {loading && <p>Loading weather data...</p>}
           {error && <p className="error">{error}</p>}
@@ -139,7 +148,21 @@ function App() {
                       </div>
                     </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%', textAlign: 'center'}}>
-                      <TemperatureChart />
+                      <div>
+                        <label>
+                          <input type="radio" value="24h" checked={timeRange === '24h'} onChange={handleTimeRangeChange} />
+                          24 Horas
+                        </label>
+                        <label>
+                          <input type="radio" value="48h" checked={timeRange === '48h'} onChange={handleTimeRangeChange} />
+                          48 Horas
+                        </label>
+                        <label>
+                          <input type="radio" value="7d" checked={timeRange === '7d'} onChange={handleTimeRangeChange} />
+                          7 Días
+                        </label>
+                      </div>
+                      <TemperatureChart timeRange={timeRange} />
                     </td>
                   </tr>
                   <tr>
@@ -164,13 +187,13 @@ function App() {
                   </tr>
                   <tr>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
-                      <HumChart />
+                      <HumChart timeRange={timeRange} />
                     </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
-                      <PressChart />  
+                      <PressChart timeRange={timeRange} />  
                     </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
-                      <RadChart />
+                      <RadChart timeRange={timeRange}  />
                     </td>
                   </tr>
 

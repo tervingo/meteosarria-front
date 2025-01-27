@@ -8,18 +8,23 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine, // Import ReferenceLine
+  ReferenceLine,
 } from 'recharts';
 
-const HumChart = () => {
+const HumChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://meteosarria-back.onrender.com/api/meteo-data');
+        const response = await axios.get(
+          'https://meteosarria-back.onrender.com/api/meteo-data',
+          {
+            params: { timeRange }, // Pass timeRange as a query parameter
+          }
+        );
         const fetchedData = response.data;
-        
+
         // Process the data with outlier handling
         let lastValidHumidity = null;
         const formattedData = fetchedData.map(entry => {
@@ -27,32 +32,33 @@ const HumChart = () => {
           const [day, month, year] = datePart.split('-');
           const formattedDate = `${year}-${month}-${day}T${timePart}`;
           const dateObj = new Date(formattedDate);
-          
-          // Get the current temperature
+
+          // Get the current humidity
           let currentHum = Number(entry.humidity);
-          
-          // Check if current temperature is valid
+
+          // Check if current humidity is valid
           if (currentHum < 100) {
             lastValidHumidity = currentHum;
           } else {
-            // If invalid, use last valid temperature
+            // If invalid, use last valid humidity
             currentHum = lastValidHumidity !== null ? lastValidHumidity : null;
             console.log(`Replaced anomalous humidity (${entry.humidity}) with last valid humidity: ${currentHum}`);
           }
-          
+
           return {
             fullTimestamp: entry.timestamp,
             dateTime: dateObj,
             humidity: currentHum
           };
         })
-        // Filter out any null temperatures (in case the first readings were invalid)
+        // Filter out any null humidities (in case the first readings were invalid)
         .filter(item => item.humidity !== null);
-        
+
+        // Sort data by dateTime
         const sortedData = formattedData
           .filter(item => !isNaN(item.dateTime))
           .sort((a, b) => a.dateTime - b.dateTime);
-        
+
         console.log('Final data for chart:', sortedData);
         setData(sortedData);
       } catch (error) {
@@ -63,28 +69,27 @@ const HumChart = () => {
     fetchData();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [timeRange]); // Add timeRange to the dependency array
 
   const chart = useMemo(() => {
     if (data.length === 0) {
       return <div className="text-center p-4">Loading...</div>;
     }
 
-    // Calculate min and max temperatures with a small padding
-
-    const absMinHum = (Math.min(...data.map(d => d.humidity)));
-    const absMaxHum = (Math.max(...data.map(d => d.humidity)));
+    // Calculate min and max humidities with padding
+    const absMinHum = Math.min(...data.map(d => d.humidity));
+    const absMaxHum = Math.max(...data.map(d => d.humidity));
     const minHum = Math.floor(absMinHum);
     const maxHum = Math.ceil(absMaxHum);
-    const padding = 10;
+    const padding = 10; // Increased padding for humidity
 
-    // Find the timestamps of min and max temperatures
+    // Find the timestamps of min and max humidities
     const minHumData = data.find(d => d.humidity === absMinHum);
     const maxHumData = data.find(d => d.humidity === absMaxHum);
     const minHumTime = minHumData ? minHumData.fullTimestamp.split(' ')[1] : 'N/A';
     const maxHumTime = maxHumData ? maxHumData.fullTimestamp.split(' ')[1] : 'N/A';
 
-     return (
+    return (
       <LineChart
         width={500}
         height={300}
@@ -100,8 +105,13 @@ const HumChart = () => {
         <XAxis
           dataKey="fullTimestamp"
           tickFormatter={(timeStr) => {
-            const [, timePart] = timeStr.split(' ');
-            return timePart;
+            const [datePart, timePart] = timeStr.split(' ');
+            if (timeRange === '7d') {
+              const [day, month] = datePart.split('-');
+              return `${day}/${month}`; // Format as DD/MM for 7 days
+            } else {
+              return timePart; // Format as HH:MM for 24h and 48h
+            }
           }}
           angle={-45}
           textAnchor="end"
@@ -109,36 +119,33 @@ const HumChart = () => {
           interval="preserveStartEnd"
         />
         <YAxis
-          domain={[minHum-padding, 100]}
+          domain={[minHum - padding, 100]} // Upper limit fixed at 100%
           label={{
-            value: 'Humidity (%)',
+            value: 'Humedad (%)',
             angle: -90,
             position: 'insideLeft',
             offset: 10
           }}
         />
-        <ReferenceLine y={maxHum} label={`${absMaxHum}% at ${maxHumTime}`}  stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={maxHum} label={`${absMaxHum}% at ${maxHumTime}`} stroke="red" strokeDasharray="1 1" />
         <ReferenceLine y={minHum} label={`${absMinHum}% at ${minHumTime}`} stroke="blue" strokeDasharray="1 1" />
-
-        <Tooltip
-          formatter={(value) => [`${value}%`, 'Humidity']}
-        />
+        <Tooltip formatter={(value) => [`${value}%`, 'Humidity']} />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
           dataKey="humidity"
-          stroke="darkBlue"s
-          name="Humidity"
+          stroke="darkBlue"
+          name="Humedad"
           dot={false}
           strokeWidth={2}
         />
       </LineChart>
     );
-  }, [data]);
+  }, [data, timeRange]); // Add timeRange to the dependency array
 
   return (
-    <div style={{ 
-      width: '500px', 
+    <div style={{
+      width: '500px',
       height: '300px',
       margin: '0 auto'
     }}>

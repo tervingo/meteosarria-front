@@ -8,18 +8,23 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine, // Import ReferenceLine
+  ReferenceLine,
 } from 'recharts';
 
-const RadChart = () => {
+const RadChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://meteosarria-back.onrender.com/api/meteo-data');
+        const response = await axios.get(
+          'https://meteosarria-back.onrender.com/api/meteo-data',
+          {
+            params: { timeRange }, // Pass timeRange as a query parameter
+          }
+        );
         const fetchedData = response.data;
-        
+
         // Process the data with outlier handling
         let lastValidRadiation = null;
         const formattedData = fetchedData.map(entry => {
@@ -27,10 +32,10 @@ const RadChart = () => {
           const [day, month, year] = datePart.split('-');
           const formattedDate = `${year}-${month}-${day}T${timePart}`;
           const dateObj = new Date(formattedDate);
-          
+
           // Get the current radiation
           let currentRad = Number(entry.solar_radiation);
-          
+
           // Check if current radiation is valid
           if (currentRad <= 2000) {
             lastValidRadiation = currentRad;
@@ -39,7 +44,7 @@ const RadChart = () => {
             currentRad = lastValidRadiation !== null ? lastValidRadiation : null;
             console.log(`Replaced anomalous radiation (${entry.solar_radiation}) with last valid radiation: ${currentRad}`);
           }
-          
+
           return {
             fullTimestamp: entry.timestamp,
             dateTime: dateObj,
@@ -48,11 +53,12 @@ const RadChart = () => {
         })
         // Filter out any null radiations (in case the first readings were invalid)
         .filter(item => item.solar_radiation !== null);
-        
+
+        // Sort data by dateTime
         const sortedData = formattedData
           .filter(item => !isNaN(item.dateTime))
           .sort((a, b) => a.dateTime - b.dateTime);
-        
+
         console.log('Final data for rad chart:', sortedData);
         setData(sortedData);
       } catch (error) {
@@ -63,20 +69,19 @@ const RadChart = () => {
     fetchData();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [timeRange]); // Add timeRange to the dependency array
 
   const chart = useMemo(() => {
     if (data.length === 0) {
       return <div className="text-center p-4">Loading...</div>;
     }
 
-    // Calculate min and max radiations with a small padding
-
-    const absMinRad = (Math.min(...data.map(d => d.solar_radiation)));
-    const absMaxRad = (Math.max(...data.map(d => d.solar_radiation)));
+    // Calculate min and max radiations with padding
+    const absMinRad = Math.min(...data.map(d => d.solar_radiation));
+    const absMaxRad = Math.max(...data.map(d => d.solar_radiation));
     const minRad = Math.floor(absMinRad);
     const maxRad = Math.ceil(absMaxRad);
-    const padding = 1;
+    const padding = 1; // Padding for radiation
 
     // Find the timestamps of min and max radiations
     const minRadData = data.find(d => d.solar_radiation === absMinRad);
@@ -84,7 +89,7 @@ const RadChart = () => {
     const minRadTime = minRadData ? minRadData.fullTimestamp.split(' ')[1] : 'N/A';
     const maxRadTime = maxRadData ? maxRadData.fullTimestamp.split(' ')[1] : 'N/A';
 
-     return (
+    return (
       <LineChart
         width={500}
         height={300}
@@ -100,8 +105,13 @@ const RadChart = () => {
         <XAxis
           dataKey="fullTimestamp"
           tickFormatter={(timeStr) => {
-            const [, timePart] = timeStr.split(' ');
-            return timePart;
+            const [datePart, timePart] = timeStr.split(' ');
+            if (timeRange === '7d') {
+              const [day, month] = datePart.split('-');
+              return `${day}/${month}`; // Format as DD/MM for 7 days
+            } else {
+              return timePart; // Format as HH:MM for 24h and 48h
+            }
           }}
           angle={-45}
           textAnchor="end"
@@ -111,34 +121,31 @@ const RadChart = () => {
         <YAxis
           domain={[minRad - padding, maxRad + padding]}
           label={{
-            value: 'Radiation (W/m2)',
+            value: 'Radiación solar (W/m2)',
             angle: -90,
             position: 'insideLeft',
             offset: 10
           }}
         />
-        <ReferenceLine y={maxRad} label={`${absMaxRad}% at ${maxRadTime}`}  stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minRad} label={`${absMinRad}% at ${minRadTime}`} stroke="blue" strokeDasharray="1 1" />
-
-        <Tooltip
-          formatter={(value) => [`${value}%`, 'Radidity']}
-        />
+        <ReferenceLine y={maxRad} label={`${absMaxRad} at ${maxRadTime}`} stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minRad} label={`${absMinRad} at ${minRadTime}`} stroke="blue" strokeDasharray="1 1" />
+        <Tooltip formatter={(value) => [`${value}`, 'Radiation']} />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
           dataKey="solar_radiation"
-          stroke="white"s
-          name="Radiation"
+          stroke="azure"
+          name="Radiación solar"
           dot={false}
           strokeWidth={2}
         />
       </LineChart>
     );
-  }, [data]);
+  }, [data, timeRange]); // Add timeRange to the dependency array
 
   return (
-    <div style={{ 
-      width: '500px', 
+    <div style={{
+      width: '500px',
       height: '300px',
       margin: '0 auto'
     }}>
