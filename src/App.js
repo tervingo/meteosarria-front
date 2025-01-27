@@ -86,6 +86,7 @@ function App() {
     { label: 'Burgos Meteo', url: 'https://renuncio.com/meteorologia/actual' },
     { label: 'Burgos Webcam', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
+    { label: 'Windy', url: 'https://www.windy.com' },
     { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe/temperature-850hpa.html' }
   ];
 
@@ -196,7 +197,26 @@ function App() {
                       <RadChart timeRange={timeRange}  />
                     </td>
                   </tr>
-
+                  <tr>
+                    <td colSpan={2}>
+                    <iframe 
+                        width="400" 
+                        height="250" 
+                        src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=45.151&lon=-1.494&message=true" 
+                        frameborder="0"
+                        title="Windy.com Weather Map"
+                      ></iframe>                    
+                      </td>
+                      <td>
+                        <iframe 
+                          width="400" 
+                          height="250" 
+                          src="https://renuncio.com/meteorologia/actual" 
+                          frameborder="0"
+                          title="Renuncio (Burgos)"
+                        ></iframe>
+                      </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
