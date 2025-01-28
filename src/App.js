@@ -202,7 +202,7 @@ function App() {
                     <iframe 
                         width="400" 
                         height="250" 
-                        src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=45.151&lon=-1.494&message=true" 
+                        src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=5&overlay=temp&product=ecmwf&level=surface&lat=39.741&lon=-5.01" 
                         frameborder="0"
                         title="Windy.com Weather Map"
                       ></iframe>                    
