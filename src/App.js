@@ -208,15 +208,9 @@ function App() {
                       ></iframe>                    
                       </td>
                       <td>
-                        <iframe 
-                          width="400" 
-                          height="250" 
-                          src="https://renuncio.com/meteorologia/actual" 
-                          frameborder="0"
-                          title="Renuncio (Burgos)"
-                        ></iframe>
                       </td>
                   </tr>
+                    
                 </tbody>
               </table>
             </div>
