@@ -27,7 +27,7 @@ const TemperatureBackground = ({ temperature }) => {
       color = 'white'; // Default to white if out of range
     }
 
-    color = 'DarkGray'; // Change background to dark grey
+    color = 'DarkSlateGray'; // Change background to dark grey
 
     document.body.style.backgroundColor = color;
   }, [temperature]);

@@ -123,13 +123,13 @@ function App() {
         <div className="App-header">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <div>
-              <Typography variant="h1" style={{ fontSize: '6rem', marginRight: '50px' }}>
+              <Typography variant="h1" style={{ fontSize: '6rem', marginRight: '50px', color: 'Gray' }}>
                 #meteosarria
               </Typography>
-              <Typography variant="h6" style={{ fontSize: '3rem' }}>
+              <Typography variant="h6" style={{ fontSize: '3rem', color: 'DarkGray'  }}>
                 {formatDate(currentTime)}
               </Typography>
-              <Typography variant="h6" style={{ fontSize: '1rem', color: 'dimGray' }}>
+              <Typography variant="h6" style={{ fontSize: '1rem', color: 'DarkGray' }}>
               Sarrià - Barcelona (41º 23' 42" N, 2º 7' 21" E - 110m) 
             </Typography>          
             </div>
