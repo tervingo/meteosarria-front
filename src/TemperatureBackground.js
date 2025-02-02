@@ -27,7 +27,9 @@ const TemperatureBackground = ({ temperature }) => {
       color = 'white'; // Default to white if out of range
     }
 
-    document.body.style.backgroundColor = 'DarkGrey';
+    color = 'DarkGray'; // Change background to dark grey
+
+    document.body.style.backgroundColor = color;
   }, [temperature]);
 
   return null; // This component does not render anything

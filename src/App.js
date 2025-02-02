@@ -23,7 +23,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [renuncioData, setRenuncioData] = useState(null);
+//  const [renuncioData, setRenuncioData] = useState(null);
 
   const [timeRange, setTimeRange] = useState('24h'); // Default to 24 hours
 
@@ -52,6 +52,7 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+/*   
    useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,7 +73,7 @@ function App() {
 
     return () => clearInterval(intervalId);
   }, []);
- 
+  */
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -232,7 +233,7 @@ function App() {
                       </iframe>                    
                       </td>
                       <td>
-                        <a name="windy-webcam-timelapse-player"  data-id="1735243432" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735243432" target="_blank">Burgos: Burgos Cathedral</a>
+                        <a name="windy-webcam-timelapse-player"  data-id="1735243432" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735243432" target="_blank" rel="noreferrer">Burgos: Burgos Cathedral</a>
                         <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js">
                         </script>
                       </td>
