@@ -5,6 +5,7 @@ import { Typography } from '@mui/material';
 import { Card, CardMedia } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TemperatureBackground from './TemperatureBackground';
+import GetTempColour from './GetTempColour';
 import GetWindDir from './GetWindDir';
 import WindDirectionIndicator from './WindDirectionIndicator';
 import TemperatureChart from './TemperatureChart';
@@ -13,6 +14,7 @@ import HumChart from './HumChart';
 import ShowTempDiffs from './ShowTempDiffs';
 import ShowPressTrend from './ShowPressTrend';
 import RadChart from './RadChart';
+import { BACKEND_URI } from './constants';
 
 const theme = createTheme();
 
@@ -21,6 +23,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [renuncioData, setRenuncioData] = useState(null);
 
   const [timeRange, setTimeRange] = useState('24h'); // Default to 24 hours
 
@@ -31,8 +34,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await axios.get('http://localhost:5000/api/live');
-        const response = await axios.get('https://meteosarria-back.onrender.com/api/live');
+        const response = await axios.get(BACKEND_URI+'/api/live');
         setWeatherData(response.data);
         console.log('Weather data:', response.data);
         setError(null);
@@ -49,6 +51,28 @@ function App() {
 
     return () => clearInterval(intervalId);
   }, []);
+
+   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(BACKEND_URI+'/api/renuncio');
+        setRenuncioData(response.data);
+        console.log('Renuncio data:', response.data);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching Renuncio data:", error);
+        setError("Failed to fetch Renuncio data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    const intervalId = setInterval(fetchData, 300000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+ 
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -83,7 +107,7 @@ function App() {
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
     { label: 'Meteocat', url: 'https://www.meteo.cat/' },
-    { label: 'Burgos Meteo', url: 'https://renuncio.com/meteorologia/actual' },
+    { label: 'Renuncio Meteo', url: 'https://renuncio.com/meteorologia/actual' },
     { label: 'Burgos Webcam', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
     { label: 'Windy', url: 'https://www.windy.com' },
@@ -142,7 +166,7 @@ function App() {
                      </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%', textAlign: 'center'}}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Typography variant="h1" style={{ fontSize: '10rem', color: 'dimGray', background: 'none', marginLeft: '1px'}}>
+                        <Typography variant="h1" style={{ fontSize: '11rem', color: GetTempColour(weatherData.external_temperature), background: 'none', marginLeft: '1px'}}>
                           {weatherData.external_temperature.toFixed(1)}°
                         </Typography>
                         <ShowTempDiffs />
@@ -198,16 +222,29 @@ function App() {
                     </td>
                   </tr>
                   <tr>
-                    <td colSpan={2}>
+                    <td>
                     <iframe 
                         width="400" 
                         height="250" 
                         src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=5&overlay=temp&product=ecmwf&level=surface&lat=39.741&lon=-5.01" 
                         frameborder="0"
-                        title="Windy.com Weather Map"
-                      ></iframe>                    
+                        title="Windy.com Weather Map">
+                      </iframe>                    
                       </td>
                       <td>
+                        <a name="windy-webcam-timelapse-player"  data-id="1735243432" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735243432" target="_blank">Burgos: Burgos Cathedral</a>
+                        <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js">
+                        </script>
+                      </td>
+                      <td>
+                        <Typography variant="h6" style={{ fontSize: '1.1rem', background: 'none', color: 'DimGray' }}>Previsión Burgos</Typography>
+                        <iframe 
+                          width="500" 
+                          height="187" 
+                          src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=default&metricRain=default&metricWind=default" frameborder="0"
+                          title="Burgos" 
+                        >
+                        </iframe>
                       </td>
                   </tr>
                     

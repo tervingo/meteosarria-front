@@ -10,6 +10,7 @@ import {
   Legend,
   ReferenceLine,
 } from 'recharts';
+import { BACKEND_URI  }  from './constants';
 
 const PressChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -18,7 +19,7 @@ const PressChart = ({ timeRange }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://meteosarria-back.onrender.com/api/meteo-data',
+          BACKEND_URI+'/api/meteo-data',
           {
             params: { timeRange }, // Pass timeRange as a query parameter
           }
@@ -134,7 +135,7 @@ const PressChart = ({ timeRange }) => {
         <Line
           type="monotone"
           dataKey="pressure"
-          stroke="salmon"
+          stroke="green"
           name="Presión"
           dot={false}
           strokeWidth={2}

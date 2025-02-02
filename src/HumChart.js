@@ -10,6 +10,7 @@ import {
   Legend,
   ReferenceLine,
 } from 'recharts';
+import { BACKEND_URI } from './constants';
 
 const HumChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -18,7 +19,7 @@ const HumChart = ({ timeRange }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://meteosarria-back.onrender.com/api/meteo-data',
+          BACKEND_URI+'/api/meteo-data',
           {
             params: { timeRange }, // Pass timeRange as a query parameter
           }

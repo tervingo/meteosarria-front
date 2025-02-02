@@ -6,7 +6,7 @@ import SouthIcon from '@mui/icons-material/South';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-
+import { BACKEND_URI  }  from './constants';
 
 const ShowPressTrend = () => {
   const [pressureTrend, setPressureTrend] = useState(null);
@@ -14,7 +14,7 @@ const ShowPressTrend = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://meteosarria-back.onrender.com/api/meteo-data');
+        const response = await axios.get(BACKEND_URI+'/api/meteo-data');
         const fetchedData = response.data;
 
         // Process data to find the most recent, 15 minutes ago, 1 hour ago, and 24 hours ago timestamps

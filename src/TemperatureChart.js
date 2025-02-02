@@ -10,6 +10,7 @@ import {
   Legend,
   ReferenceLine,
 } from 'recharts';
+import { BACKEND_URI  }  from './constants';
 
 const TemperatureChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -19,7 +20,7 @@ const TemperatureChart = ({ timeRange }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://meteosarria-back.onrender.com/api/meteo-data',
+          BACKEND_URI+'/api/meteo-data',
           {
             params: { timeRange }, // Pass timeRange as a query parameter
           }
