@@ -223,32 +223,21 @@ function App() {
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                    <iframe 
-                        width="400" 
-                        height="250" 
-                        src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=5&overlay=temp&product=ecmwf&level=surface&lat=39.741&lon=-5.01" 
+                    <td colSpan="2">
+                      <iframe 
+                        width="450" 
+                        height="300" 
+                        src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true" 
                         frameborder="0"
-                        title="Windy.com Weather Map">
-                      </iframe>                    
-                      </td>
-                      <td>
-                        <a name="windy-webcam-timelapse-player"  data-id="1735243432" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735243432" target="_blank" rel="noreferrer">Burgos: Burgos Cathedral</a>
-                        <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js">
-                        </script>
-                      </td>
-                      <td>
-                        <Typography variant="h6" style={{ fontSize: '1.1rem', background: 'none', color: 'DimGray' }}>Previsión Burgos</Typography>
-                        <iframe 
-                          width="500" 
-                          height="187" 
-                          src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=default&metricRain=default&metricWind=default" frameborder="0"
-                          title="Burgos" 
+                        title='mapa'
                         >
-                        </iframe>
-                      </td>
+                      </iframe>          
+                    </td>
+                    <td>
+                        <a name="windy-webcam-timelapse-player"  data-id="1735243432" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735243432" target="_blank" rel="noreferrer">Burgos: Burgos Cathedral</a>
+                        <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
+                    </td>
                   </tr>
-                    
                 </tbody>
               </table>
             </div>
