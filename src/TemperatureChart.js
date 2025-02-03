@@ -10,58 +10,50 @@ import {
   Legend,
   ReferenceLine,
 } from 'recharts';
-import { BACKEND_URI  }  from './constants';
+import { BACKEND_URI } from './constants';
+import GetTempColour from './GetTempColour'; // Import your color-generating component
 
 const TemperatureChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
-  console.log('Time range:', timeRange);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          BACKEND_URI+'/api/meteo-data',
-          {
-            params: { timeRange }, // Pass timeRange as a query parameter
-          }
-        );
+        const response = await axios.get(BACKEND_URI + '/api/meteo-data', {
+          params: { timeRange },
+        });
         const fetchedData = response.data;
 
-        // Process the data with outlier handling
         let lastValidTemperature = null;
-        const formattedData = fetchedData.map(entry => {
+        const formattedData = fetchedData.map((entry) => {
           const [datePart, timePart] = entry.timestamp.split(' ');
           const [day, month, year] = datePart.split('-');
           const formattedDate = `${year}-${month}-${day}T${timePart}`;
           const dateObj = new Date(formattedDate);
 
-          // Get the current temperature
           let currentTemp = Number(entry.external_temperature);
 
-          // Check if current temperature is valid
           if (currentTemp <= 45) {
             lastValidTemperature = currentTemp;
           } else {
-            // If invalid, use last valid temperature
             currentTemp = lastValidTemperature !== null ? lastValidTemperature : null;
-            console.log(`Replaced anomalous temperature (${entry.external_temperature}) with last valid temperature: ${currentTemp}`);
+            console.log(
+              `Replaced anomalous temperature (${entry.external_temperature}) with last valid temperature: ${currentTemp}`
+            );
           }
 
           return {
             fullTimestamp: entry.timestamp,
             dateTime: dateObj,
-            external_temperature: currentTemp
+            external_temperature: currentTemp,
           };
         })
-        // Filter out any null temperatures (in case the first readings were invalid)
-        .filter(item => item.external_temperature !== null);
+          .filter((item) => item.external_temperature !== null);
 
-        // Sort data by dateTime
         const sortedData = formattedData
-          .filter(item => !isNaN(item.dateTime))
+          .filter((item) => !isNaN(item.dateTime))
           .sort((a, b) => a.dateTime - b.dateTime);
 
-        console.log('Final data for chart:', sortedData);
         setData(sortedData);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
@@ -71,23 +63,21 @@ const TemperatureChart = ({ timeRange }) => {
     fetchData();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, [timeRange]); // Add timeRange to the dependency array
+  }, [timeRange]);
 
   const chart = useMemo(() => {
     if (data.length === 0) {
       return <div className="text-center p-4">Loading...</div>;
     }
 
-    // Calculate min and max temperatures with a small padding
-    const absMinTemp = Math.min(...data.map(d => d.external_temperature));
-    const absMaxTemp = Math.max(...data.map(d => d.external_temperature));
+    const absMinTemp = Math.min(...data.map((d) => d.external_temperature));
+    const absMaxTemp = Math.max(...data.map((d) => d.external_temperature));
     const minTemp = Math.floor(absMinTemp);
     const maxTemp = Math.ceil(absMaxTemp);
     const padding = 1;
 
-    // Find the timestamps of min and max temperatures
-    const minTempData = data.find(d => d.external_temperature === absMinTemp);
-    const maxTempData = data.find(d => d.external_temperature === absMaxTemp);
+    const minTempData = data.find((d) => d.external_temperature === absMinTemp);
+    const maxTempData = data.find((d) => d.external_temperature === absMaxTemp);
     const minTempTime = minTempData ? minTempData.fullTimestamp.split(' ')[1] : 'N/A';
     const maxTempTime = maxTempData ? maxTempData.fullTimestamp.split(' ')[1] : 'N/A';
 
@@ -108,12 +98,12 @@ const TemperatureChart = ({ timeRange }) => {
           dataKey="fullTimestamp"
           tickFormatter={(timeStr) => {
             const [datePart, timePart] = timeStr.split(' ');
-            
+
             if (timeRange === '7d') {
               const [day, month] = datePart.split('-');
-              return `${day}/${month}`; // Format as DD/MM for 7 days
+              return `${day}/${month}`;
             } else {
-              return timePart; // Format as HH:MM for 24h and 48h
+              return timePart;
             }
           }}
           angle={-45}
@@ -130,28 +120,46 @@ const TemperatureChart = ({ timeRange }) => {
             offset: 10,
           }}
         />
-        <ReferenceLine y={maxTemp} label={`${absMaxTemp}°C at ${maxTempTime}`} stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minTemp} label={`${absMinTemp}°C at ${minTempTime}`} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine
+          y={maxTemp}
+          label={`${absMaxTemp}°C at ${maxTempTime}`}
+          stroke="red"
+          strokeDasharray="1 1"
+        />
+        <ReferenceLine
+          y={minTemp}
+          label={`${absMinTemp}°C at ${minTempTime}`}
+          stroke="blue"
+          strokeDasharray="1 1"
+        />
         <Tooltip formatter={(value) => [`${value}°C`, 'Temperature']} />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
           dataKey="external_temperature"
-          stroke="red"
           name="Temperatura"
-          dot={false}
-          strokeWidth={2}
+          strokeWidth={0.5}
+          dot={(props) => {
+            const { cx, cy, payload } = props;
+            const color = GetTempColour(payload.external_temperature);
+
+            return (
+              <circle cx={cx} cy={cy} r={1} fill={color} stroke={color} />
+            );
+          }}
         />
       </LineChart>
     );
-  }, [data, timeRange]); // Add timeRange to the dependency array
+  }, [data, timeRange]);
 
   return (
-    <div style={{
-      width: '500px',
-      height: '300px',
-      margin: '0 auto',
-    }}>
+    <div
+      style={{
+        width: '500px',
+        height: '300px',
+        margin: '0 auto',
+      }}
+    >
       {chart}
     </div>
   );

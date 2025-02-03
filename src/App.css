@@ -115,7 +115,7 @@
 
 .circle-indicator { /* Styles for the new circle indicator */
   position: absolute;
-  background-color: darkslategray; /* Or any color you prefer */
+  background-color: orangered; /* Or any color you prefer */
   border-radius: 50%; /* Make it a circle */
 }
 
