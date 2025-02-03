@@ -70,7 +70,7 @@
 .circle {
   height: 150px;
   width: 150px;
-  border: 4px solid black;
+  border: 4px solid azure;
   border-radius: 50%;
   position: relative;
 }
@@ -78,6 +78,7 @@
 .label {
   position: absolute;
   font-size: 1.5rem;
+  color: darkgray;
 }
 
 .north {
@@ -128,6 +129,7 @@
   flex-direction: column; /* Stack speed above direction */
   align-items: center;
   font-size: 1.2rem;
+  color: darkgray;
 }
 
 .differences {
@@ -145,6 +147,7 @@
 .temp-diffs {
   /* Add some margin to separate the diffs from the arrow */
   margin-right: 10px; 
+  color: darkgray;
 }
 
 .arrow-container {

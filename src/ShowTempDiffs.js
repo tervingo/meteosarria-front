@@ -31,6 +31,11 @@ const ShowTempDiffs = () => {
         const oneHourAgoData = findDataClosestToTime(fetchedData, oneHourAgo);
         const twentyFourHoursAgoData = findDataClosestToTime(fetchedData, twentyFourHoursAgo);
 
+        console.log('Current data:', currentData);
+        console.log('15 minutes ago data:', fifteenMinutesAgoData);
+        console.log('1 hour ago data:', oneHourAgoData);
+        console.log('24 hours ago data:', twentyFourHoursAgoData);
+
         // Calculate temperature differences and trend
         if (currentData && fifteenMinutesAgoData) {
           const fifteenMinuteDiff = currentData.external_temperature - fifteenMinutesAgoData.external_temperature;
@@ -107,7 +112,7 @@ const ShowTempDiffs = () => {
           {temperatureTrend === 'up-45' && <NorthEastIcon style={{ color: 'orangeRed'  }} />}
           {temperatureTrend === 'down-90' && <SouthIcon style={{ color: 'slateBlue' }} />}
           {temperatureTrend === 'down-45' && <SouthEastIcon style={{  color: 'royalBlue'  }} />}
-          {temperatureTrend === 'right' && <DragHandleIcon style={{ color: 'darkslategray' }}/>}
+          {temperatureTrend === 'right' && <DragHandleIcon style={{ color: 'azure' }}/>}
         </div>
       </div>
     </div>

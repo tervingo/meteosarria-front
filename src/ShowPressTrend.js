@@ -81,7 +81,7 @@ const ShowPressTrend = () => {
           {pressureTrend === 'up-45' && <NorthEastIcon style={{ color: 'orangeRed'  }} />}
           {pressureTrend === 'down-90' && <SouthIcon style={{ color: 'slateBlue' }} />}
           {pressureTrend === 'down-45' && <SouthEastIcon style={{  color: 'royalBlue'  }} />}
-          {pressureTrend === 'right' && <DragHandleIcon style={{ color: 'darkslategray' }}/>}
+          {pressureTrend === 'right' && <DragHandleIcon style={{ color: 'azure' }}/>}
         </div>
       </div>
     </div>

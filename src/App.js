@@ -173,7 +173,7 @@ function App() {
                         <ShowTempDiffs />
                       </div>
                     </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%', textAlign: 'center'}}>
+                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%', color: 'darkgray', textAlign: 'center'}}>
                       <div>
                         <label>
                           <input type="radio" value="24h" checked={timeRange === '24h'} onChange={handleTimeRangeChange} />
@@ -193,20 +193,20 @@ function App() {
                   </tr>
                   <tr>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
-                      <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
+                      <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none' }}>
                         {weatherData.humidity}%
                       </Typography>
                     </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
-                        <Typography variant="h6" style={{ fontSize: '3rem', background: 'none', marginRight: '10px' }}>
+                        <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none', marginRight: '10px' }}>
                           {weatherData.pressure} hPa
                         </Typography>
                         <ShowPressTrend />
                       </div>
                     </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
-                      <Typography variant="h6" style={{ fontSize: '3rem', background: 'none' }}>
+                      <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none' }}>
                         {weatherData.solar_radiation} W/m2
                       </Typography>
                     </td>
