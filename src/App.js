@@ -13,6 +13,7 @@ import PressChart from './PressChart';
 import HumChart from './HumChart';
 import ShowTempDiffs from './ShowTempDiffs';
 import ShowPressTrend from './ShowPressTrend';
+import ShowHumTrends from './ShowHumTrends';
 import RadChart from './RadChart';
 import { BACKEND_URI } from './constants';
 
@@ -193,9 +194,12 @@ function App() {
                   </tr>
                   <tr>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
-                      <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none' }}>
-                        {weatherData.humidity}%
-                      </Typography>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
+                        <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none' }}>
+                          {weatherData.humidity}%
+                        </Typography>
+                        <ShowHumTrends />
+                      </div>
                     </td>
                     <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
