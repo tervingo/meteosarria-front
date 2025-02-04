@@ -128,14 +128,14 @@ const RadChart = ({ timeRange }) => {
             offset: 10
           }}
         />
-        <ReferenceLine y={maxRad} label={`${absMaxRad} at ${maxRadTime}`} stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minRad} label={`${absMinRad} at ${minRadTime}`} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxRad} label={{ value: `${absMaxRad} at ${maxRadTime}`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" /> 
+        <ReferenceLine y={minRad} label={{ value: `${absMinRad} at ${minRadTime}`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
         <Tooltip formatter={(value) => [`${value}`, 'Radiation']} />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
           dataKey="solar_radiation"
-          stroke="azure"
+          stroke="gold"
           name="Radiación solar"
           dot={false}
           strokeWidth={2}

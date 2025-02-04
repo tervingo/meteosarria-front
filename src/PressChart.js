@@ -128,14 +128,14 @@ const PressChart = ({ timeRange }) => {
             offset: 10
           }}
         />
-        <ReferenceLine y={maxPress} label={`${absMaxPress}hPa at ${maxPressTime}`} stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minPress} label={`${absMinPress}hPa at ${minPressTime}`} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxPress} label={{ value: `${absMaxPress} at ${maxPressTime}`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minPress} label={{ value: `${absMinPress} at ${minPressTime}`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
         <Tooltip formatter={(value) => [`${value}hPa`, 'Pressure']} />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
           dataKey="pressure"
-          stroke="green"
+          stroke="orangered"
           name="Presión"
           dot={false}
           strokeWidth={2}

@@ -122,13 +122,13 @@ const TemperatureChart = ({ timeRange }) => {
         />
         <ReferenceLine
           y={maxTemp}
-          label={`${absMaxTemp}°C at ${maxTempTime}`}
+          label={{ value: `${absMaxTemp} at ${maxTempTime}`,  fill: 'azure' }}
           stroke="red"
           strokeDasharray="1 1"
         />
         <ReferenceLine
           y={minTemp}
-          label={`${absMinTemp}°C at ${minTempTime}`}
+          label={{ value: `${absMinTemp} at ${minTempTime}`,  fill: 'azure' }}
           stroke="blue"
           strokeDasharray="1 1"
         />

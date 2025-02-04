@@ -128,14 +128,14 @@ const HumChart = ({ timeRange }) => {
             offset: 10
           }}
         />
-        <ReferenceLine y={maxHum} label={`${absMaxHum}% at ${maxHumTime}`} stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minHum} label={`${absMinHum}% at ${minHumTime}`} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxHum} label={{ value: `${absMaxHum} at ${maxHumTime}`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minHum} label={{ value: `${absMinHum} at ${minHumTime}`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
         <Tooltip formatter={(value) => [`${value}%`, 'Humidity']} />
         <Legend verticalAlign="top" height={36} />
         <Line
           type="monotone"
           dataKey="humidity"
-          stroke="darkBlue"
+          stroke="aqua"
           name="Humedad"
           dot={false}
           strokeWidth={2}
