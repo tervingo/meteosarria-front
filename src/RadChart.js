@@ -85,10 +85,9 @@ const RadChart = ({ timeRange }) => {
     const padding = 1; // Padding for radiation
 
     // Find the timestamps of min and max radiations
-    const minRadData = data.find(d => d.solar_radiation === absMinRad);
+
     const maxRadData = data.find(d => d.solar_radiation === absMaxRad);
-    const minRadTime = minRadData ? minRadData.fullTimestamp.split(' ')[1] : 'N/A';
-    const maxRadTime = maxRadData ? maxRadData.fullTimestamp.split(' ')[1] : 'N/A';
+    const maxRadTime = maxRadData ? maxRadData.fullTimestamp : 'N/A';
 
     return (
       <LineChart
@@ -128,8 +127,7 @@ const RadChart = ({ timeRange }) => {
             offset: 10
           }}
         />
-        <ReferenceLine y={maxRad} label={{ value: `${absMaxRad} at ${maxRadTime}`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" /> 
-        <ReferenceLine y={minRad} label={{ value: `${absMinRad} at ${minRadTime}`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxRad} label={{ value: `${absMaxRad} (el ${maxRadTime})`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" /> 
         <Tooltip formatter={(value) => [`${value}`, 'Radiation']} />
         <Legend verticalAlign="top" height={36} />
         <Line

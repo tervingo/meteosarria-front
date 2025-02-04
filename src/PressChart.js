@@ -87,8 +87,8 @@ const PressChart = ({ timeRange }) => {
     // Find the timestamps of min and max pressures
     const minPressData = data.find(d => d.pressure === absMinPress);
     const maxPressData = data.find(d => d.pressure === absMaxPress);
-    const minPressTime = minPressData ? minPressData.fullTimestamp.split(' ')[1] : 'N/A';
-    const maxPressTime = maxPressData ? maxPressData.fullTimestamp.split(' ')[1] : 'N/A';
+    const minPressTime = minPressData ? minPressData.fullTimestamp : 'N/A';
+    const maxPressTime = maxPressData ? maxPressData.fullTimestamp : 'N/A';
 
     return (
       <LineChart
@@ -128,8 +128,8 @@ const PressChart = ({ timeRange }) => {
             offset: 10
           }}
         />
-        <ReferenceLine y={maxPress} label={{ value: `${absMaxPress} at ${maxPressTime}`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minPress} label={{ value: `${absMinPress} at ${minPressTime}`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxPress} label={{ value: `${absMaxPress} (el ${maxPressTime})`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minPress} label={{ value: `${absMinPress} (el ${minPressTime})`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
         <Tooltip formatter={(value) => [`${value}hPa`, 'Pressure']} />
         <Legend verticalAlign="top" height={36} />
         <Line

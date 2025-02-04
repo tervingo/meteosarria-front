@@ -78,8 +78,10 @@ const TemperatureChart = ({ timeRange }) => {
 
     const minTempData = data.find((d) => d.external_temperature === absMinTemp);
     const maxTempData = data.find((d) => d.external_temperature === absMaxTemp);
-    const minTempTime = minTempData ? minTempData.fullTimestamp.split(' ')[1] : 'N/A';
-    const maxTempTime = maxTempData ? maxTempData.fullTimestamp.split(' ')[1] : 'N/A';
+    console.log('fullTimestamp:', minTempData.fullTimestamp);
+    const minTempTime = minTempData ? minTempData.fullTimestamp : 'N/A';
+//    const maxTempTime = maxTempData ? maxTempData.fullTimestamp.split(' ')[1] : 'N/A';
+    const maxTempTime = maxTempData ? maxTempData.fullTimestamp : 'N/A';
 
     return (
       <LineChart
@@ -122,13 +124,13 @@ const TemperatureChart = ({ timeRange }) => {
         />
         <ReferenceLine
           y={maxTemp}
-          label={{ value: `${absMaxTemp} at ${maxTempTime}`,  fill: 'azure' }}
+          label={{ value: `${absMaxTemp} (el ${maxTempTime})`,  fill: 'azure' }}
           stroke="red"
           strokeDasharray="1 1"
         />
         <ReferenceLine
           y={minTemp}
-          label={{ value: `${absMinTemp} at ${minTempTime}`,  fill: 'azure' }}
+          label={{ value: `${absMinTemp} (el ${minTempTime})`,  fill: 'azure' }}
           stroke="blue"
           strokeDasharray="1 1"
         />

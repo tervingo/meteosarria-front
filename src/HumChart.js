@@ -87,8 +87,8 @@ const HumChart = ({ timeRange }) => {
     // Find the timestamps of min and max humidities
     const minHumData = data.find(d => d.humidity === absMinHum);
     const maxHumData = data.find(d => d.humidity === absMaxHum);
-    const minHumTime = minHumData ? minHumData.fullTimestamp.split(' ')[1] : 'N/A';
-    const maxHumTime = maxHumData ? maxHumData.fullTimestamp.split(' ')[1] : 'N/A';
+    const minHumTime = minHumData ? minHumData.fullTimestamp : 'N/A';
+    const maxHumTime = maxHumData ? maxHumData.fullTimestamp : 'N/A';
 
     return (
       <LineChart
@@ -128,8 +128,8 @@ const HumChart = ({ timeRange }) => {
             offset: 10
           }}
         />
-        <ReferenceLine y={maxHum} label={{ value: `${absMaxHum} at ${maxHumTime}`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minHum} label={{ value: `${absMinHum} at ${minHumTime}`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
+        <ReferenceLine y={maxHum} label={{ value: `${absMaxHum} (el ${maxHumTime})`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" />
+        <ReferenceLine y={minHum} label={{ value: `${absMinHum} (el ${minHumTime})`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
         <Tooltip formatter={(value) => [`${value}%`, 'Humidity']} />
         <Legend verticalAlign="top" height={36} />
         <Line
