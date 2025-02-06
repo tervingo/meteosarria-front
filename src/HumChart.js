@@ -9,11 +9,17 @@ import {
   Tooltip,
   Legend,
   ReferenceLine,
+  ResponsiveContainer
 } from 'recharts';
+import { useMediaQuery } from '@mui/material';
 import { BACKEND_URI } from './constants';
 
 const HumChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
+  
+  // Add breakpoints for different screen sizes
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const isTablet = useMediaQuery('(min-width:601px) and (max-width:960px)');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,12 +27,11 @@ const HumChart = ({ timeRange }) => {
         const response = await axios.get(
           BACKEND_URI+'/api/meteo-data',
           {
-            params: { timeRange }, // Pass timeRange as a query parameter
+            params: { timeRange },
           }
         );
         const fetchedData = response.data;
 
-        // Process the data with outlier handling
         let lastValidHumidity = null;
         const formattedData = fetchedData.map(entry => {
           const [datePart, timePart] = entry.timestamp.split(' ');
@@ -34,16 +39,12 @@ const HumChart = ({ timeRange }) => {
           const formattedDate = `${year}-${month}-${day}T${timePart}`;
           const dateObj = new Date(formattedDate);
 
-          // Get the current humidity
           let currentHum = Number(entry.humidity);
 
-          // Check if current humidity is valid
           if (currentHum < 100) {
             lastValidHumidity = currentHum;
           } else {
-            // If invalid, use last valid humidity
             currentHum = lastValidHumidity !== null ? lastValidHumidity : null;
-            console.log(`Replaced anomalous humidity (${entry.humidity}) with last valid humidity: ${currentHum}`);
           }
 
           return {
@@ -52,15 +53,12 @@ const HumChart = ({ timeRange }) => {
             humidity: currentHum
           };
         })
-        // Filter out any null humidities (in case the first readings were invalid)
         .filter(item => item.humidity !== null);
 
-        // Sort data by dateTime
         const sortedData = formattedData
           .filter(item => !isNaN(item.dateTime))
           .sort((a, b) => a.dateTime - b.dateTime);
 
-        console.log('Final data for chart:', sortedData);
         setData(sortedData);
       } catch (error) {
         console.error('Error fetching humidity data:', error);
@@ -70,86 +68,130 @@ const HumChart = ({ timeRange }) => {
     fetchData();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, [timeRange]); // Add timeRange to the dependency array
+  }, [timeRange]);
 
   const chart = useMemo(() => {
     if (data.length === 0) {
       return <div className="text-center p-4">Loading...</div>;
     }
 
-    // Calculate min and max humidities with padding
     const absMinHum = Math.min(...data.map(d => d.humidity));
     const absMaxHum = Math.max(...data.map(d => d.humidity));
     const minHum = Math.floor(absMinHum);
     const maxHum = Math.ceil(absMaxHum);
-    const padding = 10; // Increased padding for humidity
+    const padding = 10;
 
-    // Find the timestamps of min and max humidities
     const minHumData = data.find(d => d.humidity === absMinHum);
     const maxHumData = data.find(d => d.humidity === absMaxHum);
     const minHumTime = minHumData ? minHumData.fullTimestamp : 'N/A';
     const maxHumTime = maxHumData ? maxHumData.fullTimestamp : 'N/A';
 
+    // Responsive configurations
+    const getFontSize = () => {
+      if (isMobile) return '10px';
+      if (isTablet) return '12px';
+      return '14px';
+    };
+
+    const getMargin = () => ({
+      top: isMobile ? 10 : 20,
+      right: isMobile ? 15 : 30,
+      left: isMobile ? 5 : 20,
+      bottom: isMobile ? 60 : 40,
+    });
+
+    const getTickInterval = () => {
+      if (isMobile) return Math.ceil(data.length / 4);
+      if (isTablet) return Math.ceil(data.length / 6);
+      return 'preserveStartEnd';
+    };
+
     return (
-      <LineChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 20,
-          bottom: 60
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis
-          dataKey="fullTimestamp"
-          tickFormatter={(timeStr) => {
-            const [datePart, timePart] = timeStr.split(' ');
-            if (timeRange === '7d') {
-              const [day, month] = datePart.split('-');
-              return `${day}/${month}`; // Format as DD/MM for 7 days
-            } else {
-              return timePart; // Format as HH:MM for 24h and 48h
-            }
-          }}
-          angle={-45}
-          textAnchor="end"
-          height={60}
-          interval="preserveStartEnd"
-        />
-        <YAxis
-          domain={[minHum - padding, 100]} // Upper limit fixed at 100%
-          label={{
-            value: 'Humedad (%)',
-            angle: -90,
-            position: 'insideLeft',
-            offset: 10
-          }}
-        />
-        <ReferenceLine y={maxHum} label={{ value: `${absMaxHum} (el ${maxHumTime})`,  fill: 'azure' }} stroke="red" strokeDasharray="1 1" />
-        <ReferenceLine y={minHum} label={{ value: `${absMinHum} (el ${minHumTime})`,  fill: 'azure' }} stroke="blue" strokeDasharray="1 1" />
-        <Tooltip formatter={(value) => [`${value}%`, 'Humidity']} />
-        <Legend verticalAlign="top" height={36} />
-        <Line
-          type="monotone"
-          dataKey="humidity"
-          stroke="aqua"
-          name="Humedad"
-          dot={false}
-          strokeWidth={2}
-        />
-      </LineChart>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={data}
+          margin={getMargin()}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="fullTimestamp"
+            tickFormatter={(timeStr) => {
+              const [datePart, timePart] = timeStr.split(' ');
+              if (timeRange === '7d') {
+                const [day, month] = datePart.split('-');
+                return `${day}/${month}`;
+              }
+              return timePart;
+            }}
+            angle={-45}
+            textAnchor="end"
+            height={60}
+            interval={getTickInterval()}
+            tick={{ fontSize: getFontSize() }}
+          />
+          <YAxis
+            domain={[minHum - padding, 100]}
+            label={{
+              value: 'Humedad (%)',
+              angle: -90,
+              position: 'insideLeft',
+              offset: isMobile ? 0 : 10,
+              style: { fontSize: getFontSize() }
+            }}
+            tick={{ fontSize: getFontSize() }}
+          />
+          <ReferenceLine
+            y={maxHum}
+            label={{ 
+              value: isMobile ? `${absMaxHum}%` : `${absMaxHum}% (${maxHumTime})`,
+              fill: 'azure',
+              fontSize: getFontSize()
+            }}
+            stroke="red"
+            strokeDasharray="1 1"
+          />
+          <ReferenceLine
+            y={minHum}
+            label={{ 
+              value: isMobile ? `${absMinHum}%` : `${absMinHum}% (${minHumTime})`,
+              fill: 'azure',
+              fontSize: getFontSize()
+            }}
+            stroke="blue"
+            strokeDasharray="1 1"
+          />
+          <Tooltip 
+            formatter={(value) => [`${value}%`, 'Humedad']}
+            contentStyle={{ fontSize: getFontSize() }}
+          />
+          <Legend 
+            verticalAlign="top" 
+            height={36}
+            wrapperStyle={{ fontSize: getFontSize() }}
+          />
+          <Line
+            type="monotone"
+            dataKey="humidity"
+            stroke="aqua"
+            name="Humedad"
+            dot={false}
+            strokeWidth={isMobile ? 1 : 2}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     );
-  }, [data, timeRange]); // Add timeRange to the dependency array
+  }, [data, timeRange, isMobile, isTablet]);
 
   return (
-    <div style={{
-      width: '500px',
-      height: '300px',
-      margin: '0 auto'
-    }}>
+    <div
+      style={{
+        width: '100%',
+        height: isMobile ? '250px' : isTablet ? '300px' : '350px',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: isMobile ? '10px' : '20px',
+      }}
+    >
       {chart}
     </div>
   );

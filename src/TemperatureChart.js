@@ -9,13 +9,20 @@ import {
   Tooltip,
   Legend,
   ReferenceLine,
+  ResponsiveContainer
 } from 'recharts';
+import { useMediaQuery } from '@mui/material';
 import { BACKEND_URI } from './constants';
-import GetTempColour from './GetTempColour'; // Import your color-generating component
+import GetTempColour from './GetTempColour';
 
 const TemperatureChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
+  
+  // Add breakpoints for different screen sizes
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const isTablet = useMediaQuery('(min-width:601px) and (max-width:960px)');
 
+  // Data fetching logic remains the same
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,9 +44,6 @@ const TemperatureChart = ({ timeRange }) => {
             lastValidTemperature = currentTemp;
           } else {
             currentTemp = lastValidTemperature !== null ? lastValidTemperature : null;
-            console.log(
-              `Replaced anomalous temperature (${entry.external_temperature}) with last valid temperature: ${currentTemp}`
-            );
           }
 
           return {
@@ -47,8 +51,7 @@ const TemperatureChart = ({ timeRange }) => {
             dateTime: dateObj,
             external_temperature: currentTemp,
           };
-        })
-          .filter((item) => item.external_temperature !== null);
+        }).filter((item) => item.external_temperature !== null);
 
         const sortedData = formattedData
           .filter((item) => !isNaN(item.dateTime))
@@ -78,88 +81,120 @@ const TemperatureChart = ({ timeRange }) => {
 
     const minTempData = data.find((d) => d.external_temperature === absMinTemp);
     const maxTempData = data.find((d) => d.external_temperature === absMaxTemp);
-    console.log('fullTimestamp:', minTempData.fullTimestamp);
     const minTempTime = minTempData ? minTempData.fullTimestamp : 'N/A';
-//    const maxTempTime = maxTempData ? maxTempData.fullTimestamp.split(' ')[1] : 'N/A';
     const maxTempTime = maxTempData ? maxTempData.fullTimestamp : 'N/A';
 
+    // Responsive configurations
+    const getFontSize = () => {
+      if (isMobile) return '10px';
+      if (isTablet) return '12px';
+      return '14px';
+    };
+
+    const getMargin = () => ({
+      top: isMobile ? 10 : 20,
+      right: isMobile ? 15 : 30,
+      left: isMobile ? 5 : 20,
+      bottom: isMobile ? 60 : 40,
+    });
+
+    const getTickInterval = () => {
+      if (isMobile) return Math.ceil(data.length / 4);
+      if (isTablet) return Math.ceil(data.length / 6);
+      return 'preserveStartEnd';
+    };
+
     return (
-      <LineChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 20,
-          bottom: 40,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis
-          dataKey="fullTimestamp"
-          tickFormatter={(timeStr) => {
-            const [datePart, timePart] = timeStr.split(' ');
-
-            if (timeRange === '7d') {
-              const [day, month] = datePart.split('-');
-              return `${day}/${month}`;
-            } else {
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={data}
+          margin={getMargin()}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="fullTimestamp"
+            tickFormatter={(timeStr) => {
+              const [datePart, timePart] = timeStr.split(' ');
+              if (timeRange === '7d') {
+                const [day, month] = datePart.split('-');
+                return `${day}/${month}`;
+              }
               return timePart;
-            }
-          }}
-          angle={-45}
-          textAnchor="end"
-          height={60}
-          interval="preserveStartEnd"
-        />
-        <YAxis
-          domain={[minTemp - padding, maxTemp + padding]}
-          label={{
-            value: 'Temperatura (°C)',
-            angle: -90,
-            position: 'insideLeft',
-            offset: 10,
-          }}
-        />
-        <ReferenceLine
-          y={maxTemp}
-          label={{ value: `${absMaxTemp} (el ${maxTempTime})`,  fill: 'azure' }}
-          stroke="red"
-          strokeDasharray="1 1"
-        />
-        <ReferenceLine
-          y={minTemp}
-          label={{ value: `${absMinTemp} (el ${minTempTime})`,  fill: 'azure' }}
-          stroke="blue"
-          strokeDasharray="1 1"
-        />
-        <Tooltip formatter={(value) => [`${value}°C`, 'Temperature']} />
-        <Legend verticalAlign="top" height={36} />
-        <Line
-          type="monotone"
-          dataKey="external_temperature"
-          name="Temperatura"
-          strokeWidth={0.5}
-          dot={(props) => {
-            const { cx, cy, payload } = props;
-            const color = GetTempColour(payload.external_temperature);
+            }}
+            angle={-45}
+            textAnchor="end"
+            height={60}
+            interval={getTickInterval()}
+            tick={{ fontSize: getFontSize() }}
+          />
+          <YAxis
+            domain={[minTemp - padding, maxTemp + padding]}
+            label={{
+              value: 'Temperatura (°C)',
+              angle: -90,
+              position: 'insideLeft',
+              offset: isMobile ? 0 : 10,
+              style: { fontSize: getFontSize() }
+            }}
+            tick={{ fontSize: getFontSize() }}
+          />
+          <ReferenceLine
+            y={maxTemp}
+            label={{ 
+              value: isMobile ? `${absMaxTemp}°` : `${absMaxTemp}° (${maxTempTime})`,
+              fill: 'azure',
+              fontSize: getFontSize()
+            }}
+            stroke="red"
+            strokeDasharray="1 1"
+          />
+          <ReferenceLine
+            y={minTemp}
+            label={{ 
+              value: isMobile ? `${absMinTemp}°` : `${absMinTemp}° (${minTempTime})`,
+              fill: 'azure',
+              fontSize: getFontSize()
+            }}
+            stroke="blue"
+            strokeDasharray="1 1"
+          />
+          <Tooltip 
+            formatter={(value) => [`${value}°C`, 'Temperature']}
+            contentStyle={{ fontSize: getFontSize() }}
+          />
+          <Legend 
+            verticalAlign="top" 
+            height={36}
+            wrapperStyle={{ fontSize: getFontSize() }}
+          />
+          <Line
+            type="monotone"
+            dataKey="external_temperature"
+            name="Temperatura"
+            strokeWidth={isMobile ? 0.3 : 0.5}
+            dot={(props) => {
+              const { cx, cy, payload } = props;
+              const color = GetTempColour(payload.external_temperature);
+              const radius = isMobile ? 0.5 : 1;
 
-            return (
-              <circle cx={cx} cy={cy} r={1} fill={color} stroke={color} />
-            );
-          }}
-        />
-      </LineChart>
+              return (
+                <circle cx={cx} cy={cy} r={radius} fill={color} stroke={color} />
+              );
+            }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     );
-  }, [data, timeRange]);
+  }, [data, timeRange, isMobile, isTablet]);
 
   return (
     <div
       style={{
-        width: '500px',
-        height: '300px',
+        width: '100%',
+        height: isMobile ? '250px' : isTablet ? '300px' : '350px',
+        maxWidth: '1200px',
         margin: '0 auto',
+        padding: isMobile ? '10px' : '20px',
       }}
     >
       {chart}

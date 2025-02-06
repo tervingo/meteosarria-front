@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import { Typography } from '@mui/material';
+import { Typography, useMediaQuery, Container, Box } from '@mui/material';
 import { Card, CardMedia } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TemperatureBackground from './TemperatureBackground';
@@ -17,16 +17,28 @@ import ShowHumTrends from './ShowHumTrends';
 import RadChart from './RadChart';
 import { BACKEND_URI } from './constants';
 
-const theme = createTheme();
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  },
+});
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
-//  const [renuncioData, setRenuncioData] = useState(null);
+  const [timeRange, setTimeRange] = useState('24h');
 
-  const [timeRange, setTimeRange] = useState('24h'); // Default to 24 hours
+  // Media queries for responsive design
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
   const handleTimeRangeChange = (event) => {
     setTimeRange(event.target.value);
@@ -35,9 +47,8 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(BACKEND_URI+'/api/live');
+        const response = await axios.get(BACKEND_URI + '/api/live');
         setWeatherData(response.data);
-        console.log('Weather data:', response.data);
         setError(null);
       } catch (error) {
         console.error("Error fetching weather data:", error);
@@ -52,29 +63,6 @@ function App() {
 
     return () => clearInterval(intervalId);
   }, []);
-
-/*   
-   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(BACKEND_URI+'/api/renuncio');
-        setRenuncioData(response.data);
-        console.log('Renuncio data:', response.data);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching Renuncio data:", error);
-        setError("Failed to fetch Renuncio data. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-    const intervalId = setInterval(fetchData, 300000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-  */
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -93,18 +81,34 @@ function App() {
     return `${hours}:${minutes} (${day}.${month}.${year})`;
   };
 
-  // Menu bar
-  function Menu({ items }) {
+  // Menu component with responsive styles
+  const Menu = ({ items }) => {
     return (
-      <nav>
+      <nav style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '8px' : '16px',
+        padding: isMobile ? '10px' : '20px',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+      }}>
         {items.map(item => (
-          <a key={item.label} href={item.url} target="_blank" rel="noreferrer">
+          <a
+            key={item.label}
+            href={item.url}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              padding: isMobile ? '8px' : '12px',
+              fontSize: isMobile ? '14px' : '16px'
+            }}
+          >
             {item.label}
           </a>
         ))}
       </nav>
     );
-  }
+  };
 
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
@@ -116,138 +120,188 @@ function App() {
     { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe/temperature-850hpa.html' }
   ];
 
+  // Responsive styles
+  const styles = {
+    header: {
+      fontSize: isMobile ? '2.5rem' : isTablet ? '4rem' : '6rem',
+      color: 'Gray',
+      marginBottom: isMobile ? '10px' : '20px'
+    },
+    dateTime: {
+      fontSize: isMobile ? '1.5rem' : isTablet ? '2rem' : '3rem',
+      color: 'DarkGray'
+    },
+    location: {
+      fontSize: isMobile ? '0.8rem' : '1rem',
+      color: 'DarkGray'
+    },
+    temperature: {
+      fontSize: isMobile ? '5rem' : isTablet ? '8rem' : '11rem',
+      color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
+    },
+    dataDisplay: {
+      fontSize: isMobile ? '2rem' : isTablet ? '3rem' : '4rem',
+      color: 'DarkGray'
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
+      <Container maxWidth="xl" className="App">
         {weatherData && <TemperatureBackground temperature={weatherData.external_temperature} />}
 
-        <div className="App-header">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <div>
-              <Typography variant="h1" style={{ fontSize: '6rem', marginRight: '50px', color: 'Gray' }}>
+        <Box className="App-header" py={isMobile ? 2 : 4}>
+          <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} alignItems="center" justifyContent="space-between" width="100%">
+            <Box>
+              <Typography variant="h1" style={styles.header}>
                 #meteosarria
               </Typography>
-              <Typography variant="h6" style={{ fontSize: '3rem', color: 'DarkGray'  }}>
+              <Typography variant="h6" style={styles.dateTime}>
                 {formatDate(currentTime)}
               </Typography>
-              <Typography variant="h6" style={{ fontSize: '1rem', color: 'DarkGray' }}>
-              Sarrià - Barcelona (41º 23' 42" N, 2º 7' 21" E - 110m) 
-            </Typography>          
-            </div>
-            <Card>
+              <Typography variant="h6" style={styles.location}>
+                Sarrià - Barcelona (41º 23' 42" N, 2º 7' 21" E - 110m)
+              </Typography>
+            </Box>
+            {!isMobile && (
+              <Card>
                 <CardMedia
                   component="img"
-                  width="180"
-                  height="180"
+                  width={isMobile ? 100 : 180}
+                  height={isMobile ? 100 : 180}
                   image="/images/nubes.jpg"
-                  alt="Sample image"
-                  sx={{ objectFit: 'cover'}}
+                  alt="Weather"
+                  sx={{ objectFit: 'cover' }}
                 />
               </Card>
-          </div>
-        </div>
-        <br />
+            )}
+          </Box>
+        </Box>
 
         <Menu items={menuItems} />
 
-       {/* radio buttons to select chart scope (24h, 48h, 7d) */}
-
-
-        <div className="App">
-          {loading && <p>Loading weather data...</p>}
-          {error && <p className="error">{error}</p>}
+        <Box className="weather-data" mt={3}>
+          {loading && <Typography>Loading weather data...</Typography>}
+          {error && <Typography color="error">{error}</Typography>}
 
           {weatherData && (
-            <div className="weather-container">
+            <Box className="weather-container">
+              <Box display="grid" gap={2} gridTemplateColumns={isMobile ? '1fr' : 'repeat(3, 1fr)'}>
+                {/* Wind Direction Section */}
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <WindDirectionIndicator
+                    direction={weatherData.wind_direction}
+                    speed={weatherData.wind_speed}
+                    rose={GetWindDir(weatherData.wind_direction)}
+                    size={isMobile ? 'small' : 'normal'}
+                  />
+                </Box>
 
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <tbody>
-                  <tr>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%', textAlign: 'center'}}>
-                       <WindDirectionIndicator direction={weatherData.wind_direction} speed={weatherData.wind_speed} rose={GetWindDir(weatherData.wind_direction)} />
-                     </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '40%', textAlign: 'center'}}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Typography variant="h1" style={{ fontSize: '11rem', color: GetTempColour(weatherData.external_temperature), background: 'none', marginLeft: '1px'}}>
-                          {weatherData.external_temperature.toFixed(1)}°
-                        </Typography>
-                        <ShowTempDiffs />
-                      </div>
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', width: '20%', color: 'darkgray', textAlign: 'center'}}>
-                      <div>
-                        <label>
-                          <input type="radio" value="24h" checked={timeRange === '24h'} onChange={handleTimeRangeChange} />
-                          24 Horas
-                        </label>
-                        <label>
-                          <input type="radio" value="48h" checked={timeRange === '48h'} onChange={handleTimeRangeChange} />
-                          48 Horas
-                        </label>
-                        <label>
-                          <input type="radio" value="7d" checked={timeRange === '7d'} onChange={handleTimeRangeChange} />
-                          7 Días
-                        </label>
-                      </div>
-                      <TemperatureChart timeRange={timeRange} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
-                        <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none' }}>
-                          {weatherData.humidity}%
-                        </Typography>
-                        <ShowHumTrends />
-                      </div>
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
-                        <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none', marginRight: '10px' }}>
-                          {weatherData.pressure} hPa
-                        </Typography>
-                        <ShowPressTrend />
-                      </div>
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
-                      <Typography variant="h6" style={{ fontSize: '4rem', color: 'DarkGray', background: 'none' }}>
-                        {weatherData.solar_radiation} W/m2
-                      </Typography>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
-                      <HumChart timeRange={timeRange} />
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}>
-                      <PressChart timeRange={timeRange} />  
-                    </td>
-                    <td style={{ verticalAlign: 'middle', padding: '10px', textAlign: 'center'}}> 
-                      <RadChart timeRange={timeRange}  />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan="2">
-                      <iframe 
-                        width="450" 
-                        height="300" 
-                        src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true" 
-                        frameborder="0"
-                        title='mapa'
-                        >
-                      </iframe>          
-                    </td>
-                    <td>
-                        <a name="windy-webcam-timelapse-player"  data-id="1735243432" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735243432" target="_blank" rel="noreferrer">Burgos: Burgos Cathedral</a>
-                        <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                {/* Temperature Section */}
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.temperature}>
+                      {weatherData.external_temperature.toFixed(1)}°
+                    </Typography>
+                    <ShowTempDiffs />
+                  </Box>
+                </Box>
+
+                {/* Chart Controls */}
+                <Box>
+                  <Box display="flex" justifyContent="center" gap={2} mb={2}>
+                    <label>
+                      <input
+                        type="radio"
+                        value="24h"
+                        checked={timeRange === '24h'}
+                        onChange={handleTimeRangeChange}
+                      />
+                      24h
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="48h"
+                        checked={timeRange === '48h'}
+                        onChange={handleTimeRangeChange}
+                      />
+                      48h
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="7d"
+                        checked={timeRange === '7d'}
+                        onChange={handleTimeRangeChange}
+                      />
+                      7d
+                    </label>
+                  </Box>
+                  <TemperatureChart timeRange={timeRange} />
+                </Box>
+
+                {/* Additional Data Sections */}
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.dataDisplay}>
+                      {weatherData.humidity}%
+                    </Typography>
+                    <ShowHumTrends />
+                  </Box>
+                  <HumChart timeRange={timeRange} />
+                </Box>
+
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.dataDisplay}>
+                      {weatherData.pressure} hPa
+                    </Typography>
+                    <ShowPressTrend />
+                  </Box>
+                  <PressChart timeRange={timeRange} />
+                </Box>
+
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Typography style={styles.dataDisplay}>
+                    {weatherData.solar_radiation} W/m²
+                  </Typography>
+                  <RadChart timeRange={timeRange} />
+                </Box>
+
+                {/* Maps and Webcam Section */}
+                <Box gridColumn={isMobile ? 'auto' : 'span 1'}>
+                  <iframe
+                    width="100%"
+                    height={isMobile ? "250px" : "300px"}
+                    src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true"
+                    frameBorder="0"
+                    title="Weather Map"
+                  />
+                </Box>
+
+                <Box>
+                  <a
+                    name="windy-webcam-timelapse-player"
+                    data-id="1735243432"
+                    data-play="day"
+                    data-loop="0"
+                    data-auto-play="0"
+                    data-force-full-screen-on-overlay-play="0"
+                    data-interactive="1"
+                    href="https://windy.com/webcams/1735243432"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Burgos: Burgos Cathedral
+                  </a>
+                  <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
+                </Box>
+              </Box>
+            </Box>
           )}
-        </div>
-      </div>
+        </Box>
+      </Container>
     </ThemeProvider>
   );
 }
