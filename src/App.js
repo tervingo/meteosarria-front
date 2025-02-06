@@ -100,7 +100,7 @@ function App() {
             rel="noreferrer"
             style={{
               padding: isMobile ? '8px' : '12px',
-              fontSize: isMobile ? '14px' : '16px'
+              fontSize: isMobile ? '14px' : '20px'
             }}
           >
             {item.label}
@@ -113,8 +113,8 @@ function App() {
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
     { label: 'Meteocat', url: 'https://www.meteo.cat/' },
-    { label: 'Renuncio Meteo', url: 'https://renuncio.com/meteorologia/actual' },
-    { label: 'Burgos Webcam', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
+    { label: 'Meteo Renuncio', url: 'https://renuncio.com/meteorologia/actual' },
+    { label: 'Webcam Burgos', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
     { label: 'Windy', url: 'https://www.windy.com' },
     { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe/temperature-850hpa.html' }
@@ -185,169 +185,185 @@ function App() {
           {error && <Typography color="error">{error}</Typography>}
 
           {weatherData && (
-  <Box className="weather-container">
-    <Box 
-      display="grid" 
-      gap={2} 
-      sx={{
-        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-        gridTemplateAreas: isMobile ? `
-          "temperature"
-          "wind"
-          "chart"
-          "humidity"
-          "pressure"
-          "radiation"
-          "maps"
-          "webcam"
-        ` : `
-          "wind temperature chart"
-          "humidity pressure radiation"
-          "maps maps webcam"
-        `
-      }}
-    >
-      {/* Wind Direction Section */}
-      <Box 
-        display="flex" 
-        justifyContent="center" 
-        alignItems="center"
-        sx={{ gridArea: 'wind' }}
-      >
-        <WindDirectionIndicator
-          direction={weatherData.wind_direction}
-          speed={weatherData.wind_speed}
-          rose={GetWindDir(weatherData.wind_direction)}
-          size={isMobile ? 'small' : 'normal'}
-        />
-      </Box>
+            <Box className="weather-container">
+              <Box 
+                display="grid" 
+                gap={2} 
+                sx={{
+                  gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+                  gridTemplateAreas: isMobile ? `
+                    "temperature"
+                    "wind"
+                    "chart"
+                    "humidity"
+                    "pressure"
+                    "radiation"
+                    "maps"
+                    "pred"
+                    "webcam"
+                  ` : `
+                    "wind temperature chart"
+                    "humidity pressure radiation"
+                    "maps pred webcam"
+                  `
+                }}
+              >
+                {/* Wind Direction Section */}
+                <Box 
+                  display="flex" 
+                  justifyContent="center" 
+                  alignItems="center"
+                  sx={{ gridArea: 'wind' }}
+                >
+                  <WindDirectionIndicator
+                    direction={weatherData.wind_direction}
+                    speed={weatherData.wind_speed}
+                    rose={GetWindDir(weatherData.wind_direction)}
+                    size={isMobile ? 'small' : 'normal'}
+                  />
+                </Box>
 
-      {/* Temperature Section */}
-      <Box 
-        display="flex" 
-        flexDirection="column" 
-        alignItems="center"
-        sx={{ gridArea: 'temperature' }}
-      >
-        <Box display="flex" alignItems="center">
-          <Typography style={styles.temperature}>
-            {weatherData.external_temperature.toFixed(1)}°
-          </Typography>
-          <ShowTempDiffs />
-        </Box>
-      </Box>
+                {/* Temperature Section */}
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ gridArea: 'temperature' }}
+                >
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.temperature}>
+                      {weatherData.external_temperature.toFixed(1)}°
+                    </Typography>
+                    <ShowTempDiffs />
+                  </Box>
+                </Box>
 
-      {/* Chart Controls Section */}
-      <Box sx={{ gridArea: 'chart' }}>
-        <Box display="flex" justifyContent="center" gap={2} mb={2}>
-          <label>
-            <input
-              type="radio"
-              value="24h"
-              checked={timeRange === '24h'}
-              onChange={handleTimeRangeChange}
-            />
-            24h
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="48h"
-              checked={timeRange === '48h'}
-              onChange={handleTimeRangeChange}
-            />
-            48h
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="7d"
-              checked={timeRange === '7d'}
-              onChange={handleTimeRangeChange}
-            />
-            7d
-          </label>
-        </Box>
-        <TemperatureChart timeRange={timeRange} />
-      </Box>
+                {/* Chart Controls Section */}
+                <Box sx={{ gridArea: 'chart' }}>
+                  <Box display="flex" justifyContent="center" gap={2} mb={2}>
+                    <label>
+                      <input
+                        type="radio"
+                        value="24h"
+                        checked={timeRange === '24h'}
+                        onChange={handleTimeRangeChange}
+                      />
+                      24h
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="48h"
+                        checked={timeRange === '48h'}
+                        onChange={handleTimeRangeChange}
+                      />
+                      48h
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="7d"
+                        checked={timeRange === '7d'}
+                        onChange={handleTimeRangeChange}
+                      />
+                      7d
+                    </label>
+                  </Box>
+                  <TemperatureChart timeRange={timeRange} />
+                </Box>
 
-      {/* Humidity Section */}
-      <Box 
-        display="flex" 
-        flexDirection="column" 
-        alignItems="center"
-        sx={{ gridArea: 'humidity' }}
-      >
-        <Box display="flex" alignItems="center">
-          <Typography style={styles.dataDisplay}>
-            {weatherData.humidity}%
-          </Typography>
-          <ShowHumTrends />
-        </Box>
-        <HumChart timeRange={timeRange} />
-      </Box>
+                {/* Humidity Section */}
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ gridArea: 'humidity' }}
+                >
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.dataDisplay}>
+                      {weatherData.humidity}%
+                    </Typography>
+                    <ShowHumTrends />
+                  </Box>
+                  <HumChart timeRange={timeRange} />
+                </Box>
 
-      {/* Pressure Section */}
-      <Box 
-        display="flex" 
-        flexDirection="column" 
-        alignItems="center"
-        sx={{ gridArea: 'pressure' }}
-      >
-        <Box display="flex" alignItems="center">
-          <Typography style={styles.dataDisplay}>
-            {weatherData.pressure} hPa
-          </Typography>
-          <ShowPressTrend />
-        </Box>
-        <PressChart timeRange={timeRange} />
-      </Box>
+                {/* Pressure Section */}
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ gridArea: 'pressure' }}
+                >
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.dataDisplay}>
+                      {weatherData.pressure} hPa
+                    </Typography>
+                    <ShowPressTrend />
+                  </Box>
+                  <PressChart timeRange={timeRange} />
+                </Box>
 
-      {/* Radiation Section */}
-      <Box 
-        display="flex" 
-        flexDirection="column" 
-        alignItems="center"
-        sx={{ gridArea: 'radiation' }}
-      >
-        <Typography style={styles.dataDisplay}>
-          {weatherData.solar_radiation} W/m²
-        </Typography>
-        <RadChart timeRange={timeRange} />
-      </Box>
+                {/* Radiation Section */}
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ gridArea: 'radiation' }}
+                >
+                  <Typography style={styles.dataDisplay}>
+                    {weatherData.solar_radiation} W/m²
+                  </Typography>
+                  <RadChart timeRange={timeRange} />
+                </Box>
 
-      {/* Maps Section */}
-      <Box sx={{ gridArea: 'maps' }}>
-        <iframe
-          width="100%"
-          height={isMobile ? "250px" : "300px"}
-          src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true"
-          frameBorder="0"
-          title="Weather Map"
-        />
-      </Box>
+                {/* Maps Section */}
+                <Box sx={{ gridArea: 'maps' }}>
+                  <iframe
+                    width="100%"
+                    height={isMobile ? "250px" : "300px"}
+                    src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true"
+                    frameBorder="0"
+                    title="Weather Map"
+                  />
+                </Box>
 
-      {/* Webcam Section */}
-      <Box sx={{ gridArea: 'webcam' }}>
-        <a
-          name="windy-webcam-timelapse-player"
-          data-id="1735243432"
-          data-play="day"
-          data-loop="0"
-          data-auto-play="0"
-          data-force-full-screen-on-overlay-play="0"
-          data-interactive="1"
-          href="https://windy.com/webcams/1735243432"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Burgos: Burgos Cathedral
-        </a>
-        <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
-      </Box>
-    </Box>
-  </Box>
-)}
+                {/* Predicción Section
+                <Box sx={{ gridArea: 'pred' }}>
+                  <iframe 
+                    name="iframe_aemet_id33044" 
+                    width="100%" 
+                    height="100%" 
+                    tabindex="0" 
+                    id="iframe_aemet_id33044" 
+                    src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/barcelona-id08019?w=g4p01110001ohmffffffw500z250x4f86d9t95b6e9r1s8n2" 
+                    frameborder="0" 
+                    scrolling="no">
+                  </iframe>
+                </Box>
+                */}
+
+                {/* Webcam Section */}
+                <Box sx={{ gridArea: 'webcam' }}>
+                  <a
+                    name="windy-webcam-timelapse-player"
+                    data-id="1735243432"
+                    data-play="day"
+                    data-loop="0"
+                    data-auto-play="0"
+                    data-force-full-screen-on-overlay-play="0"
+                    data-interactive="1"
+                    href="https://windy.com/webcams/1735243432"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Burgos: Burgos Cathedral
+                  </a>
+                  <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
+                </Box>
+              </Box>
+            </Box>
+          )}
         </Box>
       </Container>
     </ThemeProvider>
