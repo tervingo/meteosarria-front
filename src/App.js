@@ -82,7 +82,7 @@ function App() {
     return `${hours}:${minutes} (${day}.${month}.${year})`;
   };
 
-  // Menu component with responsive styles
+/*  
   const Menu = ({ items }) => {
     return (
       <nav style={{
@@ -109,7 +109,7 @@ function App() {
         ))}
       </nav>
     );
-  };
+  }; */
 
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },

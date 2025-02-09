@@ -93,7 +93,7 @@ const Menu = ({ items }) => {
       padding: '20px',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      background: 'rgba(0, 0, 0, 0.5)',
+      background: 'rgba(47, 79, 79, 0.5)',
       backdropFilter: 'blur(5px)',
       borderRadius: '8px',
       margin: '0 20px'
@@ -106,7 +106,7 @@ const Menu = ({ items }) => {
           rel="noreferrer"
           style={{
             padding: '12px',
-            fontSize: '16px',
+            fontSize: '24px',
             color: '#fff',
             textDecoration: 'none',
             transition: 'color 0.3s ease',
