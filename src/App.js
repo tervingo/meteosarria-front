@@ -15,6 +15,7 @@ import ShowTempDiffs from './ShowTempDiffs';
 import ShowPressTrend from './ShowPressTrend';
 import ShowHumTrends from './ShowHumTrends';
 import RadChart from './RadChart';
+import Menu from './Menu';
 import { BACKEND_URI } from './constants';
 
 const theme = createTheme({
@@ -100,7 +101,7 @@ function App() {
             rel="noreferrer"
             style={{
               padding: isMobile ? '8px' : '12px',
-              fontSize: isMobile ? '14px' : '20px'
+              fontSize: isMobile ? '14px' : '28px'
             }}
           >
             {item.label}
@@ -125,7 +126,8 @@ function App() {
     header: {
       fontSize: isMobile ? '2.5rem' : isTablet ? '4rem' : '6rem',
       color: 'Gray',
-      marginBottom: isMobile ? '10px' : '20px'
+      marginBottom: isMobile ? '10px' : '20px',
+      marginRight: isMobile ? '0' : '30px'
     },
     dateTime: {
       fontSize: isMobile ? '1.5rem' : isTablet ? '2rem' : '3rem',
