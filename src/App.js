@@ -339,7 +339,8 @@ function App() {
                     tabindex="0" 
                     id="iframe_aemet_id33044" 
                     src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/barcelona-id08019?w=g4p01110001ohmffffffw500z250x4f86d9t95b6e9r1s8n2" 
-                    frameborder="0" 
+                    frameborder="0"
+                    title="Predicción AEMET" 
                     scrolling="no">
                   </iframe>
                 </Box>
