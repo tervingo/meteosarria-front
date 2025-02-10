@@ -330,7 +330,7 @@ function App() {
                   />
                 </Box>
 
-                {/* Predicción Section
+                {/* Predicción Section */}
                 <Box sx={{ gridArea: 'pred' }}>
                   <iframe 
                     name="iframe_aemet_id33044" 
@@ -343,7 +343,6 @@ function App() {
                     scrolling="no">
                   </iframe>
                 </Box>
-                */}
 
                 {/* Webcam Section */}
                 <Box sx={{ gridArea: 'webcam' }}>
