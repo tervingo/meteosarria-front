@@ -15,6 +15,7 @@ import ShowTempDiffs from './ShowTempDiffs';
 import ShowPressTrend from './ShowPressTrend';
 import ShowHumTrends from './ShowHumTrends';
 import RadChart from './RadChart';
+import BurgosWeather from './BurgosWeather';
 import Menu from './Menu';
 import { BACKEND_URI } from './constants';
 
@@ -82,39 +83,10 @@ function App() {
     return `${hours}:${minutes} (${day}.${month}.${year})`;
   };
 
-/*  
-  const Menu = ({ items }) => {
-    return (
-      <nav style={{
-        display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        gap: isMobile ? '8px' : '16px',
-        padding: isMobile ? '10px' : '20px',
-        flexWrap: 'wrap',
-        justifyContent: 'center'
-      }}>
-        {items.map(item => (
-          <a
-            key={item.label}
-            href={item.url}
-            target="_blank"
-            rel="noreferrer"
-            style={{
-              padding: isMobile ? '8px' : '12px',
-              fontSize: isMobile ? '14px' : '28px'
-            }}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
-    );
-  }; */
-
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
     { label: 'Meteocat', url: 'https://www.meteo.cat/' },
-    { label: 'Meteo Renuncio', url: 'https://renuncio.com/meteorologia/actual' },
+    { label: 'Meteo Burgos', url: 'https://www.aemet.es/es/eltiempo/observacion/ultimosdatos?k=cle&l=2331&w=0&datos=det&x=h24&f=temperatura' },
     { label: 'Webcam Burgos', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
     { label: 'Windy', url: 'https://www.windy.com' },
@@ -330,19 +302,9 @@ function App() {
                   />
                 </Box>
 
-                {/* Predicción Section */}
+                {/* Datos de Burgos */}
                 <Box sx={{ gridArea: 'pred' }}>
-                  <iframe 
-                    name="iframe_aemet_id33044" 
-                    width="100%" 
-                    height="100%" 
-                    tabindex="0" 
-                    id="iframe_aemet_id33044" 
-                    src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/barcelona-id08019?w=g4p01110001ohmffffffw500z250x4f86d9t95b6e9r1s8n2" 
-                    frameborder="0"
-                    title="Predicción AEMET" 
-                    scrolling="no">
-                  </iframe>
+                  <BurgosWeather/>
                 </Box>
 
                 {/* Webcam Section */}
