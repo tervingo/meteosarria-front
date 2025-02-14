@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Typography, useMediaQuery, CircularProgress, Alert } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { BACKEND_URI } from './constants';
 import GetTempColour from './GetTempColour';
 
