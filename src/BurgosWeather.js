@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Typography, useMediaQuery, CircularProgress, Alert } from '@mui/material';
+import { Box, Typography, useMediaQuery, CircularProgress, Alert, Link } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { BACKEND_URI } from './constants';
 import GetTempColour from './GetTempColour';
@@ -94,7 +94,6 @@ const BurgosWeather = () => {
     estacion: {
         color: 'silver',
         fontSize: '1.2rem',
-         
     }
   };
 
@@ -131,7 +130,21 @@ const BurgosWeather = () => {
             }
           </Typography>
           <Typography variant="caption" display="block" style={styles.estacion}>
-            Estación: Burgos/Villafría ( {formatTimestamp(weatherData.timestamp) } )
+            <Link
+              href="https://www.aemet.es/es/eltiempo/observacion/ultimosdatos?k=cle&l=2331&w=0&datos=det&x=h24&f=temperatura"
+              target="_blank"
+              rel="noreferrer"
+              underline="none"
+              sx={{
+                color: 'silver',
+                '&:hover': {
+                  color: 'white',
+                  opacity: 0.8
+                }
+              }}
+            >
+              Estación: Burgos/Villafría ( {formatTimestamp(weatherData.timestamp)} )
+            </Link>
           </Typography>
         </>
       )}
