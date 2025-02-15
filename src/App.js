@@ -17,6 +17,7 @@ import ShowHumTrends from './ShowHumTrends';
 import RadChart from './RadChart';
 import BurgosWeather from './BurgosWeather';
 import Menu from './Menu';
+import TemperatureHistoryChart from './TemperatureHistoryChart';
 import { BACKEND_URI } from './constants';
 
 const theme = createTheme({
@@ -110,12 +111,16 @@ function App() {
       color: 'DarkGray'
     },
     temperature: {
-      fontSize: isMobile ? '5rem' : isTablet ? '8rem' : '11rem',
+      fontSize: isMobile ? '5rem' : isTablet ? '8rem' : '9rem',
       color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
     },
     dataDisplay: {
       fontSize: isMobile ? '2rem' : isTablet ? '3rem' : '4rem',
       color: 'DarkGray'
+    },
+    etiquetaHistorico: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
+      color: 'DarkGray' 
     }
   };
 
@@ -210,42 +215,56 @@ function App() {
                     </Typography>
                     <ShowTempDiffs />
                   </Box>
+                  <Box display="flex" justifyContent="center" gap={2} mb={2}>
+                      <label>
+                        <input
+                          type="radio"
+                          value="24h"
+                          checked={timeRange === '24h'}
+                          onChange={handleTimeRangeChange}
+                        />
+                        24h
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="48h"
+                          checked={timeRange === '48h'}
+                          onChange={handleTimeRangeChange}
+                        />
+                        48h
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="7d"
+                          checked={timeRange === '7d'}
+                          onChange={handleTimeRangeChange}
+                        />
+                        7d
+                      </label>
+                    </Box>
+                    <TemperatureChart timeRange={timeRange} />
                 </Box>
 
                 {/* Chart Controls Section */}
-                <Box sx={{ gridArea: 'chart' }}>
-                  <Box display="flex" justifyContent="center" gap={2} mb={2}>
-                    <label>
-                      <input
-                        type="radio"
-                        value="24h"
-                        checked={timeRange === '24h'}
-                        onChange={handleTimeRangeChange}
-                      />
-                      24h
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        value="48h"
-                        checked={timeRange === '48h'}
-                        onChange={handleTimeRangeChange}
-                      />
-                      48h
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        value="7d"
-                        checked={timeRange === '7d'}
-                        onChange={handleTimeRangeChange}
-                      />
-                      7d
-                    </label>
-                  </Box>
-                  <TemperatureChart timeRange={timeRange} />
-                </Box>
 
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ 
+                    gridArea: 'chart',
+                    height: '100%'  // Asegurar que el contenedor ocupa todo el espacio disponible
+                  }}>
+                   <Typography style={styles.etiquetaHistorico} gutterBottom>
+                    Histórico anual de temperaturas
+                  </Typography>
+                  <Box flexGrow={1} width="100%">  {/* Contenedor para la gráfica que ocupará el espacio restante */}
+                    <TemperatureHistoryChart />
+                  </Box>
+                </Box>
+                
                 {/* Humidity Section */}
                 <Box 
                   display="flex" 

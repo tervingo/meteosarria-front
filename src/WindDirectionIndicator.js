@@ -4,8 +4,8 @@ import './App.css';
 
 const WindDirectionIndicator = ({ direction, speed, rose }) => {
   const angleInRadians = (direction * Math.PI) / 180;
-  const radius = 75; // Radius of the circle
-  const circleRadius = 7; // Radius of the inner circle
+  const radius = 50; // Radius of the circle
+  const circleRadius = 5; // Radius of the inner circle
   const borderwidth = 4; // Width of the border
 
   const x = radius + radius * Math.sin(angleInRadians) - circleRadius - borderwidth; 
@@ -30,13 +30,13 @@ const WindDirectionIndicator = ({ direction, speed, rose }) => {
             }} 
           />
           <div className="center-labels">
-            <Typography variant="h5">
+            <Typography>
               {speed} km/h
             </Typography>
-            <Typography variant="h5">
+            <Typography>
               {direction}°
             </Typography>
-            <Typography variant="h5">
+            <Typography>
               {rose}
             </Typography>           
           </div>

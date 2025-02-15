@@ -175,7 +175,7 @@ const TemperatureChart = ({ timeRange }) => {
             dot={(props) => {
               const { cx, cy, payload } = props;
               const color = GetTempColour(payload.external_temperature);
-              const radius = isMobile ? 0.5 : 1;
+              const radius = isMobile ? 0.5 : 0.8;
 
               return (
                 <circle cx={cx} cy={cy} r={radius} fill={color} stroke={color} />
