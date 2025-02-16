@@ -48,7 +48,7 @@ const BurgosWeather = () => {
         // Asegúrate de que esta URL coincide con tu configuración de proxy
         const response = await axios.get(BACKEND_URI + '/api/burgos', {
           // Añadimos timeout y headers para mejor manejo de errores
-          timeout: 5000,
+          timeout: 10000,
           headers: {
             'Accept': 'application/json'
           }
@@ -89,11 +89,11 @@ const BurgosWeather = () => {
     },
     titulo: {
         color: 'silver',
-        fontSize: '2rem'
+        fontSize: '1.5rem'
     },
     estacion: {
         color: 'silver',
-        fontSize: '1.2rem',
+        fontSize: '1.1rem',
     }
   };
 

@@ -171,35 +171,31 @@ function App() {
                 sx={{
                   gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
                   gridTemplateAreas: isMobile ? `
-                    "temperature"
-                    "wind"
-                    "chart"
-                    "humidity"
-                    "pressure"
-                    "radiation"
-                    "maps"
-                    "pred"
-                    "webcam"
+                    "1I"
+                    "1C"
+                    "1D"
+                    "2I"
+                    "2C"
+                    "2D"
+                    "3I"
+                    "3C"
+                    "3D"
                   ` : `
-                    "wind temperature chart"
-                    "humidity pressure radiation"
-                    "maps pred webcam"
+                    "1I 1C 1D"
+                    "2I 2C 2D"
+                    "3I 3C 3D"
                   `
                 }}
               >
                 {/* Wind Direction Section */}
                 <Box 
                   display="flex" 
+                  flexDirection="column"
                   justifyContent="center" 
                   alignItems="center"
-                  sx={{ gridArea: 'wind' }}
+                  sx={{ gridArea: '1I' }}
                 >
-                  <WindDirectionIndicator
-                    direction={weatherData.wind_direction}
-                    speed={weatherData.wind_speed}
-                    rose={GetWindDir(weatherData.wind_direction)}
-                    size={isMobile ? 'small' : 'normal'}
-                  />
+                  <BurgosWeather/>
                 </Box>
 
                 {/* Temperature Section */}
@@ -207,7 +203,7 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: 'temperature' }}
+                  sx={{ gridArea: '1C' }}
                 >
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.temperature}>
@@ -254,13 +250,19 @@ function App() {
                   flexDirection="column" 
                   alignItems="center"
                   sx={{ 
-                    gridArea: 'chart',
+                    gridArea: '1D',
                     height: '100%'  // Asegurar que el contenedor ocupa todo el espacio disponible
                   }}>
+                  <WindDirectionIndicator
+                    direction={weatherData.wind_direction}
+                    speed={weatherData.wind_speed}
+                    rose={GetWindDir(weatherData.wind_direction)}
+                    size={isMobile ? 'small' : 'normal'}
+                  />
                    <Typography style={styles.etiquetaHistorico} gutterBottom>
                     Histórico anual de temperaturas
                   </Typography>
-                  <Box flexGrow={1} width="100%">  {/* Contenedor para la gráfica que ocupará el espacio restante */}
+                  <Box flexGrow={1} width="100%">
                     <TemperatureHistoryChart />
                   </Box>
                 </Box>
@@ -270,7 +272,7 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: 'humidity' }}
+                  sx={{ gridArea: '2I' }}
                 >
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.dataDisplay}>
@@ -286,7 +288,7 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: 'pressure' }}
+                  sx={{ gridArea: '2C' }}
                 >
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.dataDisplay}>
@@ -302,7 +304,7 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: 'radiation' }}
+                  sx={{ gridArea: '2D' }}
                 >
                   <Typography style={styles.dataDisplay}>
                     {weatherData.solar_radiation} W/m²
@@ -311,7 +313,7 @@ function App() {
                 </Box>
 
                 {/* Maps Section */}
-                <Box sx={{ gridArea: 'maps' }}>
+                <Box sx={{ gridArea: '3I' }}>
                   <iframe
                     width="100%"
                     height={isMobile ? "250px" : "300px"}
@@ -322,12 +324,12 @@ function App() {
                 </Box>
 
                 {/* Datos de Burgos */}
-                <Box sx={{ gridArea: 'pred' }}>
-                  <BurgosWeather/>
+                <Box sx={{ gridArea: '3C' }}>
+
                 </Box>
 
                 {/* Webcam Section */}
-                <Box sx={{ gridArea: 'webcam' }}>
+                <Box sx={{ gridArea: '3D' }}>
                   <a
                     name="windy-webcam-timelapse-player"
                     data-id="1735243432"
