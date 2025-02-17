@@ -93,7 +93,7 @@ const Menu = ({ items }) => {
       padding: '20px',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      background: 'rgba(47, 79, 79, 0.5)',
+      background: 'rgba(40, 40, 40, 0)',
       backdropFilter: 'blur(5px)',
       borderRadius: '8px',
       margin: '0 20px'
