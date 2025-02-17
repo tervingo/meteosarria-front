@@ -18,6 +18,7 @@ import RadChart from './RadChart';
 import BurgosWeather from './BurgosWeather';
 import Menu from './Menu';
 import TemperatureHistoryChart from './TemperatureHistoryChart';
+import Rain from './Rain';
 import { BACKEND_URI } from './constants';
 
 const theme = createTheme({
@@ -124,6 +125,8 @@ function App() {
     }
   };
 
+  // console.log('weatherData: ', weatherData);
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="xl" className="App">
@@ -143,16 +146,18 @@ function App() {
               </Typography>
             </Box>
             {!isMobile && (
-              <Card>
+            <Card>
                 <CardMedia
                   component="img"
-                  width={isMobile ? 80 : 150}
-                  height={isMobile ? 80 : 150}
+                  sx={{ 
+                    width: isMobile ? "80px" : "150px",
+                    height: isMobile ? "80px" : "150px",
+                    objectFit: 'cover'
+                  }}
                   image="/images/nubes.jpg"
                   alt="Weather"
-                  sx={{ objectFit: 'cover' }}
                 />
-              </Card>
+          </Card>
             )}
           </Box>
         </Box>
@@ -195,6 +200,10 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '1I',  order: isMobile ? 2 : 1  }}
                 >
+                  <Rain
+                    rainRate={weatherData.current_rain_rate}
+                    totalRain={weatherData.total_rain}
+                  />
                   <BurgosWeather/>
                 </Box>
 
