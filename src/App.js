@@ -146,8 +146,8 @@ function App() {
               <Card>
                 <CardMedia
                   component="img"
-                  width={isMobile ? 100 : 150}
-                  height={isMobile ? 100 : 150}
+                  width={isMobile ? 80 : 150}
+                  height={isMobile ? 80 : 150}
                   image="/images/nubes.jpg"
                   alt="Weather"
                   sx={{ objectFit: 'cover' }}
@@ -171,9 +171,9 @@ function App() {
                 sx={{
                   gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
                   gridTemplateAreas: isMobile ? `
-                    "1I"
-                    "1C"
                     "1D"
+                    "1C"
+                    "1I"
                     "2I"
                     "2C"
                     "2D"
@@ -181,29 +181,29 @@ function App() {
                     "3C"
                     "3D"
                   ` : `
-                    "1I 1C 1D"
+                    "1D 1C 1I"
                     "2I 2C 2D"
                     "3I 3C 3D"
                   `
                 }}
               >
-                {/* Wind Direction Section */}
+                {/* 1 izquierda */}
                 <Box 
                   display="flex" 
                   flexDirection="column"
                   justifyContent="center" 
                   alignItems="center"
-                  sx={{ gridArea: '1I' }}
+                  sx={{ gridArea: '1I',  order: isMobile ? 2 : 1  }}
                 >
                   <BurgosWeather/>
                 </Box>
 
-                {/* Temperature Section */}
+                {/* 1 centro */}
                 <Box 
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: '1C' }}
+                  sx={{ gridArea: '1C',  order: isMobile ? 1 : 2  }}
                 >
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.temperature}>
@@ -243,7 +243,7 @@ function App() {
                     <TemperatureChart timeRange={timeRange} />
                 </Box>
 
-                {/* Chart Controls Section */}
+                {/* 1 derecha */}
 
                 <Box 
                   display="flex" 
@@ -251,6 +251,7 @@ function App() {
                   alignItems="center"
                   sx={{ 
                     gridArea: '1D',
+                    order: isMobile ? 3 : 3,
                     height: '100%'  // Asegurar que el contenedor ocupa todo el espacio disponible
                   }}>
                   <WindDirectionIndicator
@@ -269,7 +270,7 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: '2I' }}
+                  sx={{ gridArea: '2I', order: 4 }}
                 >
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.dataDisplay}>
@@ -285,7 +286,7 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: '2C' }}
+                  sx={{ gridArea: '2C', order: 5 }}
                 >
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.dataDisplay}>
@@ -301,7 +302,7 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: '2D' }}
+                  sx={{ gridArea: '2D', order: 6 }}
                 >
                   <Typography style={styles.dataDisplay}>
                     {weatherData.solar_radiation} W/m²
@@ -310,7 +311,7 @@ function App() {
                 </Box>
 
                 {/* Maps Section */}
-                <Box sx={{ gridArea: '3I' }}>
+                <Box sx={{ gridArea: '3I', order: 7 }}>
                   <iframe
                     width="100%"
                     height={isMobile ? "250px" : "300px"}
@@ -321,12 +322,12 @@ function App() {
                 </Box>
 
                 {/* Datos de Burgos */}
-                <Box sx={{ gridArea: '3C' }}>
+                <Box sx={{ gridArea: '3C', order: 8 }}>
 
                 </Box>
 
                 {/* Webcam Section */}
-                <Box sx={{ gridArea: '3D' }}>
+                <Box sx={{ gridArea: '3D', order: 9 }}>
                   <a
                     name="windy-webcam-timelapse-player"
                     data-id="1735243432"

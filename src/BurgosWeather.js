@@ -84,7 +84,7 @@ const BurgosWeather = () => {
       color: weatherData ? GetTempColour(weatherData.temperature) : 'Gray'
     },
     humidity: {
-        fontSize: isMobile ? '43rem' : isTablet ? '3rem'  : '3rem',
+        fontSize: isMobile ? '3rem' : isTablet ? '3rem'  : '3rem',
         color: 'aqua',
     },
     titulo: {
