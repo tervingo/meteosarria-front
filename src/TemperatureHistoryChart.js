@@ -168,8 +168,8 @@ const TemperatureHistoryChart = () => {
           {/* Etiquetas de extremos */}
           {extremes.max && (
             <text
-              x="95%"
-              y="35%"
+              x="72%"
+              y="23%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -179,8 +179,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.max && (
             <text
-              x="95%"
-              y="40%"
+              x="65%"
+              y="29%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -190,8 +190,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.min && (
             <text
-              x="94%"
-              y="50%"
+              x="72%"
+              y="59%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -201,8 +201,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.min && (
             <text
-              x="94%"
-              y="55%"
+              x="66%"
+              y="65%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -261,6 +261,7 @@ const TemperatureHistoryChart = () => {
 
     <Box 
       height={isMobile ? "250px" : isTablet ? "300px" : "340px"}
+      width={isMobile ? '500px' : isTablet ? '550px' : '650px'}
       maxWidth="1200px"
       margin="0 auto"
       padding={isMobile ? "10px" : "20px"}

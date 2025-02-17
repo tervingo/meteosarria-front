@@ -143,7 +143,7 @@ const BurgosWeather = () => {
                 }
               }}
             >
-              Estación: Burgos/Villafría ( {formatTimestamp(weatherData.timestamp)} )
+              Burgos/Villafría ( {formatTimestamp(weatherData.timestamp)} )
             </Link>
           </Typography>
         </>

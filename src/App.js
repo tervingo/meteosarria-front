@@ -122,7 +122,12 @@ function App() {
     etiquetaHistorico: {
       fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
       color: 'DarkGray' 
+    },
+    periodo: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '0.9rem',
+      color: 'azure',
     }
+
   };
 
   // console.log('weatherData: ', weatherData);
@@ -220,7 +225,7 @@ function App() {
                     </Typography>
                     <ShowTempDiffs />
                   </Box>
-                  <Box display="flex" justifyContent="center" gap={2} mb={0}>
+                  <Box display="flex" justifyContent="center" gap={4} mb={0}>
                       <label>
                         <input
                           type="radio"
@@ -228,7 +233,9 @@ function App() {
                           checked={timeRange === '24h'}
                           onChange={handleTimeRangeChange}
                         />
+                      <Typography style={styles.periodo}>
                         24h
+                      </Typography>
                       </label>
                       <label>
                         <input
@@ -237,7 +244,9 @@ function App() {
                           checked={timeRange === '48h'}
                           onChange={handleTimeRangeChange}
                         />
+                      <Typography style={styles.periodo}>
                         48h
+                      </Typography>
                       </label>
                       <label>
                         <input
@@ -246,7 +255,9 @@ function App() {
                           checked={timeRange === '7d'}
                           onChange={handleTimeRangeChange}
                         />
+                      <Typography style={styles.periodo}>
                         7d
+                      </Typography>
                       </label>
                     </Box>
                     <TemperatureChart timeRange={timeRange} />
@@ -332,6 +343,7 @@ function App() {
 
                 {/* Datos de Burgos */}
                 <Box sx={{ gridArea: '3C', order: 8 }}>
+
 
                 </Box>
 

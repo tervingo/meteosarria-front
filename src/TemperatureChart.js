@@ -178,8 +178,8 @@ const TemperatureChart = ({ timeRange }) => {
           />
           {/* Etiquetas de extremos */}
           <text
-            x="99.5%"
-            y="40%"
+            x="62%"
+            y="22%"
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -187,8 +187,8 @@ const TemperatureChart = ({ timeRange }) => {
             {`Tmáx = ${absMaxTemp.toFixed(1)}°`}
           </text>
           <text
-            x="100%"
-            y="45%"
+            x="70%"
+            y="28%"
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -196,8 +196,8 @@ const TemperatureChart = ({ timeRange }) => {
             {`(${maxTempTime})`}
           </text>
           <text
-            x="99.5%"
-            y="55%"
+            x="62%"
+            y="60%"
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -205,8 +205,8 @@ const TemperatureChart = ({ timeRange }) => {
             {`Tmín = ${absMinTemp.toFixed(1)}°`}
           </text>
           <text
-            x="100%"
-            y="60%"
+            x="70%"
+            y="66%"
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -245,7 +245,7 @@ const TemperatureChart = ({ timeRange }) => {
   return (
     <div
       style={{
-        width: '100%',
+        width: isMobile ? '500px' : isTablet ? '550px' : '650px',
         height: isMobile ? '250px' : isTablet ? '300px' : '360px',
         maxWidth: '1200px',
         margin: '0 auto',
