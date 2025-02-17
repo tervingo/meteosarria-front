@@ -90,13 +90,13 @@ const Menu = ({ items }) => {
       display: 'flex',
       flexDirection: 'row',
       gap: '16px',
-      padding: '20px',
+      padding: '10px',
       flexWrap: 'wrap',
       justifyContent: 'center',
       background: 'rgba(40, 40, 40, 0)',
       backdropFilter: 'blur(5px)',
       borderRadius: '8px',
-      margin: '0 20px'
+      margin: '0 10px'
     }}>
       {items.map(item => (
         <a

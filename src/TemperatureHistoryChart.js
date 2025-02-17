@@ -73,6 +73,13 @@ const TemperatureHistoryChart = () => {
     fetchHistoricalData();
   }, []);
 
+  const styles = {
+    etiquetaHistorico: {
+    fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
+    color: 'DarkGray' 
+    }
+  };  
+
   const chart = useMemo(() => {
     if (loading) {
       return (
@@ -97,7 +104,7 @@ const TemperatureHistoryChart = () => {
     };
 
     const getMargin = () => ({
-      top: isMobile ? 10 : 20,
+      top: isMobile ? 10 : 0,
       right: isMobile ? 80 : 120,  // Aumentado para dar espacio a las etiquetas
       left: isMobile ? 5 : 20,
       bottom: isMobile ? 60 : 40,
@@ -117,6 +124,7 @@ const TemperatureHistoryChart = () => {
     ];
 
     return (
+
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
@@ -160,8 +168,8 @@ const TemperatureHistoryChart = () => {
           {/* Etiquetas de extremos */}
           {extremes.max && (
             <text
-              x="98%"
-              y="15%"
+              x="95%"
+              y="35%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -171,8 +179,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.max && (
             <text
-              x="98%"
-              y="20%"
+              x="95%"
+              y="40%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -182,8 +190,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.min && (
             <text
-              x="98%"
-              y="30%"
+              x="94%"
+              y="50%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -193,8 +201,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.min && (
             <text
-              x="98%"
-              y="35%"
+              x="94%"
+              y="55%"
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -250,12 +258,16 @@ const TemperatureHistoryChart = () => {
   }, [data, loading, error, isMobile, isTablet, extremes]);
 
   return (
+
     <Box 
-      height={isMobile ? "250px" : isTablet ? "300px" : "350px"}
+      height={isMobile ? "250px" : isTablet ? "300px" : "340px"}
       maxWidth="1200px"
       margin="0 auto"
       padding={isMobile ? "10px" : "20px"}
     >
+      <Typography style={styles.etiquetaHistorico} gutterBottom>
+          Histórico anual de temperatura (2025)
+      </Typography>
       {chart}
     </Box>
   );

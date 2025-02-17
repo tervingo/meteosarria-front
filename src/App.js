@@ -97,13 +97,13 @@ function App() {
   // Responsive styles
   const styles = {
     header: {
-      fontSize: isMobile ? '2.5rem' : isTablet ? '4rem' : '6rem',
+      fontSize: isMobile ? '2.5rem' : isTablet ? '4rem' : '4rem',
       color: 'Gray',
-      marginBottom: isMobile ? '10px' : '20px',
+      marginBottom: isMobile ? '10px' : '10px',
       marginRight: isMobile ? '0' : '30px'
     },
     dateTime: {
-      fontSize: isMobile ? '1.5rem' : isTablet ? '2rem' : '3rem',
+      fontSize: isMobile ? '1.5rem' : isTablet ? '2rem' : '2rem',
       color: 'DarkGray'
     },
     location: {
@@ -146,8 +146,8 @@ function App() {
               <Card>
                 <CardMedia
                   component="img"
-                  width={isMobile ? 100 : 180}
-                  height={isMobile ? 100 : 180}
+                  width={isMobile ? 100 : 150}
+                  height={isMobile ? 100 : 150}
                   image="/images/nubes.jpg"
                   alt="Weather"
                   sx={{ objectFit: 'cover' }}
@@ -211,7 +211,7 @@ function App() {
                     </Typography>
                     <ShowTempDiffs />
                   </Box>
-                  <Box display="flex" justifyContent="center" gap={2} mb={2}>
+                  <Box display="flex" justifyContent="center" gap={2} mb={0}>
                       <label>
                         <input
                           type="radio"
@@ -259,9 +259,6 @@ function App() {
                     rose={GetWindDir(weatherData.wind_direction)}
                     size={isMobile ? 'small' : 'normal'}
                   />
-                   <Typography style={styles.etiquetaHistorico} gutterBottom>
-                    Histórico anual de temperaturas
-                  </Typography>
                   <Box flexGrow={1} width="100%">
                     <TemperatureHistoryChart />
                   </Box>

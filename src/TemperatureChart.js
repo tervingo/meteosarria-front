@@ -9,9 +9,9 @@ import {
   Tooltip,
   Legend,
   ReferenceArea,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from 'recharts';
-import { useMediaQuery } from '@mui/material';
+import { useMediaQuery, Typography } from '@mui/material';
 import { BACKEND_URI } from './constants';
 import GetTempColour from './GetTempColour';
 
@@ -66,6 +66,13 @@ const TemperatureChart = ({ timeRange }) => {
     return () => clearInterval(intervalId);
   }, [timeRange]);
 
+  const styles = {
+    etiquetaHistorico: {
+    fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
+    color: 'DarkGray' 
+    }
+  };  
+
   const chart = useMemo(() => {
     if (data.length === 0) {
       return <div className="text-center p-4">Loading...</div>;
@@ -75,7 +82,7 @@ const TemperatureChart = ({ timeRange }) => {
     const absMaxTemp = Math.max(...data.map((d) => d.external_temperature));
     // Calcular límites del eje Y
     const minTemp = Math.floor(absMinTemp / 5) * 5 - 5; // Redondear hacia abajo al múltiplo de 5 más cercano y restar 5
-    const maxTemp = Math.ceil(absMaxTemp / 5) * 5 + 10; // Redondear hacia arriba al múltiplo de 5 más cercano y sumar 10
+    const maxTemp = Math.ceil(absMaxTemp / 5) * 5 + 5; // Redondear hacia arriba al múltiplo de 5 más cercano y sumar 10
     
     // Generar ticks en múltiplos de 5
     const generateTicks = (min, max) => {
@@ -180,7 +187,7 @@ const TemperatureChart = ({ timeRange }) => {
             {`Tmáx = ${absMaxTemp.toFixed(1)}°`}
           </text>
           <text
-            x="99.5%"
+            x="100%"
             y="45%"
             fill="azure"
             fontSize={getFontSize()}
@@ -198,7 +205,7 @@ const TemperatureChart = ({ timeRange }) => {
             {`Tmín = ${absMinTemp.toFixed(1)}°`}
           </text>
           <text
-            x="99.5%"
+            x="100%"
             y="60%"
             fill="azure"
             fontSize={getFontSize()}
@@ -239,12 +246,16 @@ const TemperatureChart = ({ timeRange }) => {
     <div
       style={{
         width: '100%',
-        height: isMobile ? '250px' : isTablet ? '300px' : '350px',
+        height: isMobile ? '250px' : isTablet ? '300px' : '360px',
         maxWidth: '1200px',
         margin: '0 auto',
         padding: isMobile ? '10px' : '20px',
       }}
     >
+      <Typography style={styles.etiquetaHistorico} gutterBottom>
+        Temperatura exterior
+      </Typography>
+
       {chart}
     </div>
   );
