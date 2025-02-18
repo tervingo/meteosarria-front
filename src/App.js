@@ -99,7 +99,7 @@ function App() {
   const styles = {
     header: {
       fontSize: isMobile ? '2.5rem' : isTablet ? '4rem' : '4rem',
-      color: 'Gray',
+      color: 'azure',
       marginBottom: isMobile ? '10px' : '10px',
       marginRight: isMobile ? '0' : '30px'
     },
@@ -123,6 +123,20 @@ function App() {
       fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
       color: 'DarkGray' 
     },
+    etiqueta: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
+      color: 'azure' 
+    },
+    etiTemp: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1.4rem' : '1.4rem',
+      color: 'silver',
+      marginTop: '20px'
+    },
+    etiSarria: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
+      color: 'azure',
+      marginTop: '10px' 
+    }, 
     periodo: {
       fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '0.9rem',
       color: 'azure',
@@ -206,10 +220,23 @@ function App() {
                   sx={{ gridArea: '1I',  order: isMobile ? 2 : 1  }}
                 >
                   <BurgosWeather/>
-                  <Rain
-                    rainRate={weatherData.current_rain_rate}
-                    totalRain={weatherData.total_rain}
-                  />
+                  <Box sx={{ width: '500px', height: '350px'}} >
+                    <a
+                    name="windy-webcam-timelapse-player"
+                    data-id="1735243432"
+                    data-play="day"
+                    data-loop="0"
+                    data-auto-play="0"
+                    data-force-full-screen-on-overlay-play="0"
+                    data-interactive="1"
+                    href="https://windy.com/webcams/1735243432"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Burgos: Burgos Cathedral
+                    </a>
+                    <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script> 
+                  </Box>
                 </Box>
 
                 {/* 1 centro */}
@@ -217,50 +244,39 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
-                  sx={{ gridArea: '1C',  order: isMobile ? 1 : 2  }}
+                  sx={{ gridArea: '1C',  order: isMobile ? 1 : 2, border: '1px solid azure'  }}
                 >
+                  <Typography style={styles.etiSarria}>
+                      Datos actuales en Sarrià
+                  </Typography>              
+
+                  <Typography style={styles.etiTemp}>
+                      Temperatura exterior
+                  </Typography>              
+
+
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.temperature}>
                       {weatherData.external_temperature.toFixed(1)}°
                     </Typography>
                     <ShowTempDiffs />
                   </Box>
-                  <Box display="flex" justifyContent="center" gap={4} mb={0}>
-                      <label>
-                        <input
-                          type="radio"
-                          value="24h"
-                          checked={timeRange === '24h'}
-                          onChange={handleTimeRangeChange}
-                        />
-                      <Typography style={styles.periodo}>
-                        24h
-                      </Typography>
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          value="48h"
-                          checked={timeRange === '48h'}
-                          onChange={handleTimeRangeChange}
-                        />
-                      <Typography style={styles.periodo}>
-                        48h
-                      </Typography>
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          value="7d"
-                          checked={timeRange === '7d'}
-                          onChange={handleTimeRangeChange}
-                        />
-                      <Typography style={styles.periodo}>
-                        7d
-                      </Typography>
-                      </label>
-                    </Box>
-                    <TemperatureChart timeRange={timeRange} />
+                  <Box 
+                  display="flex" 
+                  flexDirection="row" 
+                  alignItems="center"
+                  >
+                    <WindDirectionIndicator
+                      direction={weatherData.wind_direction}
+                      speed={weatherData.wind_speed}
+                      rose={GetWindDir(weatherData.wind_direction)}
+                      size={isMobile ? 'small' : 'normal'}
+                    />
+                    <Rain
+                      rainRate={weatherData.current_rain_rate}
+                      totalRain={weatherData.total_rain}
+                    />
+                  </Box>
                 </Box>
 
                 {/* 1 derecha */}
@@ -274,12 +290,43 @@ function App() {
                     order: isMobile ? 3 : 3,
                     height: '100%'  // Asegurar que el contenedor ocupa todo el espacio disponible
                   }}>
-                  <WindDirectionIndicator
-                    direction={weatherData.wind_direction}
-                    speed={weatherData.wind_speed}
-                    rose={GetWindDir(weatherData.wind_direction)}
-                    size={isMobile ? 'small' : 'normal'}
-                  />
+                  <Box display="flex" justifyContent="center" gap={4} mb={0}>
+                        <label>
+                          <input
+                            type="radio"
+                            value="24h"
+                            checked={timeRange === '24h'}
+                            onChange={handleTimeRangeChange}
+                          />
+                        <Typography style={styles.periodo}>
+                          24h
+                        </Typography>
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            value="48h"
+                            checked={timeRange === '48h'}
+                            onChange={handleTimeRangeChange}
+                          />
+                        <Typography style={styles.periodo}>
+                          48h
+                        </Typography>
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            value="7d"
+                            checked={timeRange === '7d'}
+                            onChange={handleTimeRangeChange}
+                          />
+                        <Typography style={styles.periodo}>
+                          7d
+                        </Typography>
+                        </label>
+                  </Box>
+                  <TemperatureChart timeRange={timeRange} />
+
                   <Box flexGrow={1} width="100%">
                     <TemperatureHistoryChart />
                   </Box>
@@ -292,6 +339,9 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '2I', order: 4 }}
                 >
+                  <Typography style={styles.etiqueta}>
+                      Humedad relativa
+                  </Typography>              
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.dataDisplay}>
                       {weatherData.humidity}%
@@ -308,6 +358,9 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '2C', order: 5 }}
                 >
+                  <Typography style={styles.etiqueta}>
+                      Presión atmosférica
+                  </Typography>              
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.dataDisplay}>
                       {weatherData.pressure} hPa
@@ -324,6 +377,10 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '2D', order: 6 }}
                 >
+                  <Typography style={styles.etiqueta}>
+                      Radiación solar
+                  </Typography>              
+
                   <Typography style={styles.dataDisplay}>
                     {weatherData.solar_radiation} W/m²
                   </Typography>
@@ -348,22 +405,9 @@ function App() {
                 </Box>
 
                 {/* Webcam Section */}
-                <Box sx={{ gridArea: '3D', order: 9 }}>
-                  <a
-                    name="windy-webcam-timelapse-player"
-                    data-id="1735243432"
-                    data-play="day"
-                    data-loop="0"
-                    data-auto-play="0"
-                    data-force-full-screen-on-overlay-play="0"
-                    data-interactive="1"
-                    href="https://windy.com/webcams/1735243432"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Burgos: Burgos Cathedral
-                  </a>
-                  <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
+                <Box sx={{ gridArea: '3D', order: 9  }}>
+
+ 
                 </Box>
               </Box>
             </Box>

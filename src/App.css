@@ -54,6 +54,16 @@
   width: 100%;
 }
 
+.wind-direction-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 60px;
+  margin-right: 30px;
+}
+
 .wind-direction-indicator {
   display: flex;
   justify-content: center;
@@ -61,15 +71,9 @@
   height: 150px;
   width: 150px;
   position: relative;
-}
-
-.wind-direction-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  position: relative;
+  /* Añadimos un margin-bottom más pequeño */
+  margin-bottom: 1rem;
+  margin-right: 20px;
 }
 
 .circle {

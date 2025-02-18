@@ -76,7 +76,7 @@ const TemperatureHistoryChart = () => {
   const styles = {
     etiquetaHistorico: {
     fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
-    color: 'DarkGray' 
+    color: 'azure' 
     }
   };  
 

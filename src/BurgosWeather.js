@@ -88,7 +88,7 @@ const BurgosWeather = () => {
         color: 'aqua',
     },
     titulo: {
-        color: 'silver',
+        color: 'azure',
         fontSize: '1.5rem'
     },
     estacion: {
@@ -100,7 +100,7 @@ const BurgosWeather = () => {
   return (
     <Box p={2}>
       <Typography variant="h6" gutterBottom style={ styles.titulo}>
-        Temperatura actual en Burgos
+        Datos actuales en Burgos
       </Typography>
       
       {loading && (
