@@ -205,11 +205,11 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '1I',  order: isMobile ? 2 : 1  }}
                 >
+                  <BurgosWeather/>
                   <Rain
                     rainRate={weatherData.current_rain_rate}
                     totalRain={weatherData.total_rain}
                   />
-                  <BurgosWeather/>
                 </Box>
 
                 {/* 1 centro */}
