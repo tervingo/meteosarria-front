@@ -140,6 +140,10 @@ function App() {
     periodo: {
       fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '0.9rem',
       color: 'azure',
+    },
+    catedral: {
+      fontSize:  '1rem',
+      color: 'lightblue'     
     }
 
   };
@@ -220,6 +224,7 @@ function App() {
                   sx={{ gridArea: '1I',  order: isMobile ? 2 : 1  }}
                 >
                   <BurgosWeather/>
+                  {/* Webcam Catedral de Burgos */}
                   <Box sx={{ width: '500px', height: '350px'}} >
                     <a
                     name="windy-webcam-timelapse-player"
@@ -237,6 +242,9 @@ function App() {
                     </a>
                     <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script> 
                   </Box>
+                  <Typography style={styles.catedral}>
+                    <a href="https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/" target="_blank" rel='noreferrer'>Webcam catedral de Burgos</a>
+                  </Typography>
                 </Box>
 
                 {/* 1 centro */}

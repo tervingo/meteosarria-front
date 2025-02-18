@@ -98,7 +98,7 @@ const BurgosWeather = () => {
   };
 
   return (
-    <Box p={2}>
+    <Box p={2} sx={{ marginBottom: 3}}>
       <Typography variant="h6" gutterBottom style={ styles.titulo}>
         Datos actuales en Burgos
       </Typography>
