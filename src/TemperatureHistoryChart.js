@@ -12,7 +12,7 @@ import {
   ReferenceArea,
 } from 'recharts';
 import { Box, Typography, CircularProgress, useMediaQuery } from '@mui/material';
-import { BACKEND_URI } from './constants';
+import { BACKEND_URI, WIDTH_PC, HEIGHT_PC } from './constants';
 import GetTempColour from './GetTempColour';
 
 const TemperatureHistoryChart = () => {
@@ -98,7 +98,7 @@ const TemperatureHistoryChart = () => {
 
     const getMargin = () => ({
       top: isMobile ? 10 : 0,
-      right: isMobile ? 80 : 120,  // Aumentado para dar espacio a las etiquetas
+      right: isMobile ? 80 : 30, 
       left: isMobile ? 5 : 20,
       bottom: isMobile ? 60 : 20,
     });
@@ -253,8 +253,8 @@ const TemperatureHistoryChart = () => {
   return (
 
     <Box 
-      height={isMobile ? "250px" : isTablet ? "300px" : "340px"}
-      width={isMobile ? '500px' : isTablet ? '550px' : '650px'}
+      height={isMobile ? "250px" : isTablet ? "300px" : HEIGHT_PC}
+      width={isMobile ? '500px' : isTablet ? '550px' : WIDTH_PC}
       maxWidth="1200px"
       margin="0 auto"
       padding={isMobile ? "10px" : "10px"}
