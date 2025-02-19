@@ -125,7 +125,7 @@ const RadChart = ({ timeRange }) => {
             textAnchor="end"
             height={60}
             interval={getTickInterval()}
-            tick={{ fontSize: getFontSize() }}
+            tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
           <YAxis
             domain={[minRad - padding, maxRad + padding]}
@@ -134,9 +134,9 @@ const RadChart = ({ timeRange }) => {
               angle: -90,
               position: 'insideLeft',
               offset: isMobile ? 0 : 10,
-              style: { fontSize: getFontSize() }
+              style: { fontSize: getFontSize(), fill: 'silver' }
             }}
-            tick={{ fontSize: getFontSize() }}
+            tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
           <ReferenceLine
             y={maxRad}

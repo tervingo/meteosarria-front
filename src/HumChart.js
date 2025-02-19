@@ -126,21 +126,19 @@ const HumChart = ({ timeRange }) => {
             angle={-45}
             textAnchor="end"
             height={60}
-            stroke='darkgrey'
             interval={getTickInterval()}
-            tick={{ fontSize: getFontSize() }}
+            tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
           <YAxis
             domain={[minHum - padding, 100]}
-            stroke='darkgrey'
             label={{
               value: 'Humedad (%)',
               angle: -90,
               position: 'insideLeft',
               offset: isMobile ? 0 : 10,
-              style: { fontSize: getFontSize() }
+              style: { fontSize: getFontSize(), fill: 'silver' }
             }}
-            tick={{ fontSize: getFontSize() }}
+            tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
           <ReferenceLine
             y={maxHum}
@@ -174,7 +172,7 @@ const HumChart = ({ timeRange }) => {
           <Line
             type="monotone"
             dataKey="humidity"
-            stroke="aqua"
+            stroke="chartreuse"
             name="Humedad"
             dot={false}
             strokeWidth={isMobile ? 1 : 2}

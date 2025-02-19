@@ -119,6 +119,18 @@ function App() {
       fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
       color: 'azure'
     },
+    datosHumedad: {
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
+      color: 'chartreuse'
+    },
+    datosPresion: {
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
+      color: 'orangeRed'
+    },
+    datosRadiacion: {
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
+      color: 'gold'
+    },
     etiquetaHistorico: {
       fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
       color: 'DarkGray' 
@@ -216,19 +228,19 @@ function App() {
                     "3C"
                     "3D"
                   ` : `
-                    "1D 1C 1I"
+                    "1C 1I 1D"
                     "2I 2C 2D"
                     "3I 3C 3D"
                   `
                 }}
               >
-                {/* 1 izquierda */}
+                {/* BURGOS */}
                 <Box 
                   display="flex" 
                   flexDirection="column"
                   justifyContent="flex-start"
                   alignItems="center"
-                  sx={{ gridArea: '1I',  order: isMobile ? 2 : 1, border: '1px solid darkgrey'  }}
+                  sx={{ gridArea: '1I',  order: isMobile ? 2 : 3, border: '1px solid darkgrey'  }}
                 >
                   <Typography style={styles.seccion}>
                       Datos actuales en Burgos
@@ -279,7 +291,7 @@ function App() {
                   </Box>
                 </Box>
 
-                {/* 1 centro */}
+                {/* SARRIÀ */}
                 <Box 
                   display="flex" 
                   flexDirection="column" 
@@ -346,7 +358,7 @@ function App() {
                             Humedad
                         </Typography>              
                         <Box display="flex" alignItems="center">
-                          <Typography style={styles.dataDisplay}>
+                          <Typography style={styles.datosHumedad}>
                             {weatherData.humidity}%
                           </Typography>
                           <ShowHumTrends />
@@ -365,7 +377,7 @@ function App() {
                             Presión
                         </Typography>              
                         <Box display="flex" alignItems="center">
-                          <Typography style={styles.dataDisplay}>
+                          <Typography style={styles.datosPresion}>
                             {weatherData.pressure} hPa
                           </Typography>
                           <ShowPressTrend />
@@ -384,7 +396,7 @@ function App() {
                             Radiación
                         </Typography>              
 
-                        <Typography style={styles.dataDisplay}>
+                        <Typography style={styles.datosRadiacion}>
                           {weatherData.solar_radiation} W/m²
                         </Typography>
                       </Box>
@@ -399,7 +411,7 @@ function App() {
 
                 </Box>
 
-                {/* 1 derecha */}
+                {/* Gráficas */}
 
                 <Box 
                   display="flex" 
@@ -408,12 +420,12 @@ function App() {
                   justifyContent="flex-start"
                   sx={{ 
                     gridArea: '1D',
-                    order: isMobile ? 3 : 3,
+                    order: isMobile ? 3 : 1,
                     height: '100%',
                     border: "1px solid darkgrey"
                   }}>
                   <Typography style={styles.seccion} >
-                    Gráficas
+                    Gráficas (Sarrià)
                   </Typography>
                   <Box display="flex" justifyContent="center" gap={6} mt={4} p={1} sx={{ border: "1px solid darkgrey"}}>
                         <label>

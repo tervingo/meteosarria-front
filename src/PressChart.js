@@ -115,7 +115,6 @@ const PressChart = ({ timeRange }) => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="fullTimestamp"
-            stroke='darkgrey'
             tickFormatter={(timeStr) => {
               const [datePart, timePart] = timeStr.split(' ');
               if (timeRange === '7d') {
@@ -128,19 +127,18 @@ const PressChart = ({ timeRange }) => {
             textAnchor="end"
             height={60}
             interval={getTickInterval()}
-            tick={{ fontSize: getFontSize() }}
+            tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
           <YAxis
             domain={[minPress - padding, maxPress + padding]}
-            stroke='darkgrey'
             label={{
               value: 'Presión (hPa)',
               angle: -90,
               position: 'insideLeft',
               offset: isMobile ? 0 : 10,
-              style: { fontSize: getFontSize() }
+              style: { fontSize: getFontSize(), fill: 'silver' }
             }}
-            tick={{ fontSize: getFontSize() }}
+            tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
           <ReferenceLine
             y={maxPress}
