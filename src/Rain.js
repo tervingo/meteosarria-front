@@ -6,9 +6,6 @@ const Rain = ({ rainRate, totalRain }) => {
     return (
       <div className="flex flex-col items-center">
         {/* Removemos el mb-5 del título y usamos un margen más pequeño */}
-        <div className="text-2xl mb-5 text-gray-300">
-          Precipitación
-        </div>
         <div className="flex flex-row items-end space-x-4">
           {/* Resto del código igual */}
           <div className="flex flex-col items-center">

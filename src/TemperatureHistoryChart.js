@@ -107,7 +107,7 @@ const TemperatureHistoryChart = () => {
       top: isMobile ? 10 : 0,
       right: isMobile ? 80 : 120,  // Aumentado para dar espacio a las etiquetas
       left: isMobile ? 5 : 20,
-      bottom: isMobile ? 60 : 40,
+      bottom: isMobile ? 60 : 20,
     });
 
     const temperatureRanges = [
@@ -264,11 +264,8 @@ const TemperatureHistoryChart = () => {
       width={isMobile ? '500px' : isTablet ? '550px' : '650px'}
       maxWidth="1200px"
       margin="0 auto"
-      padding={isMobile ? "10px" : "20px"}
+      padding={isMobile ? "10px" : "10px"}
     >
-      <Typography style={styles.etiquetaHistorico} gutterBottom>
-          Histórico anual de temperatura (2025)
-      </Typography>
       {chart}
     </Box>
   );

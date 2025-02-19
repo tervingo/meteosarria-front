@@ -99,10 +99,7 @@ const BurgosWeather = () => {
 
   return (
     <Box p={2} sx={{ marginBottom: 3}}>
-      <Typography variant="h6" gutterBottom style={ styles.titulo}>
-        Datos actuales en Burgos
-      </Typography>
-      
+     
       {loading && (
         <Box display="flex" justifyContent="center" alignItems="center" p={2}>
           <CircularProgress size={24} />

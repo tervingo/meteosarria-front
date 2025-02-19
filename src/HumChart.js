@@ -12,7 +12,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI } from './constants';
+import { BACKEND_URI, WIDTH_PC, HEIGHT_PC } from './constants';
 
 const HumChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -94,10 +94,10 @@ const HumChart = ({ timeRange }) => {
     };
 
     const getMargin = () => ({
-      top: isMobile ? 10 : 20,
+      top: isMobile ? 10 : 10,
       right: isMobile ? 15 : 30,
       left: isMobile ? 5 : 20,
-      bottom: isMobile ? 60 : 40,
+      bottom: isMobile ? 60 : 20,
     });
 
     const getTickInterval = () => {
@@ -126,11 +126,13 @@ const HumChart = ({ timeRange }) => {
             angle={-45}
             textAnchor="end"
             height={60}
+            stroke='darkgrey'
             interval={getTickInterval()}
             tick={{ fontSize: getFontSize() }}
           />
           <YAxis
             domain={[minHum - padding, 100]}
+            stroke='darkgrey'
             label={{
               value: 'Humedad (%)',
               angle: -90,
@@ -185,11 +187,11 @@ const HumChart = ({ timeRange }) => {
   return (
     <div
       style={{
-        width: '100%',
-        height: isMobile ? '250px' : isTablet ? '300px' : '350px',
+        height: isMobile ? '250px' : isTablet ? '300px' : HEIGHT_PC,
+        width: isMobile ? '500px' : isTablet ? '550px' : WIDTH_PC,
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: isMobile ? '10px' : '20px',
+        padding: isMobile ? '10px' : '10px',
       }}
     >
       {chart}

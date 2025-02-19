@@ -14,20 +14,10 @@ const WindDirectionIndicator = ({ direction, speed, rose }) => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const isTablet = useMediaQuery('(min-width:601px) and (max-width:960px)');
 
-  const styles = {
-    titulo: {
-    fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
-    color: 'silver',
-    marginBottom: '2rem'
-    }
-  };  
+ 
   return (
    
     <div className='wind-direction-container'>
-      <Typography style={styles.titulo}>
-          Viento
-      </Typography>
- 
       <div className="wind-direction-indicator">
         <div className="circle">
           <div className="label north">N</div>

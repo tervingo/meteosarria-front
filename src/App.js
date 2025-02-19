@@ -88,8 +88,8 @@ function App() {
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
     { label: 'Meteocat', url: 'https://www.meteo.cat/' },
-    { label: 'Meteo Burgos', url: 'https://www.aemet.es/es/eltiempo/observacion/ultimosdatos?k=cle&l=2331&w=0&datos=det&x=h24&f=temperatura' },
-    { label: 'Webcam Burgos', url: 'https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/' },
+    { label: 'Meteoclimatic', url: 'https://www.meteoclimatic.net/' },
+    { label: 'Webcam Collserola', url: 'https://www.3cat.cat/el-temps/collserola-barcelona/camera/2/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
     { label: 'Windy', url: 'https://www.windy.com' },
     { label: 'Modelos', url: 'https://meteologix.com/es/model-charts/standard/europe/temperature-850hpa.html' }
@@ -112,33 +112,40 @@ function App() {
       color: 'DarkGray'
     },
     temperature: {
-      fontSize: isMobile ? '5rem' : isTablet ? '8rem' : '9rem',
+      fontSize: isMobile ? '5rem' : isTablet ? '8rem' : '8rem',
       color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
     },
     dataDisplay: {
-      fontSize: isMobile ? '2rem' : isTablet ? '3rem' : '4rem',
-      color: 'DarkGray'
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
+      color: 'azure'
     },
     etiquetaHistorico: {
       fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
       color: 'DarkGray' 
     },
+    titulo: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
+      color: 'silver',
+      marginBottom: '2rem'
+      },
     etiqueta: {
       fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
       color: 'azure' 
     },
-    etiTemp: {
-      fontSize: isMobile ? '1rem' : isTablet ? '1.4rem' : '1.4rem',
-      color: 'silver',
-      marginTop: '20px'
-    },
-    etiSarria: {
-      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
+    seccion: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.6rem',
       color: 'azure',
-      marginTop: '10px' 
+      marginTop: '10px',
+      justifyContent: 'right'
     }, 
+    subseccion: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1.4rem' : '1.4rem',
+      color: 'lightblue',
+      marginTop: '20px',
+      marginBottom: '20px'
+    },
     periodo: {
-      fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '0.9rem',
+      fontSize: isMobile ? '0.9rem' : isTablet ? '0.9rem' : '0.9rem',
       color: 'azure',
     },
     catedral: {
@@ -219,11 +226,21 @@ function App() {
                 <Box 
                   display="flex" 
                   flexDirection="column"
-                  justifyContent="center" 
+                  justifyContent="flex-start"
                   alignItems="center"
-                  sx={{ gridArea: '1I',  order: isMobile ? 2 : 1  }}
+                  sx={{ gridArea: '1I',  order: isMobile ? 2 : 1, border: '1px solid darkgrey'  }}
                 >
-                  <BurgosWeather/>
+                  <Typography style={styles.seccion}>
+                      Datos actuales en Burgos
+                  </Typography>              
+                  <Typography style={styles.subseccion}>
+                      Temperatura y humedad
+                  </Typography>              
+                 <BurgosWeather/>
+                 <Typography style={styles.subseccion}>
+                      WebCam
+                  </Typography>              
+
                   {/* Webcam Catedral de Burgos */}
                   <Box sx={{ width: '500px', height: '350px'}} >
                     <a
@@ -245,46 +262,141 @@ function App() {
                   <Typography style={styles.catedral}>
                     <a href="https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/" target="_blank" rel='noreferrer'>Webcam catedral de Burgos</a>
                   </Typography>
+
+                  <Box sx={{ width: '100%', marginTop: '20px', border:'1px solid darkgrey'}} >
+                    <Typography style={styles.seccion}>
+                        Modelo numérico
+                    </Typography>              
+
+                    <br/>
+                    <iframe
+                      width="95%"
+                      height={isMobile ? "250px" : "300px"}     
+                      src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true"
+                      frameBorder="0"
+                      title="Weather Map"
+                    />
+                  </Box>
                 </Box>
 
                 {/* 1 centro */}
                 <Box 
                   display="flex" 
                   flexDirection="column" 
+                  justifyContent="center"
                   alignItems="center"
-                  sx={{ gridArea: '1C',  order: isMobile ? 1 : 2, border: '1px solid azure'  }}
+                  sx={{ gridArea: '1C',  order: isMobile ? 1 : 2, border: '1px solid azure'}}
                 >
-                  <Typography style={styles.etiSarria}>
+                  <Typography style={styles.seccion}>
                       Datos actuales en Sarrià
                   </Typography>              
 
-                  <Typography style={styles.etiTemp}>
+                  {/* Temperatura  */}
+
+                  <Typography style={styles.subseccion}>
                       Temperatura exterior
                   </Typography>              
-
-
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.temperature}>
                       {weatherData.external_temperature.toFixed(1)}°
                     </Typography>
                     <ShowTempDiffs />
                   </Box>
-                  <Box 
-                  display="flex" 
-                  flexDirection="row" 
-                  alignItems="center"
-                  >
-                    <WindDirectionIndicator
-                      direction={weatherData.wind_direction}
-                      speed={weatherData.wind_speed}
-                      rose={GetWindDir(weatherData.wind_direction)}
-                      size={isMobile ? 'small' : 'normal'}
-                    />
-                    <Rain
-                      rainRate={weatherData.current_rain_rate}
-                      totalRain={weatherData.total_rain}
-                    />
+
+                   <Box 
+                    display="flex" 
+                    flexDirection="row" 
+                    alignItems="center"
+                    >
+                    <Box display="column" flexDirection="row" alignItems="center">
+                      <Typography style={styles.subseccion}>
+                          Viento
+                      </Typography>
+                      <WindDirectionIndicator
+                        direction={weatherData.wind_direction}
+                        speed={weatherData.wind_speed}
+                        rose={GetWindDir(weatherData.wind_direction)}
+                        size={isMobile ? 'small' : 'normal'}
+                      />
+                    </Box>
+                    <Box display="column" flexDirection="row" alignItems="center">
+                      <Typography style={styles.subseccion}>
+                          Precipitación
+                      </Typography>
+                      <Rain
+                        rainRate={weatherData.current_rain_rate}
+                        totalRain={weatherData.total_rain}
+                      />
+                    </Box>
                   </Box>
+
+                 {/* Humedad, Presión y radiación  */}                 
+
+                  <Box display="flex" flexDirection="row" alignItems="center" gap={(4)}>
+
+                      {/* Humedad  */}
+
+                      <Box 
+                        display="flex" 
+                        flexDirection="column" 
+                        alignItems="center"
+                        sx={{ gridArea: '2I', order: 4 }}
+                        >
+                        <Typography style={styles.subseccion}>
+                            Humedad
+                        </Typography>              
+                        <Box display="flex" alignItems="center">
+                          <Typography style={styles.dataDisplay}>
+                            {weatherData.humidity}%
+                          </Typography>
+                          <ShowHumTrends />
+                        </Box>
+                      </Box>
+
+                      {/* Presión */}
+
+                      <Box 
+                        display="flex" 
+                        flexDirection="column" 
+                        alignItems="center"
+                        sx={{ gridArea: '2C', order: 5 }}
+                      >
+                        <Typography style={styles.subseccion}>
+                            Presión
+                        </Typography>              
+                        <Box display="flex" alignItems="center">
+                          <Typography style={styles.dataDisplay}>
+                            {weatherData.pressure} hPa
+                          </Typography>
+                          <ShowPressTrend />
+                        </Box>
+                      </Box>
+
+                      {/* Radiación */}
+
+                      <Box 
+                        display="flex" 
+                        flexDirection="column" 
+                        alignItems="center"
+                        sx={{ gridArea: '2D', order: 6 }}
+                      >
+                        <Typography style={styles.subseccion}>
+                            Radiación
+                        </Typography>              
+
+                        <Typography style={styles.dataDisplay}>
+                          {weatherData.solar_radiation} W/m²
+                        </Typography>
+                      </Box>
+                  </Box>
+                  <br/>
+                  <Typography style={styles.seccion}>
+                    Histórico de temperaturas (2025)
+                  </Typography>
+                  <Box flexGrow={1} width="100%">
+                    <TemperatureHistoryChart />
+                  </Box>
+
                 </Box>
 
                 {/* 1 derecha */}
@@ -293,12 +405,17 @@ function App() {
                   display="flex" 
                   flexDirection="column" 
                   alignItems="center"
+                  justifyContent="flex-start"
                   sx={{ 
                     gridArea: '1D',
                     order: isMobile ? 3 : 3,
-                    height: '100%'  // Asegurar que el contenedor ocupa todo el espacio disponible
+                    height: '100%',
+                    border: "1px solid darkgrey"
                   }}>
-                  <Box display="flex" justifyContent="center" gap={4} mb={0}>
+                  <Typography style={styles.seccion} >
+                    Gráficas
+                  </Typography>
+                  <Box display="flex" justifyContent="center" gap={6} mt={4} p={1} sx={{ border: "1px solid darkgrey"}}>
                         <label>
                           <input
                             type="radio"
@@ -333,11 +450,26 @@ function App() {
                         </Typography>
                         </label>
                   </Box>
+                  <Typography style={styles.subseccion}>
+                    Temperatura exterior
+                  </Typography>
                   <TemperatureChart timeRange={timeRange} />
 
-                  <Box flexGrow={1} width="100%">
-                    <TemperatureHistoryChart />
-                  </Box>
+                  <Typography style={styles.subseccion}>
+                    Humedad
+                  </Typography>
+                  <HumChart timeRange={timeRange} />
+
+                  <Typography style={styles.subseccion}>
+                    Presión
+                  </Typography>
+                  <PressChart timeRange={timeRange} /> 
+ 
+                  <Typography style={styles.subseccion}>
+                    Radiación
+                  </Typography>
+                  <RadChart timeRange={timeRange} /> 
+  
                 </Box>
                 
                 {/* Humidity Section */}
@@ -347,16 +479,6 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '2I', order: 4 }}
                 >
-                  <Typography style={styles.etiqueta}>
-                      Humedad relativa
-                  </Typography>              
-                  <Box display="flex" alignItems="center">
-                    <Typography style={styles.dataDisplay}>
-                      {weatherData.humidity}%
-                    </Typography>
-                    <ShowHumTrends />
-                  </Box>
-                  <HumChart timeRange={timeRange} />
                 </Box>
 
                 {/* Pressure Section */}
@@ -366,16 +488,6 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '2C', order: 5 }}
                 >
-                  <Typography style={styles.etiqueta}>
-                      Presión atmosférica
-                  </Typography>              
-                  <Box display="flex" alignItems="center">
-                    <Typography style={styles.dataDisplay}>
-                      {weatherData.pressure} hPa
-                    </Typography>
-                    <ShowPressTrend />
-                  </Box>
-                  <PressChart timeRange={timeRange} />
                 </Box>
 
                 {/* Radiation Section */}
@@ -385,25 +497,11 @@ function App() {
                   alignItems="center"
                   sx={{ gridArea: '2D', order: 6 }}
                 >
-                  <Typography style={styles.etiqueta}>
-                      Radiación solar
-                  </Typography>              
-
-                  <Typography style={styles.dataDisplay}>
-                    {weatherData.solar_radiation} W/m²
-                  </Typography>
-                  <RadChart timeRange={timeRange} />
                 </Box>
 
                 {/* Maps Section */}
                 <Box sx={{ gridArea: '3I', order: 7 }}>
-                  <iframe
-                    width="100%"
-                    height={isMobile ? "250px" : "300px"}
-                    src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true"
-                    frameBorder="0"
-                    title="Weather Map"
-                  />
+
                 </Box>
 
                 {/* Datos de Burgos */}
