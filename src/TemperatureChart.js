@@ -11,7 +11,7 @@ import {
   ReferenceArea,
   ResponsiveContainer,
 } from 'recharts';
-import { useMediaQuery, Typography } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import { BACKEND_URI, WIDTH_PC, HEIGHT_PC } from './constants';
 import GetTempColour from './GetTempColour';
 
@@ -65,13 +65,6 @@ const TemperatureChart = ({ timeRange }) => {
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, [timeRange]);
-
-  const styles = {
-    etiquetaHistorico: {
-    fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.5rem',
-    color: 'azure' 
-    }
-  };  
 
   const chart = useMemo(() => {
     if (data.length === 0) {
