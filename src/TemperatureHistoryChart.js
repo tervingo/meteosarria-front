@@ -100,7 +100,7 @@ const TemperatureHistoryChart = () => {
       top: isMobile ? 10 : 0,
       right: isMobile ? 80 : 30, 
       left: isMobile ? 5 : 20,
-      bottom: isMobile ? 60 : 20,
+      bottom: isMobile ? 60 : 10,
     });
 
     const temperatureRanges = [

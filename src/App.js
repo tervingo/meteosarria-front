@@ -76,14 +76,20 @@ function App() {
     return () => clearInterval(timerId);
   }, []);
 
-  const formatDate = (date) => {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
+  const getDate = (date) => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
-    return `${hours}:${minutes} (${day}.${month}.${year})`;
+    return `${day}.${month}.${year}`;
   };
+
+  const getTime = (date) => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
+
 
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
@@ -181,7 +187,7 @@ function App() {
                 #meteosarria
               </Typography>
               <Typography variant="h6" style={styles.dateTime}>
-                {formatDate(currentTime)}
+                {getDate(currentTime)}
               </Typography>
               <Typography variant="h6" style={styles.location}>
                 Sarrià - Barcelona (41º 23' 42" N, 2º 7' 21" E - 110m)
@@ -275,6 +281,26 @@ function App() {
                     <a href="https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/" target="_blank" rel='noreferrer'>Webcam catedral de Burgos</a>
                   </Typography>
 
+
+                  <Typography style={styles.seccion}>
+                    Predicción
+                  </Typography>
+
+                  <Box 
+                    width="100%" 
+                    display="flex"
+                    justifyContent="center" 
+                    alignItems="center" 
+                    marginTop="30px"
+                  >
+                    <iframe 
+                      width="500" 
+                      height="187" 
+                      src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h" 
+                      frameborder="0">
+                    </iframe>
+                  </Box>
+
                   <Box sx={{ width: '100%', marginTop: '20px', border:'1px solid darkgrey'}} >
                     <Typography style={styles.seccion}>
                         Modelo numérico
@@ -295,12 +321,12 @@ function App() {
                 <Box 
                   display="flex" 
                   flexDirection="column" 
-                  justifyContent="center"
+                  justifyContent="flex-start"
                   alignItems="center"
                   sx={{ gridArea: '1C',  order: isMobile ? 1 : 2, border: '1px solid azure'}}
                 >
                   <Typography style={styles.seccion}>
-                      Datos actuales en Sarrià
+                      Datos actuales en Sarrià a las {getTime(currentTime)}
                   </Typography>              
 
                   {/* Temperatura  */}
@@ -320,27 +346,27 @@ function App() {
                     flexDirection="row" 
                     alignItems="center"
                     >
-                    <Box display="column" flexDirection="row" alignItems="center">
-                      <Typography style={styles.subseccion}>
-                          Viento
-                      </Typography>
-                      <WindDirectionIndicator
-                        direction={weatherData.wind_direction}
-                        speed={weatherData.wind_speed}
-                        rose={GetWindDir(weatherData.wind_direction)}
-                        size={isMobile ? 'small' : 'normal'}
-                      />
-                    </Box>
-                    <Box display="column" flexDirection="row" alignItems="center">
-                      <Typography style={styles.subseccion}>
-                          Precipitación
-                      </Typography>
-                      <Rain
-                        rainRate={weatherData.current_rain_rate}
-                        totalRain={weatherData.total_rain}
-                      />
-                    </Box>
-                  </Box>
+                      <Box display="column" flexDirection="row" alignItems="center">
+                        <Typography style={styles.subseccion}>
+                            Viento
+                        </Typography>
+                        <WindDirectionIndicator
+                          direction={weatherData.wind_direction}
+                          speed={weatherData.wind_speed}
+                          rose={GetWindDir(weatherData.wind_direction)}
+                          size={isMobile ? 'small' : 'normal'}
+                        />
+                      </Box>
+                      <Box display="column" flexDirection="row" alignItems="center">
+                        <Typography style={styles.subseccion}>
+                            Precipitación
+                        </Typography>
+                        <Rain
+                          rainRate={weatherData.current_rain_rate}
+                          totalRain={weatherData.total_rain}
+                        />
+                      </Box>
+                   </Box>
 
                  {/* Humedad, Presión y radiación  */}                 
 
@@ -405,10 +431,28 @@ function App() {
                   <Typography style={styles.seccion}>
                     Histórico de temperaturas (2025)
                   </Typography>
-                  <Box flexGrow={1} width="100%">
+                  <Box width="100%">
                     <TemperatureHistoryChart />
                   </Box>
 
+                  <Typography style={styles.seccion}>
+                    Predicción
+                  </Typography>
+
+                  <Box 
+                    width="100%" 
+                    display="flex"
+                    justifyContent="center" 
+                    alignItems="center" 
+                    marginTop="30px"
+                  >
+                    <iframe 
+                      width="500" 
+                      height="187" 
+                      src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h" 
+                      frameborder="0"
+                    /> 
+                  </Box>                
                 </Box>
 
                 {/* Gráficas */}
