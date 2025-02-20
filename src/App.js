@@ -297,7 +297,9 @@ function App() {
                       width="500" 
                       height="187" 
                       src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h" 
-                      frameborder="0">
+                      frameborder="0"
+                      title="Predicción Burgos"
+                      >
                     </iframe>
                   </Box>
 
@@ -451,6 +453,7 @@ function App() {
                       height="187" 
                       src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h" 
                       frameborder="0"
+                      title="Predicción Barcelona"
                     /> 
                   </Box>                
                 </Box>
