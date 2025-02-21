@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, WIDTH_PC, HEIGHT_PC } from './constants';
+import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET } from './constants';
 import GetTempColour from './GetTempColour';
 
 const TemperatureChart = ({ timeRange }) => {
@@ -238,8 +238,8 @@ const TemperatureChart = ({ timeRange }) => {
   return (
     <div
       style={{
-        width: isMobile ? '500px' : isTablet ? '550px' : WIDTH_PC,
-        height: isMobile ? '250px' : isTablet ? '300px' : HEIGHT_PC,
+        width: isMobile ? WIDTH_MOBILE : isTablet ? WIDTH_TABLET : WIDTH_PC,
+        height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
         maxWidth: '1200px',
         margin: '0 auto',
         padding: isMobile ? '10px' : '10px',
