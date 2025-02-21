@@ -260,7 +260,7 @@ function App() {
                   </Typography>              
 
                   {/* Webcam Catedral de Burgos */}
-                  <Box sx={{ width: '500px', height: '350px'}} >
+                  <Box sx={{ width: '500px', height: '280px' }} > {/* Reducida la altura de 350px a 280px */}
                     <a
                     name="windy-webcam-timelapse-player"
                     data-id="1735243432"
@@ -273,37 +273,41 @@ function App() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Burgos: Burgos Cathedral
-                    </a>
-                    <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script> 
-                  </Box>
-                  <Typography style={styles.catedral}>
-                    <a href="https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/" target="_blank" rel='noreferrer'>Webcam catedral de Burgos</a>
-                  </Typography>
-
-
-                  <Typography style={styles.seccion}>
-                    Predicción
-                  </Typography>
-
-                  <Box 
-                    width="100%" 
-                    display="flex"
-                    justifyContent="center" 
-                    alignItems="center" 
-                    marginTop="30px"
-                  >
-                    <iframe 
-                      width="500" 
-                      height="187" 
-                      src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h" 
-                      frameborder="0"
-                      title="Predicción Burgos"
-                      >
-                    </iframe>
+                    Burgos: Burgos Catedral
+                  </a>
+                  <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
                   </Box>
 
-                  <Box sx={{ width: '100%', marginTop: '20px', border:'1px solid darkgrey'}} >
+                  <Typography style={{ ...styles.catedral, marginTop: '-1px' }}>
+                  <a href="https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/" target="_blank" rel='noreferrer'>
+                    Webcam Catedral de Burgos
+                  </a>
+                  </Typography>
+
+                  <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
+                    <Typography style={ styles.seccion}>
+                      Predicción
+                    </Typography>
+
+                    <Box 
+                      width="100%" 
+                      display="flex"
+                      justifyContent="center" 
+                      alignItems="center" 
+                      marginTop="30px"
+                    >
+                      <iframe 
+                        width="500" 
+                        height="187" 
+                        src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h" 
+                        frameborder="0"
+                        title="Predicción Burgos"
+                        >
+                      </iframe>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
                     <Typography style={styles.seccion}>
                         Modelo numérico
                     </Typography>              
@@ -429,33 +433,38 @@ function App() {
                         </Typography>
                       </Box>
                   </Box>
-                  <br/>
-                  <Typography style={styles.seccion}>
-                    Histórico de temperaturas (2025)
-                  </Typography>
-                  <Box width="100%">
-                    <TemperatureHistoryChart />
+  
+                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
+                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
+                      Histórico de temperaturas (2025)
+                    </Typography>
+                    <Box width="100%">
+                      <TemperatureHistoryChart />
+                    </Box>
                   </Box>
 
-                  <Typography style={styles.seccion}>
-                    Predicción
-                  </Typography>
+                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
 
-                  <Box 
-                    width="100%" 
-                    display="flex"
-                    justifyContent="center" 
-                    alignItems="center" 
-                    marginTop="30px"
-                  >
-                    <iframe 
-                      width="500" 
-                      height="187" 
-                      src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h" 
-                      frameborder="0"
-                      title="Predicción Barcelona"
-                    /> 
-                  </Box>                
+                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
+                      Predicción
+                    </Typography>
+
+                    <Box 
+                      width="100%" 
+                      display="flex"
+                      justifyContent="center" 
+                      alignItems="center" 
+                      marginTop="30px"
+                    >
+                      <iframe 
+                        width="500" 
+                        height="187" 
+                        src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h" 
+                        frameborder="0"
+                        title="Predicción Barcelona"
+                      /> 
+                    </Box>    
+                  </Box>            
                 </Box>
 
                 {/* Gráficas */}
@@ -474,7 +483,7 @@ function App() {
                   <Typography style={styles.seccion} >
                     Gráficas (Sarrià)
                   </Typography>
-                  <Box display="flex" justifyContent="center" gap={6} mt={4} p={1} sx={{ border: "1px solid darkgrey"}}>
+                  <Box display="flex" justifyContent="flex-start" gap={6} mt={4} p={1} sx={{ border: "1px solid darkgrey"}}>
                         <label>
                           <input
                             type="radio"
