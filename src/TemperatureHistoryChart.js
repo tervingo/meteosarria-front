@@ -12,7 +12,7 @@ import {
   ReferenceArea,
 } from 'recharts';
 import { Box, Typography, CircularProgress, useMediaQuery } from '@mui/material';
-import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET } from './constants';
+import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_HIS_X, MAX_VALUE_HIS_Y, MAX_TIME_HIS_X, MAX_TIME_HIS_Y, MIN_VALUE_HIS_X, MIN_VALUE_HIS_Y, MIN_TIME_HIS_X, MIN_TIME_HIS_Y } from './constants';
 import GetTempColour from './GetTempColour';
 
 const TemperatureHistoryChart = () => {
@@ -97,7 +97,7 @@ const TemperatureHistoryChart = () => {
     };
 
     const getMargin = () => ({
-      top: isMobile ? 10 : 0,
+      top: isMobile ? 10 : 20,
       right: isMobile ? 80 : 30, 
       left: isMobile ? 5 : 20,
       bottom: isMobile ? 60 : 10,
@@ -161,8 +161,8 @@ const TemperatureHistoryChart = () => {
           {/* Etiquetas de extremos */}
           {extremes.max && (
             <text
-              x="72%"
-              y="23%"
+              x={MAX_VALUE_HIS_X}
+              y={MAX_VALUE_HIS_Y}
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -172,8 +172,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.max && (
             <text
-              x="65%"
-              y="29%"
+              x={MAX_TIME_HIS_X}
+              y={MAX_TIME_HIS_Y}
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -183,8 +183,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.min && (
             <text
-              x="72%"
-              y="59%"
+              x={MIN_VALUE_HIS_X}
+              y={MIN_VALUE_HIS_Y}
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -194,8 +194,8 @@ const TemperatureHistoryChart = () => {
           )}
           {extremes.min && (
             <text
-              x="66%"
-              y="65%"
+              x={MIN_TIME_HIS_X}
+              y={MIN_TIME_HIS_Y}
               fill="azure"
               fontSize={getFontSize()}
               textAnchor="end"
@@ -240,7 +240,7 @@ const TemperatureHistoryChart = () => {
             type="monotone"
             dataKey="mean"
             name="Media"
-            stroke="#ffffff"
+            stroke="CHARTREUSE"
             strokeWidth={1.5}
             dot={false}
             connectNulls

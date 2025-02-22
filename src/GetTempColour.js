@@ -27,3 +27,5 @@ const GetTempColour = (temperature) => {
   };
   
   export default GetTempColour;
+
+

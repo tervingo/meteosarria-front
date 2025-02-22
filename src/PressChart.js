@@ -8,11 +8,12 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine,
+  ReferenceArea,
   ResponsiveContainer
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET } from './constants';
+import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
+
 
 const PressChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -86,6 +87,13 @@ const PressChart = ({ timeRange }) => {
     const minPressTime = minPressData ? minPressData.fullTimestamp : 'N/A';
     const maxPressTime = maxPressData ? maxPressData.fullTimestamp : 'N/A';
 
+    const getFechaHora = (fecha) => {
+      const [DatePart] = fecha.split(' ');
+      const [day, month] = DatePart.split('-');
+      const hora = fecha.split(' ')[1];
+      return day + '/' + month + ' ' + hora;
+    }
+
     // Responsive configurations
     const getFontSize = () => {
       if (isMobile) return '10px';
@@ -108,10 +116,16 @@ const PressChart = ({ timeRange }) => {
 
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart
+       <LineChart
           data={data}
           margin={getMargin()}
         >
+         <ReferenceArea 
+            y1={minPress - padding}
+            y2={maxPress + padding}
+            fill="orangered"
+            fillOpacity={0.2}
+          />
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="fullTimestamp"
@@ -140,26 +154,44 @@ const PressChart = ({ timeRange }) => {
             }}
             tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
-          <ReferenceLine
-            y={maxPress}
-            label={{ 
-              value: isMobile ? `${absMaxPress}` : `${absMaxPress} (${maxPressTime})`,
-              fill: 'azure',
-              fontSize: getFontSize()
-            }}
-            stroke="red"
-            strokeDasharray="1 1"
-          />
-          <ReferenceLine
-            y={minPress}
-            label={{ 
-              value: isMobile ? `${absMinPress}` : `${absMinPress} (${minPressTime})`,
-              fill: 'azure',
-              fontSize: getFontSize()
-            }}
-            stroke="blue"
-            strokeDasharray="1 1"
-          />
+          {/* Etiquetas de extremos */}
+            <text
+            x = {MAX_VALUE_X}
+            y = {MAX_VALUE_Y}
+            fill="azure"
+            fontSize={getFontSize()}
+            textAnchor="end"
+          >
+            {`Pmáx = ${absMaxPress}%`}
+          </text>
+          <text
+            x = {MAX_TIME_X}
+            y = {MAX_TIME_Y}
+            fill="azure"
+            fontSize={getFontSize()}
+            textAnchor="end"
+          >
+            {`(${getFechaHora(maxPressTime)})`}
+          </text>
+          <text
+            x = {MIN_VALUE_X}
+            y = {MIN_VALUE_Y}
+            fill="azure"
+            fontSize={getFontSize()}
+            textAnchor="end"
+          >
+            {`Pmin = ${absMinPress}%`}
+          </text>
+          <text
+            x = {MIN_TIME_X}
+            y = {MIN_TIME_Y}
+            fill="azure"
+            fontSize={getFontSize()}
+            textAnchor="end"
+          >
+            {`(${getFechaHora(minPressTime)})`}
+          </text>
+          
           <Tooltip 
             formatter={(value) => [`${value}hPa`, 'Presión']}
             contentStyle={{ fontSize: getFontSize() }}

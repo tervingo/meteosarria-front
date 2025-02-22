@@ -8,11 +8,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine,
+  ReferenceArea,
   ResponsiveContainer
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET } from './constants';
+import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_RAD_X, MAX_VALUE_RAD_Y, MAX_TIME_RAD_X, MAX_TIME_RAD_Y } from './constants';
 
 const RadChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -79,11 +79,17 @@ const RadChart = ({ timeRange }) => {
     const absMaxRad = Math.max(...data.map(d => d.solar_radiation));
     const minRad = Math.floor(absMinRad);
     const maxRad = Math.ceil(absMaxRad);
-    const padding = 1;
+    const padding = 50;
 
     const maxRadData = data.find(d => d.solar_radiation === absMaxRad);
     const maxRadTime = maxRadData ? maxRadData.fullTimestamp : 'N/A';
 
+    const getFechaHora = (fecha) => {
+      const [DatePart] = fecha.split(' ');
+      const [day, month] = DatePart.split('-');
+      const hora = fecha.split(' ')[1];
+      return day + '/' + month + ' ' + hora;
+    }
     // Responsive configurations
     const getFontSize = () => {
       if (isMobile) return '10px';
@@ -110,6 +116,13 @@ const RadChart = ({ timeRange }) => {
           data={data}
           margin={getMargin()}
         >
+          <ReferenceArea 
+            y1={0}
+            y2={maxRad + padding}
+            fill="gold"
+            fillOpacity={0.2}
+          />
+          
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="fullTimestamp"
@@ -128,7 +141,7 @@ const RadChart = ({ timeRange }) => {
             tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
           <YAxis
-            domain={[minRad - padding, maxRad + padding]}
+            domain={[minRad, maxRad + padding]}
             label={{
               value: 'Radiación solar (W/m²)',
               angle: -90,
@@ -138,16 +151,25 @@ const RadChart = ({ timeRange }) => {
             }}
             tick={{ fontSize: getFontSize(), fill: 'silver' }}
           />
-          <ReferenceLine
-            y={maxRad}
-            label={{ 
-              value: isMobile ? `${absMaxRad}` : `${absMaxRad} (${maxRadTime})`,
-              fill: 'azure',
-              fontSize: getFontSize()
-            }}
-            stroke="red"
-            strokeDasharray="1 1"
-          />
+            {/* Etiquetas de extremos */}
+              <text
+              x = {MAX_VALUE_RAD_X}
+              y = {MAX_VALUE_RAD_Y}
+              fill="azure"
+              fontSize={getFontSize()}
+              textAnchor="end"
+            >
+              {`Rmáx = ${absMaxRad}%`}
+            </text>
+            <text
+              x = {MAX_TIME_RAD_X}
+              y = {MAX_TIME_RAD_Y}
+              fill="azure"
+              fontSize={getFontSize()}
+              textAnchor="end"
+            >
+              {`(${getFechaHora(maxRadTime)})`}
+            </text>
           <Tooltip 
             formatter={(value) => [`${value} W/m²`, 'Radiación solar']}
             contentStyle={{ fontSize: getFontSize() }}
@@ -177,7 +199,7 @@ const RadChart = ({ timeRange }) => {
         height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: isMobile ? '10px' : '20px',
+        padding: isMobile ? '10px' : '10px',
       }}
     >
       {chart}

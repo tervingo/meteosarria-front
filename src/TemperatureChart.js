@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET } from './constants';
+import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
 import GetTempColour from './GetTempColour';
 
 const TemperatureChart = ({ timeRange }) => {
@@ -90,6 +90,13 @@ const TemperatureChart = ({ timeRange }) => {
     const maxTempData = data.find((d) => d.external_temperature === absMaxTemp);
     const minTempTime = minTempData ? minTempData.fullTimestamp : 'N/A';
     const maxTempTime = maxTempData ? maxTempData.fullTimestamp : 'N/A';
+
+    const getFechaHora = (fecha) => {
+      const [DatePart] = fecha.split(' ');
+      const [day, month] = DatePart.split('-');
+      const hora = fecha.split(' ')[1];
+      return day + '/' + month + ' ' + hora;
+    }
 
     // Responsive configurations
     const getFontSize = () => {
@@ -171,8 +178,8 @@ const TemperatureChart = ({ timeRange }) => {
           />
           {/* Etiquetas de extremos */}
           <text
-            x="62%"
-            y="22%"
+            x = {MAX_VALUE_X}
+            y = {MAX_VALUE_Y}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -180,17 +187,17 @@ const TemperatureChart = ({ timeRange }) => {
             {`Tmáx = ${absMaxTemp.toFixed(1)}°`}
           </text>
           <text
-            x="70%"
-            y="28%"
+            x = {MAX_TIME_X}
+            y = {MAX_TIME_Y}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
           >
-            {`(${maxTempTime})`}
+            {`(${getFechaHora(maxTempTime)})`}
           </text>
           <text
-            x="62%"
-            y="60%"
+            x = {MIN_VALUE_X}
+            y = {MIN_VALUE_Y}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -198,13 +205,13 @@ const TemperatureChart = ({ timeRange }) => {
             {`Tmín = ${absMinTemp.toFixed(1)}°`}
           </text>
           <text
-            x="70%"
-            y="66%"
+            x = {MIN_TIME_X}
+            y = {MIN_TIME_Y}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
           >
-            {`(${minTempTime})`}
+            {`(${getFechaHora(minTempTime)})`}
           </text>
           <Tooltip 
             formatter={(value) => [`${value.toFixed(1)}°C`, 'Temperatura']}
@@ -225,7 +232,7 @@ const TemperatureChart = ({ timeRange }) => {
             type="monotone"
             dataKey="external_temperature"
             name="Temperatura"
-            stroke="azure"
+            stroke="SILVER"
             strokeWidth={2}
             dot={false}
             connectNulls
