@@ -1,5 +1,9 @@
+import { RAIN_2025_CANBRUIXA } from "./constants";
+
 const Rain = ({ rainRate, totalRain }) => {
-    totalRain = totalRain + 60;
+  // Temporalmente añado el total anual de la estación de Can Bruixa
+    totalRain = totalRain + RAIN_2025_CANBRUIXA
+    ;
     const rateHeight = Math.min((rainRate / 50) * 100, 100);
     const totalHeight = Math.min((totalRain / 700) * 100, 100);
   
