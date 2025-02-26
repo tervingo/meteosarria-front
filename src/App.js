@@ -126,8 +126,8 @@ function App() {
       marginRight: isMobile ? '0' : '30px'
     },
     dateTime: {
-      fontSize: isMobile ? '1.5rem' : isTablet ? '2rem' : '2rem',
-      color: 'DarkGray'
+      fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '1.7rem',
+      color: 'azure'
     },
     location: {
       fontSize: isMobile ? '0.8rem' : '1rem',
@@ -184,15 +184,23 @@ function App() {
     },
     catedral: {
       fontSize:  '1rem',
-      color: 'lightblue'     
+      color: 'steelblue'     
+    },
+    openweathermap: {
+      fontSize:  '1rem',
+      color: 'silver'     
+    },
+    openweathermaplink: {
+      color: 'steelblue',
+      textDecoration: 'none'
     }
-
   };
 
   // console.log('weatherData: ', weatherData);
 
   return (
     <ThemeProvider theme={theme}>
+      
       <Container maxWidth="xl" className="App">
         {weatherData && <TemperatureBackground temperature={weatherData.external_temperature} />}
 
@@ -202,9 +210,7 @@ function App() {
               <Typography variant="h1" style={styles.header}>
                 #meteosarria
               </Typography>
-              <Typography variant="h6" style={styles.dateTime}>
-                {getDate(currentTime)}
-              </Typography>
+
               <Typography variant="h6" style={styles.location}>
                 Sarrià - Barcelona (41º 23' 42" N, 2º 7' 21" E - 110m)
               </Typography>
@@ -214,8 +220,8 @@ function App() {
                 <CardMedia
                   component="img"
                   sx={{ 
-                    width: isMobile ? "80px" : "150px",
-                    height: isMobile ? "80px" : "150px",
+                    width: isMobile ? "80px" : "130px",
+                    height: isMobile ? "80px" : "130px",
                     objectFit: 'cover'
                   }}
                   image="/images/nubes.jpg"
@@ -231,7 +237,9 @@ function App() {
         <Box className="weather-data" mt={3}>
           {loading && <Typography>Loading weather data...</Typography>}
           {error && <Typography color="error">{error}</Typography>}
-
+          <Typography variant="h6" style={styles.dateTime}>
+                {getDate(currentTime)}
+          </Typography>
           {weatherData && (
             <Box className="weather-container">
               <Box 
@@ -265,8 +273,16 @@ function App() {
                   sx={{ gridArea: '1I',  order: isMobile ? 2 : 3, border: '1px solid darkgrey'  }}
                 >
                   <Typography style={styles.seccion}>
-                      Datos actuales en Burgos
-                  </Typography>              
+                      Datos actuales en Burgos a las {burgosWeather && (
+                        `${new Date(burgosWeather.timestamp * 1000).toLocaleTimeString('es-ES', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}`
+                      )}
+                  </Typography>  
+                  <Typography style={styles.openweathermap}>
+                      Datos de <a href="https://openweathermap.org/" target="_blank" rel='noreferrer' style={styles.openweathermaplink}>OpenWeatherMap</a>
+                  </Typography>
                   <Typography style={styles.subseccion}>
                       Temperatura y humedad
                   </Typography>              
