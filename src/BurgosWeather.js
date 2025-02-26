@@ -1,150 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Box, Typography, useMediaQuery, CircularProgress, Alert, Link } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
-import { BACKEND_URI } from './constants';
+import React from 'react';
+import { Typography, Box } from '@mui/material';
 import GetTempColour from './GetTempColour';
+import GetHumColor from './GetHumColor';
 
-const theme = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 960,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
-});
-
-
-
-const BurgosWeather = () => {
-  const [weatherData, setWeatherData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp);
-    
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-
-    return `${day}-${month}-${year} ${hours}:${minutes}`;
-  };
-
-  // Media queries for responsive design
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-
-
-  useEffect(() => {
-    const fetchBurgosWeather = async () => {
-      try {
-        setLoading(true);
-        // Asegúrate de que esta URL coincide con tu configuración de proxy
-        const response = await axios.get(BACKEND_URI + '/api/burgos', {
-          // Añadimos timeout y headers para mejor manejo de errores
-          timeout: 10000,
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-        
-        if (response.data && response.data.data) {
-          setWeatherData(response.data.data);
-          setError(null);
-        } else {
-          throw new Error('Formato de respuesta inválido');
-        }
-      } catch (err) {
-        console.error('Error fetching Burgos weather:', err);
-        setError(
-          err.response?.data?.message || 
-          err.message || 
-          'Error al obtener datos de Burgos'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBurgosWeather();
-    const interval = setInterval(fetchBurgosWeather, 300000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+const BurgosWeather = ({ weatherData }) => {
   const styles = {
     temperature: {
-      fontSize: isMobile ? '5rem' : isTablet ? '5rem' : '5rem',
+      fontSize: '3rem',
       color: weatherData ? GetTempColour(weatherData.temperature) : 'Gray'
     },
     humidity: {
-        fontSize: isMobile ? '3rem' : isTablet ? '3rem'  : '3rem',
-        color: 'aqua',
+      fontSize: '2rem',
+      color: weatherData ? GetHumColor(weatherData.humidity) : 'chartreuse'
     },
-    titulo: {
-        color: 'azure',
-        fontSize: '1.5rem'
+    description: {
+      fontSize: '1.2rem',
+      color: 'azure',
+      textTransform: 'capitalize',
+      marginTop: '10px'
     },
-    estacion: {
-        color: 'silver',
-        fontSize: '1.1rem',
+    label: {
+      fontSize: '1rem',
+      color: 'lightblue',
+      marginTop: '5px'
     }
   };
 
+  if (!weatherData) {
+    return <Typography color="azure">Loading Burgos weather data...</Typography>;
+  }
+
   return (
-    <Box p={2} sx={{ marginBottom: 3}}>
-     
-      {loading && (
-        <Box display="flex" justifyContent="center" alignItems="center" p={2}>
-          <CircularProgress size={24} />
-        </Box>
-      )}
-
-      {error && (
-        <Alert severity="error" sx={{ mt: 1, mb: 1 }}>
-          {error}
-        </Alert>
-      )}
-
-      {!loading && !error && weatherData && (
-        <>
+    <Box display="flex" flexDirection="column" alignItems="center">
+      <Box display="flex" alignItems="center" gap={2}>
+        <Box>
           <Typography style={styles.temperature}>
-            {typeof weatherData.temperature === 'number' 
-              ? `${weatherData.temperature.toFixed(1)}°C`
-              : 'N/A'
-            }
+            {weatherData.temperature.toFixed(1)}°C
           </Typography>
           <Typography style={styles.humidity}>
-            {typeof weatherData.humidity === 'number' 
-              ? `${weatherData.humidity}%`
-              : 'N/A'
-            }
+            {weatherData.humidity}%
           </Typography>
-          <Typography variant="caption" display="block" style={styles.estacion}>
-            <Link
-              href="https://www.aemet.es/es/eltiempo/observacion/ultimosdatos?k=cle&l=2331&w=0&datos=det&x=h24&f=temperatura"
-              target="_blank"
-              rel="noreferrer"
-              underline="none"
-              sx={{
-                color: 'silver',
-                '&:hover': {
-                  color: 'white',
-                  opacity: 0.8
-                }
-              }}
-            >
-              Burgos/Villafría ( {formatTimestamp(weatherData.timestamp)} )
-            </Link>
-          </Typography>
-        </>
-      )}
+        </Box>
+        {weatherData.icon && (
+          <img 
+            src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
+            alt={weatherData.description}
+            style={{ width: '64px', height: '64px' }}
+          />
+        )}
+      </Box>
+      <Typography style={styles.description}>
+        {weatherData.description}
+      </Typography>
+      <Typography style={styles.label}>
+        Viento: {weatherData.windSpeed.toFixed(1)} km/h
+      </Typography>
+      <Typography style={styles.label}>
+        Presión: {weatherData.pressure} hPa
+      </Typography>
     </Box>
   );
 };

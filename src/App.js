@@ -36,6 +36,7 @@ const theme = createTheme({
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
+  const [burgosWeather, setBurgosWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -70,6 +71,22 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const fetchBurgosWeather = async () => {
+      try {
+        const response = await axios.get(BACKEND_URI + '/api/burgos-weather');
+        setBurgosWeather(response.data);
+      } catch (error) {
+        console.error("Error fetching Burgos weather data:", error);
+      }
+    };
+
+    fetchBurgosWeather();
+    const burgosIntervalId = setInterval(fetchBurgosWeather, 900000); // 15 minutes
+
+    return () => clearInterval(burgosIntervalId);
+  }, []);
+
+  useEffect(() => {
     const timerId = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -89,8 +106,6 @@ function App() {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   };
-
-
 
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
@@ -255,8 +270,8 @@ function App() {
                   <Typography style={styles.subseccion}>
                       Temperatura y humedad
                   </Typography>              
-                 <BurgosWeather/>
-                 <Typography style={styles.subseccion}>
+                  <BurgosWeather weatherData={burgosWeather}/>
+                  <Typography style={styles.subseccion}>
                       WebCam
                   </Typography>              
 
