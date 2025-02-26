@@ -20,6 +20,7 @@ import Menu from './Menu';
 import TemperatureHistoryChart from './TemperatureHistoryChart';
 import Rain from './Rain';
 import { BACKEND_URI } from './constants';
+import GetHumColor from './GetHumColor';
 
 const theme = createTheme({
   breakpoints: {
@@ -127,7 +128,7 @@ function App() {
     },
     datosHumedad: {
       fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
-      color: 'chartreuse'
+      color: weatherData ? GetHumColor(weatherData.humidity) : 'chartreuse'
     },
     datosPresion: {
       fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',

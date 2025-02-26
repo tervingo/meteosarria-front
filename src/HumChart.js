@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
 import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
+import GetHumColor from './GetHumColor';
 
 const HumChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -130,23 +131,6 @@ const HumChart = ({ timeRange }) => {
       { start: 80, end: 100 }
      ];
 
-     const GetHumColour = (humidity) => {
-      let color;
-      if (humidity >= 0 && humidity < 20) {
-        color = 'orangered'; 
-      } else if (humidity >= 20 && humidity < 40) {
-        color = 'gold'; 
-      } else if (humidity >= 40 && humidity < 60) {
-        color = 'chartreuse'; 
-      } else if (humidity >= 60 && humidity < 80) {
-        color = 'dodgerblue';
-      } else if (humidity >= 80) {
-        color = 'navy';
-      } else {
-        color = 'white'; // Default to white if out of range
-      }
-        return color;
-      }; 
 
       const getMinLevel = (minHum) => {
         return Math.floor(minHum/20) * 20 -20;
@@ -165,7 +149,7 @@ const HumChart = ({ timeRange }) => {
               key={`${range.start}-${range.end}`}
               y1={range.start}
               y2={range.end}
-              fill={GetHumColour(range.start)}
+              fill={GetHumColor(range.start)}
               fillOpacity={0.2}
             />
           ))}
