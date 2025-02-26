@@ -139,11 +139,13 @@ function App() {
     },
     maxTemp: {
       fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
-      color: weatherData ? GetTempColour(weatherData.max_temperature) : 'red'
+      color: weatherData ? GetTempColour(weatherData.max_temperature) : 'red',
+      marginBottom: '-20px'
     },
     minTemp: {
       fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
-      color: weatherData ? GetTempColour(weatherData.min_temperature) : 'blue'
+      color: weatherData ? GetTempColour(weatherData.min_temperature) : 'blue',
+      marginTop: '-20px'
     },
 
     dataDisplay: {
@@ -381,7 +383,7 @@ function App() {
                   <Typography style={styles.subseccion}>
                       Temperatura exterior
                   </Typography>              
-                  <Box display="flex" flexDirection="column" alignItems="left">
+                  <Box display="flex" flexDirection="column" alignItems="flex-start">
                     <Typography style={styles.maxTemp}>
                       {weatherData.max_temperature}°
                     </Typography>
@@ -392,6 +394,7 @@ function App() {
                         </Typography>
                         <ShowTempDiffs />
                     </Box>
+
                     <Typography style={styles.minTemp}>
                       {weatherData.min_temperature}°
                     </Typography>
