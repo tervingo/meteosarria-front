@@ -23,6 +23,11 @@ const BurgosWeather = ({ weatherData }) => {
       fontSize: '1rem',
       color: 'lightblue',
       marginTop: '5px'
+    },
+    press: {
+      fontSize: '1rem',
+      color: 'orangeRed',
+      marginTop: '5px'
     }
   };
 
@@ -55,7 +60,7 @@ const BurgosWeather = ({ weatherData }) => {
       <Typography style={styles.label}>
         Viento: {weatherData.windSpeed.toFixed(1)} km/h
       </Typography>
-      <Typography style={styles.label}>
+      <Typography style={styles.press}>
         Presión: {weatherData.pressure} hPa
       </Typography>
     </Box>

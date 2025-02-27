@@ -138,12 +138,12 @@ function App() {
       color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
     },
     maxTemp: {
-      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2.5rem',
       color: weatherData ? GetTempColour(weatherData.max_temperature) : 'red',
       marginBottom: '-20px'
     },
     minTemp: {
-      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2.5rem',
       color: weatherData ? GetTempColour(weatherData.min_temperature) : 'blue',
       marginTop: '-20px'
     },
@@ -178,7 +178,7 @@ function App() {
       color: 'azure' 
     },
     seccion: {
-      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.6rem',
+      fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.8rem',
       color: 'azure',
       marginTop: '10px',
       justifyContent: 'right'

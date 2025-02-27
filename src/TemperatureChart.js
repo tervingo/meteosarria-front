@@ -232,7 +232,7 @@ const TemperatureChart = ({ timeRange }) => {
             type="monotone"
             dataKey="external_temperature"
             name="Temperatura"
-            stroke="SILVER"
+            stroke="chartreuse"
             strokeWidth={2}
             dot={false}
             connectNulls

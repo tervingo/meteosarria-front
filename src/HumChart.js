@@ -234,7 +234,7 @@ const HumChart = ({ timeRange }) => {
           <Line
             type="monotone"
             dataKey="humidity"
-            stroke="cyan"
+            stroke="deepskyblue"
             name="Humedad"
             dot={false}
             strokeWidth={isMobile ? 1 : 2}
