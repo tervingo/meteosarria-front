@@ -138,12 +138,12 @@ function App() {
       color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
     },
     maxTemp: {
-      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2.5rem',
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '3rem',
       color: weatherData ? GetTempColour(weatherData.max_temperature) : 'red',
       marginBottom: '-20px'
     },
     minTemp: {
-      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2.5rem',
+      fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '3rem',
       color: weatherData ? GetTempColour(weatherData.min_temperature) : 'blue',
       marginTop: '-20px'
     },

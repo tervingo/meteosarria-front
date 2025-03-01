@@ -6,11 +6,11 @@ import GetHumColor from './GetHumColor';
 const BurgosWeather = ({ weatherData }) => {
   const styles = {
     temperature: {
-      fontSize: '3rem',
+      fontSize: '4rem',
       color: weatherData ? GetTempColour(weatherData.temperature) : 'Gray'
     },
     humidity: {
-      fontSize: '2rem',
+      fontSize: '3rem',
       color: weatherData ? GetHumColor(weatherData.humidity) : 'chartreuse'
     },
     description: {
