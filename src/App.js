@@ -184,7 +184,7 @@ function App() {
       justifyContent: 'right'
     }, 
     subseccion: {
-      fontSize: isMobile ? '1rem' : isTablet ? '1.4rem' : '1.4rem',
+      fontSize: isMobile ? '1rem' : isTablet ? '1.4rem' : '1.5rem',
       color: 'lightblue',
       marginTop: '20px',
       marginBottom: '20px'
