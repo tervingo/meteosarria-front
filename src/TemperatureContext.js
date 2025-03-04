@@ -5,7 +5,9 @@ const TemperatureContext = createContext();
 export function TemperatureProvider({ children }) {
   const [validTemperatures, setValidTemperatures] = useState({
     maxTemp: null,
-    minTemp: null
+    minTemp: null,
+    maxTempTime: null,
+    minTempTime: null
   });
 
   return (

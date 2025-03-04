@@ -140,7 +140,7 @@ function AppContent() {
       color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
     },
     maxminTempLabel: {
-      fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '1rem',
+      fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '1.2rem',
       color: 'silver',
     },
     maxTemp: {
@@ -398,8 +398,10 @@ function AppContent() {
                     }}>
                       <Typography style={styles.maxminTempLabel}>
                         Tmax hoy 
+                          ({validTemperatures.maxTempTime ? validTemperatures.maxTempTime.split(' ')[1] : '--'})                      
                       </Typography>
                       {weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp?.toFixed(1) || '--'}°
+
                     </Typography>
 
                     <Box  display="flex" flexDirection="row" alignItems="center">
@@ -418,6 +420,7 @@ function AppContent() {
                       {weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp?.toFixed(1) || '--'}°
                       <Typography style={styles.maxminTempLabel}>
                         Tmin hoy
+                        ({validTemperatures.minTempTime ? validTemperatures.minTempTime.split(' ')[1] : '--'})
                       </Typography>
                     </Typography>
                    </Box>

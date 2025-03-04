@@ -75,13 +75,25 @@ const TemperatureChart = ({ timeRange }) => {
 
           if (todayData.length > 0) {
             const validTemps = todayData
-              .map(d => d.external_temperature)
-              .filter(temp => temp !== null && temp <= 45);
+              .map(d => ({
+                temp: d.external_temperature,
+                time: d.fullTimestamp
+              }))
+              .filter(item => item.temp !== null && item.temp <= 45);
             
             if (validTemps.length > 0) {
+              const maxTempData = validTemps.reduce((max, current) => 
+                current.temp > max.temp ? current : max
+              );
+              const minTempData = validTemps.reduce((min, current) => 
+                current.temp < min.temp ? current : min
+              );
+
               setValidTemperatures({
-                maxTemp: Math.max(...validTemps),
-                minTemp: Math.min(...validTemps)
+                maxTemp: maxTempData.temp,
+                minTemp: minTempData.temp,
+                maxTempTime: maxTempData.time,
+                minTempTime: minTempData.time
               });
             }
           }
