@@ -21,6 +21,7 @@ import TemperatureHistoryChart from './TemperatureHistoryChart';
 import Rain from './Rain';
 import { BACKEND_URI } from './constants';
 import GetHumColor from './GetHumColor';
+import { TemperatureProvider, useTemperature } from './TemperatureContext';
 
 const theme = createTheme({
   breakpoints: {
@@ -34,13 +35,14 @@ const theme = createTheme({
   },
 });
 
-function App() {
+function AppContent() {
   const [weatherData, setWeatherData] = useState(null);
   const [burgosWeather, setBurgosWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [timeRange, setTimeRange] = useState('24h');
+  const { validTemperatures } = useTemperature();
 
   // Media queries for responsive design
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -384,8 +386,13 @@ function App() {
                       Temperatura exterior
                   </Typography>              
                   <Box display="flex" flexDirection="column" alignItems="flex-start">
-                    <Typography style={styles.maxTemp}>
-                      {weatherData.max_temperature}°
+                    <Typography style={{
+                      ...styles.maxTemp,
+                      color: (weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) ? 
+                        GetTempColour(weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) : 
+                        'Gray'
+                    }}>
+                      {weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp?.toFixed(1) || '--'}°
                     </Typography>
 
                     <Box  display="flex" flexDirection="row" alignItems="center">
@@ -395,8 +402,13 @@ function App() {
                         <ShowTempDiffs />
                     </Box>
 
-                    <Typography style={styles.minTemp}>
-                      {weatherData.min_temperature}°
+                    <Typography style={{
+                      ...styles.maxTemp,
+                      color: (weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) ? 
+                        GetTempColour(weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) : 
+                        'Gray'
+                    }}>
+                      {weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp?.toFixed(1) || '--'}°
                     </Typography>
                   </Box>
                    <Box 
@@ -641,6 +653,14 @@ function App() {
         </Box>
       </Container>
     </ThemeProvider>
+  );
+}
+
+function App() {
+  return (
+    <TemperatureProvider>
+      <AppContent />
+    </TemperatureProvider>
   );
 }
 

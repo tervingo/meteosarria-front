@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
+import { useTemperature } from './TemperatureContext';
 import {
   LineChart,
   Line,
@@ -17,6 +18,7 @@ import GetTempColour from './GetTempColour';
 
 const TemperatureChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
+  const { setValidTemperatures } = useTemperature();
   
   const isMobile = useMediaQuery('(max-width:600px)');
   const isTablet = useMediaQuery('(min-width:601px) and (max-width:960px)');
@@ -56,6 +58,34 @@ const TemperatureChart = ({ timeRange }) => {
           .sort((a, b) => a.dateTime - b.dateTime);
 
         setData(sortedData);
+
+        // Update valid temperatures in context
+        if (sortedData.length > 0) {
+          // Get today's date at 00:00h
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          // Filter data for current day only, regardless of timeRange
+          const todayData = sortedData.filter(item => {
+            const itemDate = new Date(item.dateTime);
+            return itemDate.getDate() === today.getDate() &&
+                   itemDate.getMonth() === today.getMonth() &&
+                   itemDate.getFullYear() === today.getFullYear();
+          });
+
+          if (todayData.length > 0) {
+            const validTemps = todayData
+              .map(d => d.external_temperature)
+              .filter(temp => temp !== null && temp <= 45);
+            
+            if (validTemps.length > 0) {
+              setValidTemperatures({
+                maxTemp: Math.max(...validTemps),
+                minTemp: Math.min(...validTemps)
+              });
+            }
+          }
+        }
       } catch (error) {
         console.error('Error fetching temperature data:', error);
       }
@@ -64,7 +94,7 @@ const TemperatureChart = ({ timeRange }) => {
     fetchData();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, [timeRange]);
+  }, [timeRange, setValidTemperatures]);
 
   const chart = useMemo(() => {
     if (data.length === 0) {
