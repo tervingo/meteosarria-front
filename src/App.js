@@ -139,6 +139,10 @@ function AppContent() {
       fontSize: isMobile ? '5rem' : isTablet ? '8rem' : '8rem',
       color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
     },
+    maxminTempLabel: {
+      fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '1rem',
+      color: 'silver',
+    },
     maxTemp: {
       fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '3rem',
       color: weatherData ? GetTempColour(weatherData.max_temperature) : 'red',
@@ -147,7 +151,7 @@ function AppContent() {
     minTemp: {
       fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '3rem',
       color: weatherData ? GetTempColour(weatherData.min_temperature) : 'blue',
-      marginTop: '-20px'
+      marginTop: '-20px',
     },
 
     dataDisplay: {
@@ -392,6 +396,9 @@ function AppContent() {
                         GetTempColour(weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) : 
                         'Gray'
                     }}>
+                      <Typography style={styles.maxminTempLabel}>
+                        Tmax hoy 
+                      </Typography>
                       {weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp?.toFixed(1) || '--'}°
                     </Typography>
 
@@ -403,14 +410,17 @@ function AppContent() {
                     </Box>
 
                     <Typography style={{
-                      ...styles.maxTemp,
+                      ...styles.minTemp,
                       color: (weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) ? 
                         GetTempColour(weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) : 
                         'Gray'
                     }}>
                       {weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp?.toFixed(1) || '--'}°
+                      <Typography style={styles.maxminTempLabel}>
+                        Tmin hoy
+                      </Typography>
                     </Typography>
-                  </Box>
+                   </Box>
                    <Box 
                     display="flex" 
                     flexDirection="row" 
