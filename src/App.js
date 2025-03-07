@@ -199,18 +199,15 @@ function AppContent() {
       fontSize: isMobile ? '0.9rem' : isTablet ? '0.9rem' : '0.9rem',
       color: 'azure',
     },
-    catedral: {
+    enlace: {
       fontSize:  '1rem',
-      color: 'steelblue'     
+      color: 'greenyellow'     
     },
     openweathermap: {
       fontSize:  '1rem',
       color: 'silver'     
     },
-    openweathermaplink: {
-      color: 'steelblue',
-      textDecoration: 'none'
-    }
+
   };
 
   // console.log('weatherData: ', weatherData);
@@ -298,7 +295,7 @@ function AppContent() {
                       )}
                   </Typography>  
                   <Typography style={styles.openweathermap}>
-                      Datos de <a href="https://openweathermap.org/" target="_blank" rel='noreferrer' style={styles.openweathermaplink}>OpenWeatherMap</a>
+                      Datos de <a href="https://openweathermap.org/" target="_blank" rel='noreferrer' style={styles.enlace}>OpenWeatherMap</a>
                   </Typography>
                   <Typography style={styles.subseccion}>
                       Temperatura y humedad
@@ -327,7 +324,7 @@ function AppContent() {
                   <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
                   </Box>
 
-                  <Typography style={{ ...styles.catedral, marginTop: '-1px' }}>
+                  <Typography style={{ ...styles.enlace, marginTop: '-1px' }}>
                   <a href="https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/" target="_blank" rel='noreferrer'>
                     Webcam Catedral de Burgos
                   </a>

@@ -107,7 +107,7 @@ const Menu = ({ items }) => {
           style={{
             padding: '12px',
             fontSize: '24px',
-            color: '#fff',
+            color: 'greenyellow',
             textDecoration: 'none',
             transition: 'color 0.3s ease',
             '&:hover': {
