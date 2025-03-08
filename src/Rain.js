@@ -4,7 +4,7 @@ const Rain = ({ rainRate, totalRain }) => {
   // Temporalmente añado el total anual de la estación de Can Bruixa
     totalRain = totalRain + RAIN_2025_CANBRUIXA
     ;
-    const rateHeight = Math.min((rainRate / 50) * 100, 100);
+//    const rateHeight = Math.min((rainRate / 50) * 100, 100);
     const totalHeight = Math.min((totalRain / 700) * 100, 100);
   
     return (
