@@ -4,7 +4,7 @@ import './App.css';
 
 const WindDirectionIndicator = ({ direction, speed, rose }) => {
   const angleInRadians = (direction * Math.PI) / 180;
-  const radius = 50; // Radius of the circle
+  const radius = 80; // Radius of the circle
   const circleRadius = 5; // Radius of the inner circle
   const borderwidth = 4; // Width of the border
 

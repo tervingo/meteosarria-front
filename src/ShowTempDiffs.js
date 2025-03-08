@@ -6,6 +6,9 @@ import SouthIcon from '@mui/icons-material/South';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import { BACKEND_URI  }  from './constants';
 
 const ShowTempDiffs = () => {
@@ -108,11 +111,11 @@ const ShowTempDiffs = () => {
           )}
         </div>
         <div className="arrow-container"> {/* Container for the arrow */}
-          {temperatureTrend === 'up-90' && <NorthIcon style={{ color: 'red'  }} />}
-          {temperatureTrend === 'up-45' && <NorthEastIcon style={{ color: 'orangeRed'  }} />}
-          {temperatureTrend === 'down-90' && <SouthIcon style={{ color: 'slateBlue' }} />}
-          {temperatureTrend === 'down-45' && <SouthEastIcon style={{  color: 'royalBlue'  }} />}
-          {temperatureTrend === 'right' && <DragHandleIcon style={{ color: 'azure' }}/>}
+          {temperatureTrend === 'up-90' && <TrendingUpIcon style={{ color: 'red' }} />}
+          {temperatureTrend === 'up-45' && <NorthEastIcon style={{ color: 'orangeRed' }} />}
+          {temperatureTrend === 'down-90' && <TrendingDownIcon style={{ color: 'blue' }} />}
+          {temperatureTrend === 'down-45' && <SouthEastIcon style={{ color: 'royalBlue' }} />}
+          {temperatureTrend === 'right' && <HorizontalRuleIcon style={{ color: 'azure' }} />}
         </div>
       </div>
     </div>

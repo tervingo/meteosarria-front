@@ -12,7 +12,7 @@ const Rain = ({ rainRate, totalRain }) => {
         {/* Removemos el mb-5 del título y usamos un margen más pequeño */}
         <div className="flex flex-row items-end space-x-4">
           {/* Resto del código igual */}
-          <div className="flex flex-col items-center">
+{/*           <div className="flex flex-col items-center">
             <div className="relative w-16 h-48 border border-white">
               <div 
                 className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
@@ -24,7 +24,7 @@ const Rain = ({ rainRate, totalRain }) => {
               {rainRate.toFixed(1)} mm/h
             </div>
           </div>
-  
+ */}  
           <div className="flex flex-col items-center">
             <div className="relative w-16 h-48 border border-white">
               <div 

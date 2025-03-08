@@ -128,7 +128,7 @@ function AppContent() {
       marginRight: isMobile ? '0' : '30px'
     },
     dateTime: {
-      fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '1.7rem',
+      fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '2rem',
       color: 'azure'
     },
     location: {
@@ -427,7 +427,7 @@ function AppContent() {
                     alignItems="center"
                     >
                       <Box display="column" flexDirection="row" alignItems="center">
-                        <Typography style={styles.subseccion}>
+                        <Typography style={{...styles.subseccion, marginBottom: '40px'}}>
                             Viento
                         </Typography>
                         <WindDirectionIndicator
