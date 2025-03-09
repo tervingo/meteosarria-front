@@ -1,6 +1,6 @@
 export const BACKEND_URI = "https://meteosarria-back-docker.onrender.com";
 
-export const RAIN_2025_CANBRUIXA = 94.6;
+export const RAIN_2025_CANBRUIXA = 134.8;
 
 export const WIDTH_PC = '580px';
 export const WIDTH_MOBILE = '500px';
