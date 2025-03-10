@@ -437,7 +437,7 @@ function AppContent() {
                           size={isMobile ? 'small' : 'normal'}
                         />
                       </Box>
-                      <Box display="column" flexDirection="row" alignItems="center">
+{/*                       <Box display="column" flexDirection="row" alignItems="center">
                         <Typography style={styles.subseccion}>
                             Precipitación
                         </Typography>
@@ -445,7 +445,7 @@ function AppContent() {
                           rainRate={weatherData.current_rain_rate}
                           totalRain={weatherData.total_rain}
                         />
-                      </Box>
+                      </Box> */}
                    </Box>
 
                  {/* Humedad, Presión y radiación  */}                 
