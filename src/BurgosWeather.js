@@ -2,37 +2,26 @@ import React from 'react';
 import { Typography, Box } from '@mui/material';
 import GetTempColour from './GetTempColour';
 import GetHumColor from './GetHumColor';
-import GetWindDir from './GetWindDir';
 
 const BurgosWeather = ({ weatherData }) => {
   const styles = {
     temperature: {
-      fontSize: '4rem',
+      fontSize: '3rem',
       color: weatherData ? GetTempColour(weatherData.temperature) : 'Gray'
     },
     humidity: {
-      fontSize: '3rem',
+      fontSize: '2rem',
       color: weatherData ? GetHumColor(weatherData.humidity) : 'chartreuse'
-    },
-    viento: {
-      fontSize: '1rem',
-      color: 'gold'
     },
     description: {
       fontSize: '1.2rem',
       color: 'azure',
       textTransform: 'capitalize',
-      marginTop: '10px',
-      marginBottom: '20px'
+      marginTop: '10px'
     },
     label: {
       fontSize: '1rem',
       color: 'lightblue',
-      marginTop: '5px'
-    },
-    press: {
-      fontSize: '1rem',
-      color: 'orangeRed',
       marginTop: '5px'
     }
   };
@@ -63,10 +52,10 @@ const BurgosWeather = ({ weatherData }) => {
       <Typography style={styles.description}>
         {weatherData.description}
       </Typography>
-      <Typography style={styles.viento}>
-        Viento: {weatherData.windSpeed.toFixed(1)} km/h ({weatherData.windDirection}° - {GetWindDir(weatherData.windDirection)})
+      <Typography style={styles.label}>
+        Viento: {weatherData.windSpeed.toFixed(1)} km/h
       </Typography>
-      <Typography style={styles.press}>
+      <Typography style={styles.label}>
         Presión: {weatherData.pressure} hPa
       </Typography>
     </Box>
