@@ -439,7 +439,7 @@ function AppContent() {
                       </Box>
                        <Box display="column" flexDirection="row" alignItems="center">
                         <Typography style={styles.subseccion}>
-                            Precipitación
+                            Precipitació<a href="https://www.meteoclimatic.net/perfil/ESCAT0800000008014C" target="_blank" rel="noreferrer">n</a>
                         </Typography>
                         <Rain
                           rainRate={weatherData.current_rain_rate}
