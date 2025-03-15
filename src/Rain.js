@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import axios from 'axios';
 import { BACKEND_URI } from './constants';
 
-const Rain = ( ) => {
+const Rain = () => {
   const [fabraData, setFabraData] = useState(null);
   const [error, setError] = useState(null);
 //  const totalAnnualRain = totalRain + RAIN_2025_CANBRUIXA;
@@ -14,8 +14,16 @@ const Rain = ( ) => {
         console.log('Fetching Fabra data from:', BACKEND_URI + '/api/barcelona-rain');
         const response = await axios.get(BACKEND_URI + '/api/barcelona-rain');
         console.log('Received Fabra data:', response.data);
-        setFabraData(response.data);
-        return response.data.today_rain > 0;
+        
+        // Asegurarnos de que los datos son números
+        const processedData = {
+          ...response.data,
+          today_rain: parseFloat(response.data.today_rain) || 0,
+          yearly_rain: parseFloat(response.data.yearly_rain) || 0
+        };
+        
+        setFabraData(processedData);
+        return processedData.today_rain > 0;
       } catch (err) {
         setError(err.message);
         console.error('Error fetching Fabra data:', err);
@@ -66,11 +74,11 @@ const Rain = ( ) => {
             <div className="relative w-12 h-48 border border-white">
               <div 
                 className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
-                style={{ height: `${fabraData && fabraData.today_rain ? (fabraData.today_rain / 100) * 100 : 0}%` }}
+                style={{ height: `${fabraData?.today_rain ? (fabraData.today_rain / 100) * 100 : 0}%` }}
               />
             </div>
             <div className="text-sm mt-2 text-white">
-              {fabraData && fabraData.today_rain ? `${fabraData.today_rain.toFixed(1)} mm` : 'Cargando...'}
+              {fabraData?.today_rain !== undefined ? `${fabraData.today_rain.toFixed(1)} mm` : 'Cargando...'}
             </div>
           </div>
 
@@ -80,15 +88,14 @@ const Rain = ( ) => {
             <div className="relative w-16 h-48 border border-white">
               <div 
                 className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
-                style={{ height: `${fabraData && fabraData.yearly_rain ? (fabraData.yearly_rain / 1000) * 100 : 0}%` }}
+                style={{ height: `${fabraData?.yearly_rain ? (fabraData.yearly_rain / 1000) * 100 : 0}%` }}
               />
             </div>
             <div className="text-sm mt-2 text-white">
-              {fabraData && fabraData.yearly_rain ? `${fabraData.yearly_rain.toFixed(1)} mm` : 'Cargando...'}
+              {fabraData?.yearly_rain !== undefined ? `${fabraData.yearly_rain.toFixed(1)} mm` : 'Cargando...'}
               {error && <p className="text-red-500 text-xs">Error: {error}</p>}
             </div>
           </div>
-
 
         </div>
       </div>
