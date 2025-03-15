@@ -22,6 +22,7 @@ import Rain from './Rain';
 import { BACKEND_URI } from './constants';
 import GetHumColor from './GetHumColor';
 import { TemperatureProvider, useTemperature } from './TemperatureContext';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 const theme = createTheme({
   breakpoints: {
@@ -669,6 +670,7 @@ function AppContent() {
 function App() {
   return (
     <TemperatureProvider>
+      <GoogleAnalytics />
       <AppContent />
     </TemperatureProvider>
   );
