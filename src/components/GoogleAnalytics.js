@@ -1,18 +1,15 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 const GoogleAnalytics = () => {
-  const location = useLocation();
-
   useEffect(() => {
-    // Enviar evento de vista de página cuando cambia la ruta
+    // Enviar evento de vista de página cuando se carga el componente
     if (window.gtag) {
       window.gtag('event', 'page_view', {
-        page_path: location.pathname,
+        page_path: window.location.pathname,
         page_title: document.title
       });
     }
-  }, [location]);
+  }, []); // Solo se ejecuta una vez al montar el componente
 
   return null;
 };
