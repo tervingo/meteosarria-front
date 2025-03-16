@@ -407,6 +407,13 @@ function AppContent() {
                           {weatherData.external_temperature.toFixed(1)}°
                         </Typography>
                         <ShowTempDiffs />
+                        {weatherData.icon && (
+                          <img 
+                            src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
+                            alt={weatherData.description}
+                            style={{ width: '64px', height: '64px' }}
+                          />
+                        )}
                     </Box>
 
                     <Typography style={{
