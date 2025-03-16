@@ -411,7 +411,7 @@ function AppContent() {
                           <img 
                             src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
                             alt={weatherData.description}
-                            style={{ width: '64px', height: '64px' }}
+                            style={{ width: '80px', height: '80px' }}
                           />
                         )}
                     </Box>

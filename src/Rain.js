@@ -63,6 +63,9 @@ const Rain = () => {
     }
   }, [fabraData]);
   
+  // Calculate max value for today's rain (10 times current rain)
+  const maxTodayRain = fabraData?.today_rain ? Math.ceil(fabraData.today_rain * 10) : 10;
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center" width="100%">
       <div className="flex flex-col items-center">
@@ -72,9 +75,13 @@ const Rain = () => {
           <div className="flex flex-col items-center">
             <p className="text-sm mb-2 text-white">Hoy</p>
             <div className="relative w-12 h-48 border border-white">
+              {/* Max value label */}
+              <div className="absolute -right-10 top-0 text-xs text-gray-400">
+                {maxTodayRain} mm
+              </div>
               <div 
                 className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
-                style={{ height: `${fabraData?.today_rain ? (fabraData.today_rain / 100) * 100 : 0}%` }}
+                style={{ height: `${fabraData?.today_rain ? (fabraData.today_rain / maxTodayRain) * 100 : 0}%` }}
               />
             </div>
             <div className="text-sm mt-2 text-white">
@@ -86,6 +93,10 @@ const Rain = () => {
           <div className="flex flex-col items-center">
             <p className="text-sm mb-2 text-white">Total año</p>
             <div className="relative w-16 h-48 border border-white">
+              {/* Max value label */}
+              <div className="absolute -right-14 top-0 text-xs text-gray-400">
+                1.000 mm
+              </div>
               <div 
                 className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
                 style={{ height: `${fabraData?.yearly_rain ? (fabraData.yearly_rain / 1000) * 100 : 0}%` }}
