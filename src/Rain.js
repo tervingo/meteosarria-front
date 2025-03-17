@@ -63,8 +63,8 @@ const Rain = () => {
     }
   }, [fabraData]);
   
-  // Calculate max value for today's rain (10 times current rain)
-  const maxTodayRain = fabraData?.today_rain ? Math.ceil(fabraData.today_rain * 10) : 10;
+  // Calculate max value for today's rain (round up to next nice number)
+  const maxTodayRain = fabraData?.today_rain ? Math.ceil(Math.ceil(fabraData.today_rain) * 10) : 10;
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" width="100%">

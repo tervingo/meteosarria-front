@@ -208,6 +208,14 @@ function AppContent() {
       fontSize:  '1rem',
       color: 'silver'     
     },
+    description: {
+      fontSize: '1.2rem',
+      color: 'azure',
+      textTransform: 'capitalize',
+      marginLeft: '40px',
+      marginBottom: '20px'
+    }
+
 
   };
 
@@ -394,11 +402,25 @@ function AppContent() {
                         GetTempColour(weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) : 
                         'Gray'
                     }}>
-                      <Typography style={styles.maxminTempLabel}>
-                        Tmax hoy 
+                      <Box display="flex" flexDirection="row" alignItems="flex-start">
+                        <Typography style={styles.maxminTempLabel}>
+                          Tmax hoy 
                           ({validTemperatures.maxTempTime ? validTemperatures.maxTempTime.split(' ')[1] : '--'})                      
-                      </Typography>
-                      {weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp?.toFixed(1) || '--'}°
+                        </Typography>
+                      </Box>
+                      <Box display="flex" flexDirection="row" alignItems="flex-end">
+                        {weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp?.toFixed(1) || '--'}°
+                        {weatherData.icon && (
+                          <img 
+                            src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
+                            alt={weatherData.description}
+                            style={{ width: '80px', height: '80px', marginLeft: '30px' }}
+                          />
+                        )}
+                        <Typography style={styles.description}>
+                            {weatherData.description}
+                        </Typography>
+                      </Box>
 
                     </Typography>
 
@@ -407,28 +429,87 @@ function AppContent() {
                           {weatherData.external_temperature.toFixed(1)}°
                         </Typography>
                         <ShowTempDiffs />
-                        {weatherData.icon && (
-                          <img 
-                            src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
-                            alt={weatherData.description}
-                            style={{ width: '80px', height: '80px' }}
-                          />
-                        )}
                     </Box>
 
-                    <Typography style={{
-                      ...styles.minTemp,
-                      color: (weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) ? 
-                        GetTempColour(weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) : 
-                        'Gray'
-                    }}>
-                      {weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp?.toFixed(1) || '--'}°
-                      <Typography style={styles.maxminTempLabel}>
-                        Tmin hoy
-                        ({validTemperatures.minTempTime ? validTemperatures.minTempTime.split(' ')[1] : '--'})
+                    <Box display="flex" flexDirection="row" alignItems="center">
+                      <Typography style={{
+                        ...styles.minTemp,
+                        color: (weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) ? 
+                          GetTempColour(weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) : 
+                          'Gray'
+                      }}>
+                        {weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp?.toFixed(1) || '--'}°
                       </Typography>
+
+
+                    </Box>
+
+                    <Typography style={styles.maxminTempLabel}>
+                      Tmin hoy
+                    ({validTemperatures.minTempTime ? validTemperatures.minTempTime.split(' ')[1] : '--'})
                     </Typography>
-                   </Box>
+                  </Box>
+
+                 {/* Humedad, Presión y radiación  */}                 
+
+                 <Box display="flex" flexDirection="row" alignItems="center" gap={(4)}>
+
+                {/* Humedad  */}
+
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ gridArea: '2I', order: 4 }}
+                  >
+                  <Typography style={styles.subseccion}>
+                      Humedad
+                  </Typography>              
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.datosHumedad}>
+                      {weatherData.humidity}%
+                    </Typography>
+                    <ShowHumTrends />
+                  </Box>
+                </Box>
+
+                {/* Presión */}
+
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ gridArea: '2C', order: 5 }}
+                >
+                  <Typography style={styles.subseccion}>
+                      Presión
+                  </Typography>              
+                  <Box display="flex" alignItems="center">
+                    <Typography style={styles.datosPresion}>
+                      {weatherData.pressure} hPa
+                    </Typography>
+                    <ShowPressTrend />
+                  </Box>
+                </Box>
+
+                {/* Radiación */}
+
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center"
+                  sx={{ gridArea: '2D', order: 6 }}
+                >
+                  <Typography style={styles.subseccion}>
+                      Radiación
+                  </Typography>              
+
+                  <Typography style={styles.datosRadiacion}>
+                    {weatherData.solar_radiation} W/m²
+                  </Typography>
+                </Box>
+                </Box>
+
                    <Box 
                     display="flex" 
                     flexDirection="row" 
@@ -456,65 +537,7 @@ function AppContent() {
                       </Box> 
                    </Box>
 
-                 {/* Humedad, Presión y radiación  */}                 
 
-                  <Box display="flex" flexDirection="row" alignItems="center" gap={(4)}>
-
-                      {/* Humedad  */}
-
-                      <Box 
-                        display="flex" 
-                        flexDirection="column" 
-                        alignItems="center"
-                        sx={{ gridArea: '2I', order: 4 }}
-                        >
-                        <Typography style={styles.subseccion}>
-                            Humedad
-                        </Typography>              
-                        <Box display="flex" alignItems="center">
-                          <Typography style={styles.datosHumedad}>
-                            {weatherData.humidity}%
-                          </Typography>
-                          <ShowHumTrends />
-                        </Box>
-                      </Box>
-
-                      {/* Presión */}
-
-                      <Box 
-                        display="flex" 
-                        flexDirection="column" 
-                        alignItems="center"
-                        sx={{ gridArea: '2C', order: 5 }}
-                      >
-                        <Typography style={styles.subseccion}>
-                            Presión
-                        </Typography>              
-                        <Box display="flex" alignItems="center">
-                          <Typography style={styles.datosPresion}>
-                            {weatherData.pressure} hPa
-                          </Typography>
-                          <ShowPressTrend />
-                        </Box>
-                      </Box>
-
-                      {/* Radiación */}
-
-                      <Box 
-                        display="flex" 
-                        flexDirection="column" 
-                        alignItems="center"
-                        sx={{ gridArea: '2D', order: 6 }}
-                      >
-                        <Typography style={styles.subseccion}>
-                            Radiación
-                        </Typography>              
-
-                        <Typography style={styles.datosRadiacion}>
-                          {weatherData.solar_radiation} W/m²
-                        </Typography>
-                      </Box>
-                  </Box>
   
                   <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
                     <Typography style={{...styles.seccion, marginTop: '20px'}}>
