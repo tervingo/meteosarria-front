@@ -84,7 +84,7 @@ const Rain = () => {
                 style={{ height: `${fabraData?.today_rain ? (fabraData.today_rain / maxTodayRain) * 100 : 0}%` }}
               />
             </div>
-            <div className="text-sm mt-2 text-white">
+            <div className="text-base mt-2 text-white">
               {fabraData?.today_rain !== undefined ? `${fabraData.today_rain.toFixed(1)} mm` : 'Cargando...'}
             </div>
           </div>
@@ -102,7 +102,7 @@ const Rain = () => {
                 style={{ height: `${fabraData?.yearly_rain ? (fabraData.yearly_rain / 1000) * 100 : 0}%` }}
               />
             </div>
-            <div className="text-sm mt-2 text-white">
+            <div className="text-base mt-2 text-white">
               {fabraData?.yearly_rain !== undefined ? `${fabraData.yearly_rain.toFixed(1)} mm` : 'Cargando...'}
               {error && <p className="text-red-500 text-xs">Error: {error}</p>}
             </div>

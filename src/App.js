@@ -4,6 +4,7 @@ import './App.css';
 import { Typography, useMediaQuery, Container, Box } from '@mui/material';
 import { Card, CardMedia } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import TemperatureBackground from './TemperatureBackground';
 import GetTempColour from './GetTempColour';
 import GetWindDir from './GetWindDir';
@@ -23,6 +24,9 @@ import { BACKEND_URI } from './constants';
 import GetHumColor from './GetHumColor';
 import { TemperatureProvider, useTemperature } from './TemperatureContext';
 import GoogleAnalytics from './components/GoogleAnalytics';
+import CookieConsent from './components/CookieConsent';
+import CookiePolicy from './pages/CookiePolicy';
+import EmailIcon from '@mui/icons-material/Email';
 
 const theme = createTheme({
   breakpoints: {
@@ -129,7 +133,7 @@ function AppContent() {
       marginRight: isMobile ? '0' : '30px'
     },
     dateTime: {
-      fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '2rem',
+      fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '2.5rem',
       color: 'azure'
     },
     location: {
@@ -463,7 +467,7 @@ function AppContent() {
                   sx={{ gridArea: '2I', order: 4 }}
                   >
                   <Typography style={styles.subseccion}>
-                      Humedad
+                      Humedad oacept
                   </Typography>              
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.datosHumedad}>
@@ -692,6 +696,28 @@ function AppContent() {
             </Box>
           )}
         </Box>
+
+        {/* Footer */}
+        <Box sx={{ mt: 4, mb: 2, textAlign: 'center' }}>
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            gap: 4 
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <EmailIcon sx={{ color: 'gray', fontSize: '1rem' }} />
+              <Typography variant="body2">
+                <a href="mailto:meteosarria@gmail.com" style={{ color: 'gray', textDecoration: 'none' }}>
+                  meteosarria@gmail.com
+                </a>
+              </Typography>
+            </Box>
+            <Typography variant="body2" style={{ color: 'gray' }}>
+              ® www.meteosarria.com 2025
+            </Typography>
+          </Box>
+        </Box>
       </Container>
     </ThemeProvider>
   );
@@ -699,10 +725,16 @@ function AppContent() {
 
 function App() {
   return (
-    <TemperatureProvider>
-      <GoogleAnalytics />
-      <AppContent />
-    </TemperatureProvider>
+    <Router>
+      <TemperatureProvider>
+        <GoogleAnalytics />
+        <Routes>
+          <Route path="/politica-cookies" element={<CookiePolicy />} />
+          <Route path="/" element={<AppContent />} />
+        </Routes>
+        <CookieConsent />
+      </TemperatureProvider>
+    </Router>
   );
 }
 
