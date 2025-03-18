@@ -366,11 +366,23 @@ function AppContent() {
                     </Box>
                   </Box>
 
-                  <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
+                  <Box display="flex" flexDirection="column" alignItems="center" sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
+                    <Typography style={styles.seccion}>
+                        Radar
+                    </Typography>              
+                    <br/>
+                    <iframe 
+                    width="500" 
+                    height="350" 
+                    src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=5&overlay=radar&product=radar&level=surface&lat=40.078&lon=-3.56" 
+                    frameborder="0"
+                    title="Radar"
+                    />
+                  </Box>
+                  <Box display="flex" flexDirection="column" alignItems="center" sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
                     <Typography style={styles.seccion}>
                         Modelo numérico
                     </Typography>              
-
                     <br/>
                     <iframe
                       width="95%"
@@ -380,6 +392,7 @@ function AppContent() {
                       title="Weather Map"
                     />
                   </Box>
+ 
                 </Box>
 
                 {/* SARRIÀ */}
