@@ -117,6 +117,7 @@ function AppContent() {
   const menuItems = [
     { label: 'AEMET', url: 'https://www.aemet.es/es/portada' },
     { label: 'Meteocat', url: 'https://www.meteo.cat/' },
+    { label: 'Radar', url: 'https://www.meteo.cat/observacions/radar'},
     { label: 'Meteoclimatic', url: 'https://www.meteoclimatic.net/' },
     { label: 'Webcam Collserola', url: 'https://www.3cat.cat/el-temps/collserola-barcelona/camera/2/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
