@@ -219,9 +219,12 @@ function AppContent() {
       textTransform: 'capitalize',
       marginLeft: '40px',
       marginBottom: '20px'
+    },
+    resumen: {
+      width: '85%',
+      color: 'silver',
+      fontSize: '0.8rem'
     }
-
-
   };
 
   // console.log('weatherData: ', weatherData);
@@ -367,19 +370,6 @@ function AppContent() {
                     </Box>
                   </Box>
 
-                  <Box display="flex" flexDirection="column" alignItems="center" sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
-                    <Typography style={styles.seccion}>
-                        Radar
-                    </Typography>              
-                    <br/>
-                    <iframe 
-                    width="500" 
-                    height="350" 
-                    src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=5&overlay=radar&product=radar&level=surface&lat=40.078&lon=-3.56" 
-                    frameborder="0"
-                    title="Radar"
-                    />
-                  </Box>
                   <Box display="flex" flexDirection="column" alignItems="center" sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
                     <Typography style={styles.seccion}>
                         Modelo numérico
@@ -555,17 +545,28 @@ function AppContent() {
                       </Box> 
                    </Box>
 
+                   {/* Descripción */}
 
-  
                   <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
                     <Typography style={{...styles.seccion, marginTop: '20px'}}>
-                      Histórico de temperaturas (2025)
+                      Resumen del tiempo
                     </Typography>
-                    <Box width="100%">
-                      <TemperatureHistoryChart />
+                    <Box 
+                      width="100%" 
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center" 
+                      alignItems="center" 
+                      marginTop="30px"
+                    > 
+                      <Typography style={styles.resumen}>
+                        {weatherData.resumen}
+                      </Typography>
                     </Box>
                   </Box>
 
+                  {/* Predicción */}
+ 
                   <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
 
                     <Typography style={{...styles.seccion, marginTop: '20px'}}>
@@ -575,6 +576,7 @@ function AppContent() {
                     <Box 
                       width="100%" 
                       display="flex"
+                      flexDirection="column"
                       justifyContent="center" 
                       alignItems="center" 
                       marginTop="30px"
@@ -588,6 +590,33 @@ function AppContent() {
                       /> 
                     </Box>    
                   </Box>            
+ 
+                  {/* Radar */}
+
+                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
+                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
+                      Radar
+                    </Typography>
+                    <Box 
+                      width="100%" 
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center" 
+                      alignItems="center" 
+                      marginTop="30px"
+                    >
+                      <iframe src="https://static-m.meteo.cat/ginys/mapaRadar?language=ca&color=2c3e50&target=_blank" 
+                              title="Última imatge de radar" 
+                              frameborder="0" 
+                              style={{border:0}} 
+                              scrolling="no" 
+                              width="396" 
+                              height="412"
+                              />
+                    </Box>
+                  </Box>
+
+ 
                 </Box>
 
                 {/* Gráficas */}
@@ -660,7 +689,17 @@ function AppContent() {
                     Radiación
                   </Typography>
                   <RadChart timeRange={timeRange} /> 
-  
+
+                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
+                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
+                      Histórico de temperaturas (2025)
+                    </Typography>
+                    <Box width="100%">
+                      <TemperatureHistoryChart />
+                    </Box>
+                  </Box>
+
+
                 </Box>
                 
                 {/* Humidity Section */}
