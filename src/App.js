@@ -481,7 +481,7 @@ function AppContent() {
                   sx={{ gridArea: '2I', order: 4 }}
                   >
                   <Typography style={styles.subseccion}>
-                      Humedad oacept
+                      Humedad
                   </Typography>              
                   <Box display="flex" alignItems="center">
                     <Typography style={styles.datosHumedad}>
