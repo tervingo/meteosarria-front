@@ -10,6 +10,7 @@ import GetTempColour from './GetTempColour';
 import GetWindDir from './GetWindDir';
 import WindDirectionIndicator from './WindDirectionIndicator';
 import TemperatureChart from './TemperatureChart';
+import IntTemperatureChart from './IntTemperatureChart';
 import PressChart from './PressChart';
 import HumChart from './HumChart';
 import ShowTempDiffs from './ShowTempDiffs';
@@ -145,6 +146,12 @@ function AppContent() {
       fontSize: isMobile ? '5rem' : isTablet ? '8rem' : '8rem',
       color: weatherData ? GetTempColour(weatherData.external_temperature) : 'Gray'
     },
+    tempInt: {
+      fontSize: isMobile ? '1.5rem' : isTablet ? '1.5rem' : '1.5rem',
+      color: weatherData ? GetTempColour(weatherData.internal_temperature) : 'Gray',
+      marginRight: '70px',
+      marginTop: '40px'
+    },
     maxminTempLabel: {
       fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '1.2rem',
       color: 'silver',
@@ -223,7 +230,7 @@ function AppContent() {
     resumen: {
       width: '85%',
       color: 'silver',
-      fontSize: '0.8rem'
+      fontSize: '0.9rem'
     }
   };
 
@@ -523,6 +530,9 @@ function AppContent() {
                     flexDirection="row" 
                     alignItems="center"
                     >
+                      <Typography style={styles.tempInt}>
+                        {weatherData.internal_temperature.toFixed(1)}°
+                      </Typography>
                       <Box display="column" flexDirection="row" alignItems="center">
                         <Typography style={{...styles.subseccion, marginBottom: '40px'}}>
                             Viento
@@ -689,6 +699,11 @@ function AppContent() {
                     Radiación
                   </Typography>
                   <RadChart timeRange={timeRange} /> 
+
+                  <Typography style={styles.subseccion}>
+                    Temperatura interior
+                  </Typography>
+                  <IntTemperatureChart timeRange={timeRange} /> 
 
                   <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
                     <Typography style={{...styles.seccion, marginTop: '20px'}}>
