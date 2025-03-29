@@ -539,7 +539,7 @@ function AppContent() {
                         </Typography>
                         <WindDirectionIndicator
                           direction={weatherData.wind_direction}
-                          speed={weatherData.wind_speed}
+                          speed={weatherData.wind_speed * 3.6}
                           rose={GetWindDir(weatherData.wind_direction)}
                           size={isMobile ? 'small' : 'normal'}
                         />
