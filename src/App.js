@@ -7,20 +7,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import TemperatureBackground from './TemperatureBackground';
 import GetTempColour from './GetTempColour';
-import GetWindDir from './GetWindDir';
-import WindDirectionIndicator from './WindDirectionIndicator';
-import TemperatureChart from './TemperatureChart';
-import IntTemperatureChart from './IntTemperatureChart';
-import PressChart from './PressChart';
-import HumChart from './HumChart';
-import ShowTempDiffs from './ShowTempDiffs';
-import ShowPressTrend from './ShowPressTrend';
-import ShowHumTrends from './ShowHumTrends';
-import RadChart from './RadChart';
-import BurgosWeather from './BurgosWeather';
 import Menu from './Menu';
-import TemperatureHistoryChart from './TemperatureHistoryChart';
-import Rain from './Rain';
 import { BACKEND_URI } from './constants';
 import GetHumColor from './GetHumColor';
 import { TemperatureProvider, useTemperature } from './TemperatureContext';
@@ -28,6 +15,11 @@ import GoogleAnalytics from './components/GoogleAnalytics';
 import CookieConsent from './components/CookieConsent';
 import CookiePolicy from './pages/CookiePolicy';
 import EmailIcon from '@mui/icons-material/Email';
+import DatosBurgos from './components/DatosBurgos';
+import DatosSarria from './components/DatosSarria';
+import Graficas from './components/Graficas';
+import Modelos from './components/Modelos';
+import Radar from './components/Radar';
 
 const theme = createTheme({
   breakpoints: {
@@ -83,6 +75,7 @@ function AppContent() {
       try {
         const response = await axios.get(BACKEND_URI + '/api/burgos-weather');
         setBurgosWeather(response.data);
+        console.log('burgosWeather: ', response.data);
       } catch (error) {
         console.error("Error fetching Burgos weather data:", error);
       }
@@ -286,480 +279,69 @@ function AppContent() {
                 sx={{
                   gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
                   gridTemplateAreas: isMobile ? `
-                    "1D"
-                    "1C"
                     "1I"
+                    "1C"
+                    "1D"
                     "2I"
                     "2C"
                     "2D"
-                    "3I"
-                    "3C"
-                    "3D"
                   ` : `
-                    "1C 1I 1D"
+                    "1I 1C 1D"
                     "2I 2C 2D"
-                    "3I 3C 3D"
                   `
                 }}
               >
-                {/* BURGOS */}
-                <Box 
-                  display="flex" 
-                  flexDirection="column"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  sx={{ gridArea: '1I',  order: isMobile ? 2 : 3, border: '1px solid darkgrey'  }}
-                >
-                  <Typography style={styles.seccion}>
-                      Datos actuales en Burgos a las {burgosWeather && (
-                        `${new Date(burgosWeather.timestamp * 1000).toLocaleTimeString('es-ES', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}`
-                      )}
-                  </Typography>  
-                  <Typography style={styles.openweathermap}>
-                      Datos de <a href="https://openweathermap.org/" target="_blank" rel='noreferrer' style={styles.enlace}>OpenWeatherMap</a>
-                  </Typography>
-                  <Typography style={styles.subseccion}>
-                      Temperatura y humedad
-                  </Typography>              
-                  <BurgosWeather weatherData={burgosWeather}/>
-                  <Typography style={styles.subseccion}>
-                      WebCam
-                  </Typography>              
-
-                  {/* Webcam Catedral de Burgos */}
-                  <Box sx={{ width: '500px', height: '280px' }} > {/* Reducida la altura de 350px a 280px */}
-                    <a
-                    name="windy-webcam-timelapse-player"
-                    data-id="1735243432"
-                    data-play="day"
-                    data-loop="0"
-                    data-auto-play="0"
-                    data-force-full-screen-on-overlay-play="0"
-                    data-interactive="1"
-                    href="https://windy.com/webcams/1735243432"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Burgos: Burgos Catedral
-                  </a>
-                  <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
-                  </Box>
-
-                  <Typography style={{ ...styles.enlace, marginTop: '-1px' }}>
-                  <a href="https://ibericam.com/espana/burgos/webcam-burgos-catedral-de-burgos/" target="_blank" rel='noreferrer'>
-                    Webcam Catedral de Burgos
-                  </a>
-                  </Typography>
-
-                  <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
-                    <Typography style={ styles.seccion}>
-                      Predicción
-                    </Typography>
-
-                    <Box 
-                      width="100%" 
-                      display="flex"
-                      justifyContent="center" 
-                      alignItems="center" 
-                      marginTop="30px"
-                    >
-                      <iframe 
-                        width="500" 
-                        height="187" 
-                        src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h" 
-                        frameborder="0"
-                        title="Predicción Burgos"
-                        >
-                      </iframe>
-                    </Box>
-                  </Box>
-
-                  <Box display="flex" flexDirection="column" alignItems="center" sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}} >
-                    <Typography style={styles.seccion}>
-                        Modelo numérico
-                    </Typography>              
-                    <br/>
-                    <iframe
-                      width="95%"
-                      height={isMobile ? "250px" : "300px"}     
-                      src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=temp&product=ecmwf&level=surface&lat=44.778&lon=7.646&pressure=true&message=true"
-                      frameBorder="0"
-                      title="Weather Map"
-                    />
-                  </Box>
- 
+                {/* GRÁFICAS - 1I */}
+                <Box sx={{ gridArea: '1I', order: isMobile ? 3 : 1, height: '100%', border: '1px solid darkgrey'}}>
+                  <Graficas 
+                    styles={styles}
+                    isMobile={isMobile}
+                    timeRange={timeRange}
+                    handleTimeRangeChange={handleTimeRangeChange}
+                  />
                 </Box>
 
-                {/* SARRIÀ */}
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  sx={{ gridArea: '1C',  order: isMobile ? 1 : 2, border: '1px solid azure'}}
-                >
-                  <Typography style={styles.seccion}>
-                      Datos actuales en Sarrià a las {getTime(currentTime)}
-                  </Typography>              
-
-                  {/* Temperatura  */}
-
-                  <Typography style={styles.subseccion}>
-                      Temperatura exterior
-                  </Typography>              
-                  <Box display="flex" flexDirection="column" alignItems="flex-start">
-                    <Typography style={{
-                      ...styles.maxTemp,
-                      color: (weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) ? 
-                        GetTempColour(weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) : 
-                        'Gray'
-                    }}>
-                      <Box display="flex" flexDirection="row" alignItems="flex-start">
-                        <Typography style={styles.maxminTempLabel}>
-                          Tmax hoy 
-                          ({validTemperatures.maxTempTime ? validTemperatures.maxTempTime.split(' ')[1] : '--'})                      
-                        </Typography>
-                      </Box>
-                      <Box display="flex" flexDirection="row" alignItems="flex-end">
-                        {weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp?.toFixed(1) || '--'}°
-                        {weatherData.icon && (
-                          <img 
-                            src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
-                            alt={weatherData.description}
-                            style={{ width: '80px', height: '80px', marginLeft: '30px' }}
-                          />
-                        )}
-                        <Typography style={styles.description}>
-                            {weatherData.description}
-                        </Typography>
-                      </Box>
-
-                    </Typography>
-
-                    <Box  display="flex" flexDirection="row" alignItems="center">
-                      <Typography style={styles.temperature}>
-                          {weatherData.external_temperature.toFixed(1)}°
-                        </Typography>
-                        <ShowTempDiffs />
-                    </Box>
-
-                    <Box display="flex" flexDirection="row" alignItems="center">
-                      <Typography style={{
-                        ...styles.minTemp,
-                        color: (weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) ? 
-                          GetTempColour(weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) : 
-                          'Gray'
-                      }}>
-                        {weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp?.toFixed(1) || '--'}°
-                      </Typography>
-
-
-                    </Box>
-
-                    <Typography style={styles.maxminTempLabel}>
-                      Tmin hoy
-                    ({validTemperatures.minTempTime ? validTemperatures.minTempTime.split(' ')[1] : '--'})
-                    </Typography>
-                  </Box>
-
-                 {/* Humedad, Presión y radiación  */}                 
-
-                 <Box display="flex" flexDirection="row" alignItems="center" gap={(4)}>
-
-                {/* Humedad  */}
-
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center"
-                  sx={{ gridArea: '2I', order: 4 }}
-                  >
-                  <Typography style={styles.subseccion}>
-                      Humedad
-                  </Typography>              
-                  <Box display="flex" alignItems="center">
-                    <Typography style={styles.datosHumedad}>
-                      {weatherData.humidity}%
-                    </Typography>
-                    <ShowHumTrends />
-                  </Box>
+                {/* SARRIÀ - 1C */}
+                <Box sx={{ gridArea: '1C', order: isMobile ? 1 : 2, border: '1px solid azure'}}>
+                  <DatosSarria 
+                    weatherData={weatherData}
+                    styles={styles}
+                    isMobile={isMobile}
+                    currentTime={currentTime}
+                    getTime={getTime}
+                    validTemperatures={validTemperatures}
+                  />
                 </Box>
 
-                {/* Presión */}
-
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center"
-                  sx={{ gridArea: '2C', order: 5 }}
-                >
-                  <Typography style={styles.subseccion}>
-                      Presión
-                  </Typography>              
-                  <Box display="flex" alignItems="center">
-                    <Typography style={styles.datosPresion}>
-                      {weatherData.pressure} hPa
-                    </Typography>
-                    <ShowPressTrend />
-                  </Box>
+                {/* BURGOS - 1D */}
+                <Box sx={{ gridArea: '1D', order: isMobile ? 2 : 3, border: '1px solid darkgrey' }}>
+                  <DatosBurgos 
+                    burgosWeather={burgosWeather}
+                    styles={styles}
+                    isMobile={isMobile}
+                  />
                 </Box>
 
-                {/* Radiación */}
-
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center"
-                  sx={{ gridArea: '2D', order: 6 }}
-                >
-                  <Typography style={styles.subseccion}>
-                      Radiación
-                  </Typography>              
-
-                  <Typography style={styles.datosRadiacion}>
-                    {weatherData.solar_radiation} W/m²
-                  </Typography>
-                </Box>
+                {/* MODELOS */}
+                <Box sx={{ gridArea: '2I', order: isMobile ? 4 : 4, border: '1px solid darkgrey'}}>
+                  <Modelos 
+                    styles={styles}
+                    isMobile={isMobile}
+                  />
                 </Box>
 
-                   <Box 
-                    display="flex" 
-                    flexDirection="row" 
-                    alignItems="center"
-                    >
-                      <Typography style={styles.tempInt}>
-                        {weatherData.internal_temperature.toFixed(1)}°
-                      </Typography>
-                      <Box display="column" flexDirection="row" alignItems="center">
-                        <Typography style={{...styles.subseccion, marginBottom: '40px'}}>
-                            Viento
-                        </Typography>
-                        <WindDirectionIndicator
-                          direction={weatherData.wind_direction}
-                          speed={(weatherData.wind_speed * 3.6).toFixed(1)}
-                          rose={GetWindDir(weatherData.wind_direction)}
-                          size={isMobile ? 'small' : 'normal'}
-                        />
-                      </Box>
-                       <Box display="column" flexDirection="row" alignItems="center">
-                        <Typography style={styles.subseccion}>
-                            Precipitació<a href="https://www.meteoclimatic.net/perfil/ESCAT0800000008014C" target="_blank" rel="noreferrer">n</a>
-                        </Typography>
-                        <Rain
-                          rainRate={weatherData.current_rain_rate}
-                          totalRain={weatherData.total_rain}
-                        />
-                      </Box> 
-                   </Box>
-
-                   {/* Descripción */}
-
-                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
-                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
-                      Resumen del tiempo
-                    </Typography>
-                    <Box 
-                      width="100%" 
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="center" 
-                      alignItems="center" 
-                      marginTop="30px"
-                    > 
-                      <Typography style={styles.resumen}>
-                        {weatherData.resumen}
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  {/* Predicción */}
- 
-                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
-
-                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
-                      Predicción
-                    </Typography>
-
-                    <Box 
-                      width="100%" 
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="center" 
-                      alignItems="center" 
-                      marginTop="30px"
-                    >
-                      <iframe 
-                        width="500" 
-                        height="187" 
-                        src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h" 
-                        frameborder="0"
-                        title="Predicción Barcelona"
-                      /> 
-                    </Box>    
-                  </Box>            
- 
-                  {/* Radar */}
-
-                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
-                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
-                      Radar
-                    </Typography>
-                    <Box 
-                      width="100%" 
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="center" 
-                      alignItems="center" 
-                      marginTop="30px"
-                    >
-                      <iframe src="https://static-m.meteo.cat/ginys/mapaRadar?language=ca&color=2c3e50&target=_blank" 
-                              title="Última imatge de radar" 
-                              frameborder="0" 
-                              style={{border:0}} 
-                              scrolling="no" 
-                              width="396" 
-                              height="412"
-                              />
-                    </Box>
-                  </Box>
-
- 
+                {/* RADAR */}
+                <Box sx={{ gridArea: '2C  ', order: isMobile ? 5 : 5, border: '1px solid darkgrey'}}>
+                  <Radar 
+                    styles={styles}
+                    isMobile={isMobile}
+                  />
                 </Box>
 
-                {/* Gráficas */}
-
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  sx={{ 
-                    gridArea: '1D',
-                    order: isMobile ? 3 : 1,
-                    height: '100%',
-                    border: "1px solid darkgrey"
-                  }}>
-                  <Typography style={styles.seccion} >
-                    Gráficas (Sarrià)
-                  </Typography>
-                  <Box display="flex" justifyContent="flex-start" gap={6} mt={4} p={1} sx={{ border: "1px solid darkgrey"}}>
-                        <label>
-                          <input
-                            type="radio"
-                            value="24h"
-                            checked={timeRange === '24h'}
-                            onChange={handleTimeRangeChange}
-                          />
-                        <Typography style={styles.periodo}>
-                          24h
-                        </Typography>
-                        </label>
-                        <label>
-                          <input
-                            type="radio"
-                            value="48h"
-                            checked={timeRange === '48h'}
-                            onChange={handleTimeRangeChange}
-                          />
-                        <Typography style={styles.periodo}>
-                          48h
-                        </Typography>
-                        </label>
-                        <label>
-                          <input
-                            type="radio"
-                            value="7d"
-                            checked={timeRange === '7d'}
-                            onChange={handleTimeRangeChange}
-                          />
-                        <Typography style={styles.periodo}>
-                          7d
-                        </Typography>
-                        </label>
-                  </Box>
-                  <Typography style={styles.subseccion}>
-                    Temperatura exterior
-                  </Typography>
-                  <TemperatureChart timeRange={timeRange} />
-
-                  <Typography style={styles.subseccion}>
-                    Humedad
-                  </Typography>
-                  <HumChart timeRange={timeRange} />
-
-                  <Typography style={styles.subseccion}>
-                    Presión
-                  </Typography>
-                  <PressChart timeRange={timeRange} /> 
- 
-                  <Typography style={styles.subseccion}>
-                    Radiación
-                  </Typography>
-                  <RadChart timeRange={timeRange} /> 
-
-                  <Typography style={styles.subseccion}>
-                    Temperatura interior
-                  </Typography>
-                  <IntTemperatureChart timeRange={timeRange} /> 
-
-                  <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}} >
-                    <Typography style={{...styles.seccion, marginTop: '20px'}}>
-                      Histórico de temperaturas (2025)
-                    </Typography>
-                    <Box width="100%">
-                      <TemperatureHistoryChart />
-                    </Box>
-                  </Box>
 
 
-                </Box>
-                
-                {/* Humidity Section */}
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center"
-                  sx={{ gridArea: '2I', order: 4 }}
-                >
-                </Box>
-
-                {/* Pressure Section */}
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center"
-                  sx={{ gridArea: '2C', order: 5 }}
-                >
-                </Box>
-
-                {/* Radiation Section */}
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center"
-                  sx={{ gridArea: '2D', order: 6 }}
-                >
-                </Box>
-
-                {/* Maps Section */}
-                <Box sx={{ gridArea: '3I', order: 7 }}>
-
-                </Box>
-
-                {/* Datos de Burgos */}
-                <Box sx={{ gridArea: '3C', order: 8 }}>
-
-
-                </Box>
-
-                {/* Webcam Section */}
-                <Box sx={{ gridArea: '3D', order: 9  }}>
-
- 
-                </Box>
+                {/* Empty section for grid layout */}
+                <Box sx={{ gridArea: '2D', order: 5 }} />
               </Box>
             </Box>
           )}
