@@ -20,7 +20,7 @@ import DatosSarria from './components/DatosSarria';
 import Graficas from './components/Graficas';
 import Modelos from './components/Modelos';
 import Radar from './components/Radar';
-import RadarAemet from './components/RadarAEMET';
+// import RadarAemet from './components/RadarAEMET';
 
 const theme = createTheme({
   breakpoints: {
