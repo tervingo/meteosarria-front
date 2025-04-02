@@ -6,11 +6,13 @@ const Radar = ({ styles, isMobile }) => {
     <Box>
       {/* Radar */}
       <Box sx={{ 
-        width: isMobile ? '100%' : '90%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}>
+      width: isMobile ? '100%' : '90%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '0 auto'
+    }}>
         <Typography style={styles.seccion}>
           Radar
         </Typography>

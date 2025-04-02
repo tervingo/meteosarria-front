@@ -173,7 +173,7 @@ const DatosSarria = ({
       {/* Predicción */}
       <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
         <Typography style={{...styles.seccion, marginTop: '20px'}}>
-          Predicción
+          Predicción (Sarrià)
         </Typography>
 
         <Box 
@@ -197,7 +197,7 @@ const DatosSarria = ({
       {/* Descripción */}
       <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
         <Typography style={{...styles.seccion, marginTop: '20px'}}>
-          Resumen del tiempo
+          Resumen del tiempo (Sarrià)
         </Typography>
         <Box 
           width="100%" 

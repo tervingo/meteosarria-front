@@ -3,6 +3,21 @@ import { Box, Typography } from '@mui/material';
 import BurgosWeather from '../BurgosWeather';
 
 const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
+  if (!burgosWeather) {
+    return (
+      <Box 
+        display="flex" 
+        flexDirection="column"
+        justifyContent="flex-start"
+        alignItems="center"
+      >
+        <Typography style={styles.seccion}>
+          Cargando datos de Burgos...
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box 
       display="flex" 
@@ -11,12 +26,10 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
       alignItems="center"
     >
       <Typography style={styles.seccion}>
-        Datos actuales en Burgos a las {burgosWeather && (
-          `${new Date(burgosWeather.timestamp * 1000).toLocaleTimeString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit'
-          })}`
-        )}
+        Datos actuales en Burgos a las {`${new Date(burgosWeather.timestamp * 1000).toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })}`}
       </Typography>  
       <Typography style={styles.openweathermap}>
         Datos de <a href="https://openweathermap.org/" target="_blank" rel='noreferrer' style={styles.enlace}>OpenWeatherMap</a>
@@ -30,7 +43,7 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
       </Typography>              
 
       {/* Webcam Catedral de Burgos */}
-      
+
       <Box sx={{ width: '500px', height: '280px' }}>
         <a
           name="windy-webcam-timelapse-player"
@@ -57,7 +70,7 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
 
       <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}}>
         <Typography style={styles.seccion}>
-          Predicción
+          Predicción (Burgos)
         </Typography>
 
         <Box 
@@ -80,7 +93,7 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
      {/* Descripción */}
      <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
         <Typography style={{...styles.seccion, marginTop: '20px'}}>
-          Resumen del tiempo
+          Resumen del tiempo (Burgos)
         </Typography>
         <Box 
           width="100%" 

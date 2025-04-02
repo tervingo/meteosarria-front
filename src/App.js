@@ -20,6 +20,7 @@ import DatosSarria from './components/DatosSarria';
 import Graficas from './components/Graficas';
 import Modelos from './components/Modelos';
 import Radar from './components/Radar';
+import RadarAemet from './components/RadarAEMET';
 
 const theme = createTheme({
   breakpoints: {
@@ -338,10 +339,11 @@ function AppContent() {
                   />
                 </Box>
 
-
-
-                {/* Empty section for grid layout */}
-                <Box sx={{ gridArea: '2D', order: 5 }} />
+                {/* RADAR AEMET 
+                <Box sx={{ gridArea: '2D  ', order: isMobile ? 6 : 6, border: '1px solid darkgrey'}}>
+                  <RadarAemet />
+                </Box>
+                */}
               </Box>
             </Box>
           )}
