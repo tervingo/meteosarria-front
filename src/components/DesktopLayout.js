@@ -20,28 +20,37 @@ const DesktopLayout = ({
   menuItems,
   getDate,
   getTime,
-  validTemperatures
+  validTemperatures,
+  isTablet
 }) => {
   return (
-    <Container maxWidth="xl" className="App">
+    <Container 
+      maxWidth={false} 
+      className="App"
+      sx={{
+        px: { sm: 2, md: 3 },
+        maxWidth: isTablet ? '100%' : '1920px',
+        overflowX: 'hidden'
+      }}
+    >
       {weatherData && <TemperatureBackground temperature={weatherData.external_temperature} />}
 
-      <Box className="App-header" py={4}>
+      <Box className="App-header" py={isTablet ? 2 : 4}>
         <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" width="100%">
           <Box>
             <Typography variant="h1" style={styles.header}>
               #meteosarria
             </Typography>
             <Typography variant="h6" style={styles.location}>
-              Sarrià - Barcelona (41º 23' 42" N, 2º 7' 21" E - 110m)
+              Sarrià - Barcelona {!isTablet && "(41º 23' 42\" N, 2º 7' 21\" E - 110m)"}
             </Typography>
           </Box>
           <Card>
             <CardMedia
               component="img"
               sx={{ 
-                width: "130px",
-                height: "130px",
+                width: isTablet ? "100px" : "130px",
+                height: isTablet ? "100px" : "130px",
                 objectFit: 'cover'
               }}
               image="/images/nubes.jpg"
@@ -65,29 +74,44 @@ const DesktopLayout = ({
               display="grid" 
               gap={2} 
               sx={{
-                gridTemplateColumns: 'repeat(3, 1fr)',
+                gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
                 gridTemplateAreas: `
                   "1I 1C 1D"
                   "2I 2C 2D"
-                `
+                `,
+                '& > *': {
+                  minWidth: 0, // Previene que los elementos se desborden
+                  width: '100%'
+                }
               }}
             >
               {/* GRÁFICAS - 1I */}
-              <Box sx={{ gridArea: '1I', height: '100%', border: '1px solid darkgrey'}}>
+              <Box sx={{ 
+                gridArea: '1I', 
+                height: '100%', 
+                border: '1px solid darkgrey',
+                overflowX: 'hidden'
+              }}>
                 <Graficas 
                   styles={styles}
                   isMobile={false}
+                  isTablet={isTablet}
                   timeRange={timeRange}
                   handleTimeRangeChange={handleTimeRangeChange}
                 />
               </Box>
 
               {/* SARRIÀ - 1C */}
-              <Box sx={{ gridArea: '1C', border: '1px solid azure'}}>
+              <Box sx={{ 
+                gridArea: '1C', 
+                border: '1px solid azure',
+                overflowX: 'hidden'
+              }}>
                 <DatosSarria 
                   weatherData={weatherData}
                   styles={styles}
                   isMobile={false}
+                  isTablet={isTablet}
                   currentTime={currentTime}
                   getTime={getTime}
                   validTemperatures={validTemperatures}
@@ -95,27 +119,42 @@ const DesktopLayout = ({
               </Box>
 
               {/* BURGOS - 1D */}
-              <Box sx={{ gridArea: '1D', border: '1px solid darkgrey' }}>
+              <Box sx={{ 
+                gridArea: '1D', 
+                border: '1px solid darkgrey',
+                overflowX: 'hidden'
+              }}>
                 <DatosBurgos 
                   burgosWeather={burgosWeather}
                   styles={styles}
                   isMobile={false}
+                  isTablet={isTablet}
                 />
               </Box>
 
               {/* MODELOS */}
-              <Box sx={{ gridArea: '2I', border: '1px solid darkgrey'}}>
+              <Box sx={{ 
+                gridArea: '2I', 
+                border: '1px solid darkgrey',
+                overflowX: 'hidden'
+              }}>
                 <Modelos 
                   styles={styles}
                   isMobile={false}
+                  isTablet={isTablet}
                 />
               </Box>
 
               {/* RADAR */}
-              <Box sx={{ gridArea: '2C', border: '1px solid darkgrey'}}>
+              <Box sx={{ 
+                gridArea: '2C', 
+                border: '1px solid darkgrey',
+                overflowX: 'hidden'
+              }}>
                 <Radar 
                   styles={styles}
                   isMobile={false}
+                  isTablet={isTablet}
                 />
               </Box>
             </Box>

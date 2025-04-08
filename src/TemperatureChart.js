@@ -149,8 +149,8 @@ const TemperatureChart = ({ timeRange }) => {
 
     const getMargin = () => ({
       top: isMobile ? 10 : 10,
-      right: isMobile ? 80 : 30,
-      left: isMobile ? 5 : 20,
+      right: isMobile ? 80 : isTablet ? 60 : 30,
+      left: isMobile ? 5 : isTablet ? 60 : 20,
       bottom: isMobile ? 60 : 20,
     });
 
@@ -287,7 +287,8 @@ const TemperatureChart = ({ timeRange }) => {
   return (
     <div
       style={{
-        width: isMobile ? WIDTH_MOBILE : isTablet ? WIDTH_TABLET : WIDTH_PC,
+        // width: isMobile ? WIDTH_MOBILE : isTablet ? WIDTH_TABLET : WIDTH_PC,
+        width: '100%',
         height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
         maxWidth: '1200px',
         margin: '0 auto',

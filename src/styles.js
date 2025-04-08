@@ -75,8 +75,7 @@ export const createStyles = (isMobile, isTablet, weatherData, GetTempColour, Get
   subseccion: {
     fontSize: isMobile ? '1rem' : isTablet ? '1.4rem' : '1.5rem',
     color: 'lightblue',
-    marginTop: '20px',
-    marginBottom: '20px'
+    marginTop: '20px'
   },
   periodo: {
     fontSize: isMobile ? '0.9rem' : isTablet ? '0.9rem' : '0.9rem',

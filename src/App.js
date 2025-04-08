@@ -129,7 +129,8 @@ function AppContent() {
     menuItems,
     getDate,
     getTime,
-    validTemperatures
+    validTemperatures,
+    isTablet
   };
 
   return (

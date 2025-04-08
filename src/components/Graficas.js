@@ -8,7 +8,8 @@ import RadChart from '../RadChart';
 
 const Graficas = ({ 
   styles, 
-  isMobile, 
+  isMobile,
+  isTablet,
   timeRange, 
   handleTimeRangeChange 
 }) => {
@@ -18,11 +19,27 @@ const Graficas = ({
       flexDirection="column" 
       alignItems="center"
       justifyContent="flex-start"
-     >
+      sx={{
+        width: '100%',
+        '& > *': {
+          width: '100%'
+        }
+      }}
+    >
       <Typography style={styles.seccion}>
         Gráficas (Sarrià)
       </Typography>
-      <Box display="flex" justifyContent="flex-start" gap={6} mt={4} p={1} sx={{ border: "1px solid darkgrey"}}>
+      <Box 
+        display="flex" 
+        justifyContent="flex-start" 
+        gap={isTablet ? 3 : 6} 
+        mt={4} 
+        p={1} 
+        sx={{ 
+          border: "1px solid darkgrey",
+          width: 'auto'
+        }}
+      >
         <label>
           <input
             type="radio"
@@ -57,32 +74,41 @@ const Graficas = ({
           </Typography>
         </label>
       </Box>
-      <Typography style={styles.subseccion}>
-        Temperatura exterior
-      </Typography>
-      <TemperatureChart timeRange={timeRange} />
 
-      <Typography style={styles.subseccion}>
-        Humedad
-      </Typography>
-      <HumChart timeRange={timeRange} />
+      <Box sx={{ width: '100%', height: isTablet ? '200px' : '320px' }}>
+        <Typography style={styles.subseccion}>
+          Temperatura exterior
+        </Typography>
+        <TemperatureChart timeRange={timeRange} isTablet={isTablet} />
+      </Box>
 
-      <Typography style={styles.subseccion}>
-        Presión
-      </Typography>
-      <PressChart timeRange={timeRange} /> 
- 
-      <Typography style={styles.subseccion}>
-        Radiación
-      </Typography>
-      <RadChart timeRange={timeRange} /> 
+      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+        <Typography style={styles.subseccion}>
+          Humedad
+        </Typography>
+        <HumChart timeRange={timeRange} isTablet={isTablet} />
+      </Box>
 
-      <Typography style={styles.subseccion}>
-        Temperatura interior
-      </Typography>
-      <IntTemperatureChart timeRange={timeRange} /> 
+      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+        <Typography style={styles.subseccion}>
+          Presión
+        </Typography>
+        <PressChart timeRange={timeRange} isTablet={isTablet} />
+      </Box>
 
+      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+        <Typography style={styles.subseccion}>
+          Radiación
+        </Typography>
+        <RadChart timeRange={timeRange} isTablet={isTablet} />
+      </Box>
 
+      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+        <Typography style={styles.subseccion}>
+          Temperatura interior
+        </Typography>
+        <IntTemperatureChart timeRange={timeRange} isTablet={isTablet} />
+      </Box>
     </Box>
   );
 };
