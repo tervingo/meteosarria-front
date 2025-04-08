@@ -7,7 +7,6 @@ import WindDirectionIndicator from '../WindDirectionIndicator';
 import GetWindDir from '../GetWindDir';
 import Rain from '../Rain';
 import GetTempColour from '../GetTempColour';
-import TemperatureHistoryChart from '../TemperatureHistoryChart';
 
 const DatosSarria = ({ 
   weatherData, 
@@ -23,7 +22,6 @@ const DatosSarria = ({
       flexDirection="column" 
       justifyContent="flex-start"
       alignItems="center"
-
     >
       <Typography style={styles.seccion}>
         Datos actuales en Sarrià a las {getTime(currentTime)}
@@ -52,7 +50,7 @@ const DatosSarria = ({
               <img 
                 src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
                 alt={weatherData.description}
-                style={{ width: '80px', height: '80px', marginLeft: '30px' }}
+                style={{ width: isMobile ? '60px' : '80px', height: isMobile ? '60px' : '80px', marginLeft: '30px' }}
               />
             )}
             <Typography style={styles.description}>
@@ -86,13 +84,25 @@ const DatosSarria = ({
       </Box>
 
       {/* Humedad, Presión y radiación  */}                 
-      <Box display="flex" flexDirection="row" alignItems="center" gap={(4)}>
+      <Box 
+        display="flex" 
+        flexDirection={isMobile ? "column" : "row"} 
+        alignItems="center" 
+        gap={2}
+        width="100%"
+      >
         {/* Humedad  */}
         <Box 
           display="flex" 
           flexDirection="column" 
           alignItems="center"
-          sx={{ gridArea: '2I', order: 4 }}
+          width={isMobile ? "100%" : "auto"}
+          sx={{ 
+            gridArea: '2I', 
+            order: 4,
+            borderTop: isMobile ? '1px solid darkgrey' : 'none',
+            paddingTop: isMobile ? 2 : 0
+          }}
         >
           <Typography style={styles.subseccion}>
             Humedad
@@ -110,7 +120,13 @@ const DatosSarria = ({
           display="flex" 
           flexDirection="column" 
           alignItems="center"
-          sx={{ gridArea: '2C', order: 5 }}
+          width={isMobile ? "100%" : "auto"}
+          sx={{ 
+            gridArea: '2C', 
+            order: 5,
+            borderTop: isMobile ? '1px solid darkgrey' : 'none',
+            paddingTop: isMobile ? 2 : 0
+          }}
         >
           <Typography style={styles.subseccion}>
             Presión
@@ -128,28 +144,63 @@ const DatosSarria = ({
           display="flex" 
           flexDirection="column" 
           alignItems="center"
-          sx={{ gridArea: '2D', order: 6 }}
+          width={isMobile ? "100%" : "auto"}
+          sx={{ 
+            gridArea: '2D', 
+            order: 6,
+            borderTop: isMobile ? '1px solid darkgrey' : 'none',
+            paddingTop: isMobile ? 2 : 0
+          }}
         >
           <Typography style={styles.subseccion}>
             Radiación
           </Typography>              
-
           <Typography style={styles.datosRadiacion}>
             {weatherData.solar_radiation} W/m²
           </Typography>
         </Box>
       </Box>
 
+      {/* Temperatura interior, Viento y Lluvia */}
       <Box 
         display="flex" 
-        flexDirection="row" 
+        flexDirection={isMobile ? "column" : "row"} 
         alignItems="center"
+        width="100%"
+        gap={2}
+        sx={{
+          borderTop: '1px solid darkgrey',
+          paddingTop: 2,
+          marginTop: 2
+        }}
       >
-        <Typography style={styles.tempInt}>
-          {weatherData.internal_temperature.toFixed(1)}°
-        </Typography>
-        <Box display="column" flexDirection="row" alignItems="center">
-          <Typography style={{...styles.subseccion, marginBottom: '40px'}}>
+        {/* Temperatura interior */}
+        <Box 
+          display="flex" 
+          flexDirection="column" 
+          alignItems="center"
+          width={isMobile ? "100%" : "auto"}
+        >
+          <Typography style={styles.subseccion}>
+            Temperatura interior
+          </Typography>
+          <Typography style={{...styles.tempInt, marginRight: 0}}>
+            {weatherData.internal_temperature.toFixed(1)}°
+          </Typography>
+        </Box>
+
+        {/* Viento */}
+        <Box 
+          display="flex" 
+          flexDirection="column" 
+          alignItems="center"
+          width={isMobile ? "100%" : "auto"}
+          sx={{ 
+            borderTop: isMobile ? '1px solid darkgrey' : 'none',
+            paddingTop: isMobile ? 2 : 0
+          }}
+        >
+          <Typography style={styles.subseccion}>
             Viento
           </Typography>
           <WindDirectionIndicator
@@ -159,7 +210,18 @@ const DatosSarria = ({
             size={isMobile ? 'small' : 'normal'}
           />
         </Box>
-        <Box display="column" flexDirection="row" alignItems="center">
+
+        {/* Lluvia */}
+        <Box 
+          display="flex" 
+          flexDirection="column" 
+          alignItems="center"
+          width={isMobile ? "100%" : "auto"}
+          sx={{ 
+            borderTop: isMobile ? '1px solid darkgrey' : 'none',
+            paddingTop: isMobile ? 2 : 0
+          }}
+        >
           <Typography style={styles.subseccion}>
             Precipitació<a href="https://www.meteoclimatic.net/perfil/ESCAT0800000008014C" target="_blank" rel="noreferrer">n</a>
           </Typography>
@@ -167,7 +229,7 @@ const DatosSarria = ({
             rainRate={weatherData.current_rain_rate}
             totalRain={weatherData.total_rain}
           />
-        </Box> 
+        </Box>
       </Box>
 
       {/* Predicción */}
@@ -185,7 +247,7 @@ const DatosSarria = ({
           marginTop="30px"
         >
           <iframe 
-            width="500" 
+            width={isMobile ? "100%" : "500"} 
             height="187" 
             src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h" 
             frameborder="0"
@@ -199,29 +261,12 @@ const DatosSarria = ({
         <Typography style={{...styles.seccion, marginTop: '20px'}}>
           Resumen del tiempo (Sarrià)
         </Typography>
-        <Box 
-          width="100%" 
-          display="flex"
-          flexDirection="column"
-          justifyContent="center" 
-          alignItems="center" 
-          marginTop="30px"
-        > 
-          <Typography style={styles.resumen}>
-            {weatherData.resumen}
-          </Typography>
-        </Box>
-      </Box>
-
-      <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
-        <Typography style={{...styles.seccion, marginTop: '20px'}}>
-          Histórico de temperaturas (2025)
+        <Typography style={styles.resumen}>
+          La estación meteorológica está situada en el barrio de Sarrià (Barcelona), a 110 metros sobre el nivel del mar. 
+          Los datos se actualizan cada 30 segundos. La temperatura, humedad y presión se miden con un sensor BME280, 
+          la radiación solar con un sensor BH1750 y la lluvia con un pluviómetro de balancín.
         </Typography>
-        <Box width="100%">
-          <TemperatureHistoryChart />
-        </Box>
       </Box>
-      
     </Box>
   );
 };
