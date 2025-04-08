@@ -7,9 +7,10 @@ import {
   ListItem,
   ListItemText,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Tooltip
 } from '@mui/material';
-import { Menu as MenuIcon } from 'lucide-react';
+import { Menu as MenuIcon, RotateCw } from 'lucide-react';
 
 const Menu = ({ items }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -21,6 +22,10 @@ const Menu = ({ items }) => {
       return;
     }
     setDrawerOpen(open);
+  };
+
+  const handleRefresh = () => {
+    window.location.reload();
   };
 
   const menuList = (
@@ -56,7 +61,17 @@ const Menu = ({ items }) => {
 
   if (isMobile) {
     return (
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '10px', gap: 1 }}>
+        <Tooltip title="Recargar página" placement="bottom">
+          <IconButton
+            color="inherit"
+            aria-label="recargar"
+            onClick={handleRefresh}
+            sx={{ color: '#fff' }}
+          >
+            <RotateCw size={24} />
+          </IconButton>
+        </Tooltip>
         <IconButton
           edge="start"
           color="inherit"
