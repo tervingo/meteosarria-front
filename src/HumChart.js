@@ -12,7 +12,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
+import { BACKEND_URI, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
 import GetHumColor from './GetHumColor';
 
 const HumChart = ({ timeRange }) => {
@@ -247,8 +247,8 @@ const HumChart = ({ timeRange }) => {
   return (
     <div
       style={{
-        width: isMobile ? WIDTH_MOBILE : isTablet ? WIDTH_TABLET : WIDTH_PC,
-        height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
+        width: '100%',
+        height: '100%',
         maxWidth: '1200px',
         margin: '0 auto',
         padding: isMobile ? '10px' : '10px',

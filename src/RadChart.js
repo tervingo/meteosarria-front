@@ -12,7 +12,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, WIDTH_PC, WIDTH_MOBILE, WIDTH_TABLET, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_RAD_X, MAX_VALUE_RAD_Y, MAX_TIME_RAD_X, MAX_TIME_RAD_Y } from './constants';
+import { BACKEND_URI, MAX_VALUE_RAD_X, MAX_VALUE_RAD_Y, MAX_TIME_RAD_X, MAX_TIME_RAD_Y } from './constants';
 
 const RadChart = ({ timeRange }) => {
   const [data, setData] = useState([]);
@@ -195,8 +195,8 @@ const RadChart = ({ timeRange }) => {
   return (
     <div
       style={{
-        width: isMobile ? WIDTH_MOBILE : isTablet ? WIDTH_TABLET : WIDTH_PC,
-        height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
+        width: '100%',
+        height: '100%',
         maxWidth: '1200px',
         margin: '0 auto',
         padding: isMobile ? '10px' : '10px',

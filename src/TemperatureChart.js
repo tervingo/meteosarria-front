@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, HEIGHT_PC, HEIGHT_MOBILE, HEIGHT_TABLET, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
+import { BACKEND_URI, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
 import GetTempColour from './GetTempColour';
 
 const TemperatureChart = ({ timeRange }) => {
@@ -116,8 +116,12 @@ const TemperatureChart = ({ timeRange }) => {
     const absMinTemp = Math.min(...data.map((d) => d.external_temperature));
     const absMaxTemp = Math.max(...data.map((d) => d.external_temperature));
     // Calcular límites del eje Y
-    const minTemp = Math.floor(absMinTemp / 5) * 5 - 5; // Redondear hacia abajo al múltiplo de 5 más cercano y restar 5
-    const maxTemp = Math.ceil(absMaxTemp / 5) * 5 + 5; // Redondear hacia arriba al múltiplo de 5 más cercano y sumar 10
+    // const minTemp = Math.floor(absMinTemp / 5) * 5 - 5; // Redondear hacia abajo al múltiplo de 5 más cercano y restar 5
+    // const maxTemp = Math.ceil(absMaxTemp / 5) * 5 + 5; // Redondear hacia arriba al múltiplo de 5 más cercano y sumar 10
+
+    const minTemp = Math.floor(absMinTemp / 5) * 5; // Redondear hacia abajo al múltiplo de 5 más cercano 
+    const maxTemp = Math.ceil(absMaxTemp / 5) * 5; // Redondear hacia arriba al múltiplo de 5 más cercano 
+
     
     // Generar ticks en múltiplos de 5
     const generateTicks = (min, max) => {
@@ -289,7 +293,8 @@ const TemperatureChart = ({ timeRange }) => {
       style={{
         // width: isMobile ? WIDTH_MOBILE : isTablet ? WIDTH_TABLET : WIDTH_PC,
         width: '100%',
-        height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
+        // height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
+        height: '100%',
         maxWidth: '1200px',
         margin: '0 auto',
         padding: isMobile ? '10px' : '10px',
