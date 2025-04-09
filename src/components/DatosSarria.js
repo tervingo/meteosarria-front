@@ -87,7 +87,8 @@ const DatosSarria = ({
       <Box 
         display="flex" 
         flexDirection={isMobile ? "column" : "row"} 
-        alignItems="center" 
+        alignItems="center"
+        justifyContent="center"
         gap={2}
         width="100%"
       >

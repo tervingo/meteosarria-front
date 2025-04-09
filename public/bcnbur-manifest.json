@@ -1,0 +1,20 @@
+{
+  "short_name": "Meteo BcnBur",
+  "name": "Meteo Sarrià & Burgos",
+  "icons": [
+    {
+      "src": "bcnbur-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "bcnbur-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/bcnbur",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000"
+} 
