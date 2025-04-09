@@ -152,12 +152,16 @@ function BcnBurContent() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
+    console.log('BcnBurContent mounted');
     const fetchData = async () => {
       try {
+        console.log('Fetching data...');
         const [weatherResponse, burgosResponse] = await Promise.all([
           axios.get(BACKEND_URI + '/api/live'),
           axios.get(BACKEND_URI + '/api/burgos-weather')
         ]);
+        console.log('Weather data:', weatherResponse.data);
+        console.log('Burgos data:', burgosResponse.data);
         setWeatherData(weatherResponse.data);
         setBurgosWeather(burgosResponse.data);
         setError(null);
@@ -172,7 +176,10 @@ function BcnBurContent() {
     fetchData();
     const intervalId = setInterval(fetchData, 60000);
 
-    return () => clearInterval(intervalId);
+    return () => {
+      console.log('BcnBurContent unmounted');
+      clearInterval(intervalId);
+    };
   }, []);
 
   useEffect(() => {
@@ -195,6 +202,14 @@ function BcnBurContent() {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <ThemeProvider theme={theme}>
