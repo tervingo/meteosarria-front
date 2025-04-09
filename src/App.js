@@ -14,7 +14,7 @@ import CookiePolicy from './pages/CookiePolicy';
 import { createStyles } from './styles';
 import DesktopLayout from './components/DesktopLayout';
 import MobileLayout from './components/MobileLayout';
-// import RadarAemet from './components/RadarAEMET';
+import BcnBurLayout from './components/BcnBurLayout';
 
 const theme = createTheme({
   breakpoints: {
@@ -144,6 +144,73 @@ function AppContent() {
   );
 }
 
+function BcnBurContent() {
+  const [weatherData, setWeatherData] = useState(null);
+  const [burgosWeather, setBurgosWeather] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [weatherResponse, burgosResponse] = await Promise.all([
+          axios.get(BACKEND_URI + '/api/live'),
+          axios.get(BACKEND_URI + '/api/burgos-weather')
+        ]);
+        setWeatherData(weatherResponse.data);
+        setBurgosWeather(burgosResponse.data);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+        setError("Failed to fetch weather data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    const intervalId = setInterval(fetchData, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, []);
+
+  const getDate = (date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+
+  const getTime = (date) => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <BcnBurLayout
+        weatherData={weatherData}
+        burgosWeather={burgosWeather}
+        loading={loading}
+        error={error}
+        currentTime={currentTime}
+        getDate={getDate}
+        getTime={getTime}
+      />
+    </ThemeProvider>
+  );
+}
+
 function App() {
   return (
     <Router>
@@ -151,6 +218,7 @@ function App() {
         <GoogleAnalytics />
         <Routes>
           <Route path="/politica-cookies" element={<CookiePolicy />} />
+          <Route path="/bcnbur" element={<BcnBurContent />} />
           <Route path="/" element={<AppContent />} />
         </Routes>
         <CookieConsent />
