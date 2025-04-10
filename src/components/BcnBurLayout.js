@@ -23,7 +23,7 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
     dataContainer: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
+      gap: '12px',
     },
     stationCard: {
       padding: '16px',
@@ -40,8 +40,8 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
     },
     dataRow: {
       display: 'flex',
-      justifyContent: 'space-between',
-      marginBottom: '8px',
+      justifyContent: 'center',
+      marginBottom: '1px',
       color: 'silver',
     },
     dataLabel: {
@@ -49,7 +49,10 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
       color: 'silver',
     },
     dataValue: {
-      fontSize: '2rem',
+      fontSize: '2.5rem',
+    },
+    tempValue: {
+      fontSize: '4rem',
     },
     timestamp: {
       fontSize: '12px',
@@ -74,20 +77,20 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             <Typography variant="h4">Sarrià</Typography>
           </Box>
           <Box sx={styles.dataRow}>
-            <Typography sx={styles.dataLabel}>Temperatura:</Typography>
-            <Typography sx={{ ...styles.dataValue, color: GetTempColour(weatherData.external_temperature) }}>
+            {/* <Typography sx={styles.dataLabel}>Temperatura:</Typography> */}
+            <Typography sx={{ ...styles.tempValue, color: GetTempColour(weatherData.external_temperature) }}>
               {weatherData.external_temperature.toFixed(1)}°C
             </Typography>
           </Box>
           <Box sx={styles.dataRow}>
-            <Typography sx={styles.dataLabel}>Humedad:</Typography>
+            {/* <Typography sx={styles.dataLabel}>Humedad:</Typography> */}
             <Typography sx={{ ...styles.dataValue, color: GetHumColor(weatherData.humidity) }}>
               {weatherData.humidity}%
             </Typography>
           </Box>
           <Box sx={styles.dataRow}>
-            <Typography sx={styles.dataLabel}>Presión:</Typography>
-            <Typography sx={styles.dataValue}>{weatherData.pressure} hPa</Typography>
+            {/* <Typography sx={styles.dataLabel}>Presión:</Typography> */}
+            <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{weatherData.pressure} hPa</Typography>
           </Box>
         </Paper>
 
@@ -97,20 +100,20 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             <Typography variant="h4">Burgos</Typography>
           </Box>
           <Box sx={styles.dataRow}>
-            <Typography sx={styles.dataLabel}>Temperatura:</Typography>
-            <Typography sx={{ ...styles.dataValue, color: GetTempColour(burgosWeather.temperature) }}>
+            {/* <Typography sx={styles.dataLabel}>Temperatura:</Typography> */}
+            <Typography sx={{ ...styles.tempValue, color: GetTempColour(burgosWeather.temperature) }}>
               {burgosWeather.temperature.toFixed(1)}°C
             </Typography>
           </Box>
           <Box sx={styles.dataRow}>
-            <Typography sx={styles.dataLabel}>Humedad:</Typography>
+            {/* <Typography sx={styles.dataLabel}>Humedad:</Typography> */}
             <Typography sx={{ ...styles.dataValue, color: GetHumColor(burgosWeather.humidity) }}>
               {burgosWeather.humidity}%
             </Typography>
           </Box>
           <Box sx={styles.dataRow}>
-            <Typography sx={styles.dataLabel}>Presión:</Typography>
-            <Typography sx={styles.dataValue}>{burgosWeather.pressure} hPa</Typography>
+            {/* <Typography sx={styles.dataLabel}>Presión:</Typography> */}
+            <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{burgosWeather.pressure} hPa</Typography>
           </Box>
         </Paper>
       </Box>
