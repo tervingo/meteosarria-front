@@ -145,7 +145,7 @@ function AppContent() {
         <link rel="apple-touch-icon" sizes="180x180" href="/nubes-180x180.png" />
         <link rel="apple-touch-icon" sizes="167x167" href="/nubes-167x167.png" />
         {/* <link rel="manifest" href="/manifest.json" /> */}
-        <meta name="apple-mobile-web-app-title" content="Meteo Sarria" />
+        <meta name="apple-mobile-web-app-title" content="Meteosarria" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <title>Meteo Sarria</title>
@@ -230,16 +230,16 @@ function BcnBurContent() {
     <ThemeProvider theme={theme}>
       {/* Agregar Helmet para la ruta BcnBur */}
       <Helmet>
-        <link rel="icon" href="/clouds.ico" />
-        <link rel="apple-touch-icon" href="/clouds.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/clouds.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/clouds.png" />
-        <link rel="apple-touch-icon" sizes="167x167" href="/clouds.png" />
+        <link rel="icon" href="/paramo.ico" />
+        <link rel="apple-touch-icon" href="/paramo.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/paramo.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/paramo.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/paramo.png" />
         {/* <link rel="manifest" href="/bcnbur-manifest.json" /> */}
-        <meta name="apple-mobile-web-app-title" content="BCN-BUR Weather" />
+        <meta name="apple-mobile-web-app-title" content="MeteoBcnBur" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <title>BCN-BUR Weather</title>
+        <title>MeteoBcnBur</title>
       </Helmet>
       <BcnBurLayout
         weatherData={weatherData}
