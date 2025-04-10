@@ -257,19 +257,6 @@ const DatosSarria = ({
         </Box>    
       </Box>      
 
-      {/* Descripción */}
-      <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
-        <Typography style={{...styles.seccion, marginTop: '20px'}}>
-          Resumen del tiempo (Sarrià)
-        </Typography>
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <Typography style={styles.resumen}>
-            La estación meteorológica está situada en el barrio de Sarrià (Barcelona), a 110 metros sobre el nivel del mar. 
-          Los datos se actualizan cada 30 segundos. La temperatura, humedad y presión se miden con un sensor BME280, 
-            la radiación solar con un sensor BH1750 y la lluvia con un pluviómetro de balancín.
-          </Typography>
-        </Box>
-      </Box>
     </Box>
   );
 };

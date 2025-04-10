@@ -89,26 +89,6 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
           />
         </Box>
       </Box>
-
-     {/* Descripción */}
-     <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
-        <Typography style={{...styles.seccion, marginTop: '20px'}}>
-          Resumen del tiempo (Burgos)
-        </Typography>
-        <Box 
-          width="100%" 
-          display="flex"
-          flexDirection="column"
-          justifyContent="center" 
-          alignItems="center" 
-          marginTop="30px"
-        > 
-          <Typography style={styles.resumen}>
-            {burgosWeather.resumen}
-          </Typography>
-        </Box>
-      </Box>
-
     </Box>
   );
 };
