@@ -1,36 +1,9 @@
 import { Box, Typography, Paper } from '@mui/material';
 import GetTempColour from '../GetTempColour';
 import GetHumColor from '../GetHumColor';
-import { useEffect } from 'react';
 
 const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime, getDate, getTime }) => {
-  useEffect(() => {
-    // Actualizar título
-    document.title = 'Meteo Sarrià & Burgos';
-    
-    // Actualizar favicon
-    const favicon = document.querySelector("link[rel='icon']");
-    if (favicon) {
-      favicon.href = '/bcnbur.ico';
-    }
 
-    // Actualizar apple-touch-icon
-    const appleIcon = document.querySelector("link[rel='apple-touch-icon']");
-    if (appleIcon) {
-      appleIcon.href = '/bcnbur-apple.png';
-    }
-
-    // Limpiar al desmontar
-    return () => {
-      document.title = 'Meteo Sarrià';
-      if (favicon) {
-        favicon.href = '/favicon.ico';
-      }
-      if (appleIcon) {
-        appleIcon.href = '/logo192.png';
-      }
-    };
-  }, []);
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;

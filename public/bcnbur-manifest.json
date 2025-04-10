@@ -1,20 +1,30 @@
 {
-  "short_name": "Meteo BcnBur",
-  "name": "Meteo Sarrià & Burgos",
-  "icons": [
-    {
-      "src": "bcnbur-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "bcnbur-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": "/bcnbur",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#000000"
-} 
+    "short_name": "BCN-BUR",
+    "name": "BCN-BUR Weather",
+    "icons": [
+      {
+        "src": "clouds.ico",
+        "sizes": "64x64 32x32 24x24 16x16",
+        "type": "image/x-icon"
+      },
+      {
+        "src": "clouds.png",
+        "type": "image/png",
+        "sizes": "180x180"
+      },
+      {
+        "src": "logo-bcnbur-192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "logo-bcnbur-512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "/bcnbur",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+  }

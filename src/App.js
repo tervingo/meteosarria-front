@@ -4,6 +4,7 @@ import './App.css';
 import { useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Helmet } from 'react-helmet'; // Importar React Helmet
 import GetTempColour from './GetTempColour';
 import { BACKEND_URI } from './constants';
 import GetHumColor from './GetHumColor';
@@ -135,6 +136,20 @@ function AppContent() {
 
   return (
     <ThemeProvider theme={theme}>
+      {/* Agregar Helmet para la ruta principal */}
+      <Helmet>
+        {/* <link rel="icon" href="/nubes.ico" /> */}
+        <link rel="icon" type="image/x-icon" href={`${process.env.PUBLIC_URL}/nubes.ico`} />
+        <link rel="apple-touch-icon" href="/nubes.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/nubes-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/nubes-180x180.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/nubes-167x167.png" />
+        {/* <link rel="manifest" href="/manifest.json" /> */}
+        <meta name="apple-mobile-web-app-title" content="Meteo Sarria" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <title>Meteo Sarria</title>
+      </Helmet>
       {isMobile ? (
         <MobileLayout {...layoutProps} />
       ) : (
@@ -213,6 +228,19 @@ function BcnBurContent() {
 
   return (
     <ThemeProvider theme={theme}>
+      {/* Agregar Helmet para la ruta BcnBur */}
+      <Helmet>
+        <link rel="icon" href="/clouds.ico" />
+        <link rel="apple-touch-icon" href="/clouds.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/clouds.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/clouds.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/clouds.png" />
+        {/* <link rel="manifest" href="/bcnbur-manifest.json" /> */}
+        <meta name="apple-mobile-web-app-title" content="BCN-BUR Weather" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <title>BCN-BUR Weather</title>
+      </Helmet>
       <BcnBurLayout
         weatherData={weatherData}
         burgosWeather={burgosWeather}
