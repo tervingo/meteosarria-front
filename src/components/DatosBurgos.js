@@ -26,18 +26,17 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
       alignItems="center"
     >
       <Typography style={styles.seccion}>
-        Datos actuales en Burgos a las {`${new Date(burgosWeather.timestamp * 1000).toLocaleTimeString('es-ES', {
-          hour: '2-digit',
-          minute: '2-digit'
-        })}`}
+        Datos actuales en Burgos a las {burgosWeather.timestamp ? 
+          new Date(burgosWeather.timestamp).toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit'
+          }) : '--:--'}
       </Typography>  
       <Typography style={styles.openweathermap}>
         Datos de <a href="https://openweathermap.org/" target="_blank" rel='noreferrer' style={styles.enlace}>OpenWeatherMap</a>
       </Typography>
-      <Typography style={styles.subseccion}>
-        Temperatura y humedad
-      </Typography>              
-      <BurgosWeather weatherData={burgosWeather}/>
+          
+      <BurgosWeather weatherData={burgosWeather} isMobile={isMobile} styles={styles}/>
       <Typography style={styles.subseccion}>
         WebCam
       </Typography>              
