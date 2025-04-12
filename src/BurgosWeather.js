@@ -9,6 +9,10 @@ const BurgosWeather = ({ weatherData }) => {
       fontSize: '3rem',
       color: weatherData ? GetTempColour(weatherData.temperature) : 'Gray'
     },
+    temperatureDiff: {
+      fontSize: '1.5rem',
+      color: weatherData ? GetTempColour(weatherData.max_temperature) : 'Gray'
+    },
     humidity: {
       fontSize: '2rem',
       color: weatherData ? GetHumColor(weatherData.humidity) : 'chartreuse'
@@ -34,11 +38,21 @@ const BurgosWeather = ({ weatherData }) => {
     <Box display="flex" flexDirection="column" alignItems="center">
       <Box display="flex" alignItems="center" gap={2}>
         <Box>
-          <Typography style={styles.temperature}>
-            {weatherData.temperature.toFixed(1)}°C
-          </Typography>
+          <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
+            <Typography style={styles.temperature}>
+              {weatherData.temperature.toFixed(1)}°C
+            </Typography>
+            <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+              <Typography style={styles.temperatureDiff}>
+                {weatherData.max_temperature.toFixed(1)}°C
+              </Typography>
+            <Typography style={styles.temperatureDiff}>
+              {weatherData.min_temperature.toFixed(1)}°C
+              </Typography>
+            </Box>
+          </Box>
           <Typography style={styles.humidity}>
-            {weatherData.humidity}%
+              {weatherData.humidity}%
           </Typography>
         </Box>
         {weatherData.icon && (
@@ -53,7 +67,7 @@ const BurgosWeather = ({ weatherData }) => {
         {weatherData.description}
       </Typography>
       <Typography style={styles.label}>
-        Viento: {weatherData.windSpeed.toFixed(1)} km/h
+        Viento: {weatherData.wind_speed.toFixed(1)} km/h
       </Typography>
       <Typography style={styles.label}>
         Presión: {weatherData.pressure} hPa

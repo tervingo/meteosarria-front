@@ -156,8 +156,28 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             <Typography sx={{ ...styles.tempValue, color: GetTempColour(burgosWeather.temperature) }}>
               {burgosWeather.temperature.toFixed(1)}°C
             </Typography>
-          </Box>
+            <Box sx={styles.maxminTempContainer}>
+              {/* Max Temp */}
+              <Typography style={{
+                ...styles.maxminTemp,
+                color: (burgosWeather.max_temperature <= 45 ? burgosWeather.max_temperature : validTemperatures.maxTemp) ? 
+                  GetTempColour(burgosWeather.max_temperature <= 45 ? burgosWeather.max_temperature : validTemperatures.maxTemp) : 
+                  'Gray'
+              }}>
+              {burgosWeather.max_temperature.toFixed(1)}°C
+                </Typography>
+              {/* Min Temp */}
+              <Typography style={{
+                ...styles.maxminTemp,
+                color: (burgosWeather.min_temperature <= 45 ? burgosWeather.min_temperature : validTemperatures.minTemp) ? 
+                  GetTempColour(burgosWeather.min_temperature <= 45 ? burgosWeather.min_temperature : validTemperatures.minTemp) : 
+                  'Gray'
+              }}>
+                {burgosWeather.min_temperature.toFixed(1)}°C
+              </Typography>
 
+            </Box>
+           </Box>
           <Box sx={styles.humPressContainer}>
             <Box sx={styles.dataRow}>
               <Typography sx={{ ...styles.dataValue, color: GetHumColor(burgosWeather.humidity) }}>
