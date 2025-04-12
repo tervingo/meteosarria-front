@@ -1,8 +1,8 @@
 import { Box, Typography, Paper } from '@mui/material';
 import GetTempColour from '../GetTempColour';
 import GetHumColor from '../GetHumColor';
-
-const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime, getDate, getTime }) => {
+import ShowTempDiffs from '../ShowTempDiffs';
+const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime, getDate, getTime, validTemperatures }) => {
 
 
   if (loading) return <Typography>Loading...</Typography>;
@@ -40,9 +40,11 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
     },
     dataRow: {
       display: 'flex',
+      flexDirection: 'row',
       justifyContent: 'center',
       marginBottom: '1px',
       color: 'silver',
+      gap: '20px',  
     },
     dataLabel: {
       fontSize: '2rem',
@@ -60,6 +62,28 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
       textAlign: 'center',
       marginTop: '16px',
     },
+    maxminTemp: {
+      fontSize: '1.5rem',
+    },
+    maxminTempContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px',
+    },
+    humPressContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: '10px',
+      justifyContent: 'center',
+      gap: '20px',
+    },
+    tempDiffContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: '10px',
+      justifyContent: 'center',
+      gap: '20px',
+    },
   };
 
   return (
@@ -76,23 +100,54 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
           <Box sx={styles.stationHeader}>
             <Typography variant="h4">Sarrià</Typography>
           </Box>
+
+          {/* Exterior Temperature */}
           <Box sx={styles.dataRow}>
-            {/* <Typography sx={styles.dataLabel}>Temperatura:</Typography> */}
             <Typography sx={{ ...styles.tempValue, color: GetTempColour(weatherData.external_temperature) }}>
               {weatherData.external_temperature.toFixed(1)}°C
             </Typography>
-          </Box>
-          <Box sx={styles.dataRow}>
-            {/* <Typography sx={styles.dataLabel}>Humedad:</Typography> */}
-            <Typography sx={{ ...styles.dataValue, color: GetHumColor(weatherData.humidity) }}>
-              {weatherData.humidity}%
-            </Typography>
-          </Box>
-          <Box sx={styles.dataRow}>
-            {/* <Typography sx={styles.dataLabel}>Presión:</Typography> */}
-            <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{weatherData.pressure} hPa</Typography>
+            <Box sx={styles.maxminTempContainer}>
+              {/* Max Temp */}
+              <Typography style={{
+                ...styles.maxminTemp,
+                color: (weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) ? 
+                  GetTempColour(weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) : 
+                  'Gray'
+              }}>
+              {weatherData.max_temperature.toFixed(1)}°C
+                </Typography>
+              {/* Min Temp */}
+              <Typography style={{
+                ...styles.maxminTemp,
+                color: (weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) ? 
+                  GetTempColour(weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) : 
+                  'Gray'
+              }}>
+                {weatherData.min_temperature.toFixed(1)}°C
+              </Typography>
+
+            </Box>
+           </Box>
+           <Box sx={styles.tempDiffContainer}>
+            <ShowTempDiffs />
+           </Box>
+         
+          <Box sx={styles.humPressContainer}>
+            {/* Humidity */}
+            < Box sx={styles.dataRow}>
+                <Typography sx={{ ...styles.dataValue, color: GetHumColor(weatherData.humidity) }}>
+                {weatherData.humidity}%
+                </Typography>
+            </Box>
+
+            {/* Pressure */}
+            <Box sx={styles.dataRow}>
+              <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{weatherData.pressure} hPa</Typography>
+            </Box>
           </Box>
         </Paper>
+
+
 
         {/* Burgos Data */}
         <Paper elevation={3} sx={styles.stationCard}>
@@ -100,20 +155,20 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             <Typography variant="h4">Burgos</Typography>
           </Box>
           <Box sx={styles.dataRow}>
-            {/* <Typography sx={styles.dataLabel}>Temperatura:</Typography> */}
             <Typography sx={{ ...styles.tempValue, color: GetTempColour(burgosWeather.temperature) }}>
               {burgosWeather.temperature.toFixed(1)}°C
             </Typography>
           </Box>
-          <Box sx={styles.dataRow}>
-            {/* <Typography sx={styles.dataLabel}>Humedad:</Typography> */}
-            <Typography sx={{ ...styles.dataValue, color: GetHumColor(burgosWeather.humidity) }}>
-              {burgosWeather.humidity}%
-            </Typography>
-          </Box>
-          <Box sx={styles.dataRow}>
-            {/* <Typography sx={styles.dataLabel}>Presión:</Typography> */}
-            <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{burgosWeather.pressure} hPa</Typography>
+
+          <Box sx={styles.humPressContainer}>
+            <Box sx={styles.dataRow}>
+              <Typography sx={{ ...styles.dataValue, color: GetHumColor(burgosWeather.humidity) }}>
+                {burgosWeather.humidity}%
+              </Typography>
+            </Box>
+            <Box sx={styles.dataRow}>
+              <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{burgosWeather.pressure} hPa</Typography>
+            </Box>
           </Box>
         </Paper>
       </Box>

@@ -165,6 +165,7 @@ function BcnBurContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const { validTemperatures } = useTemperature();
 
   useEffect(() => {
     console.log('BcnBurContent mounted');
@@ -249,6 +250,7 @@ function BcnBurContent() {
         currentTime={currentTime}
         getDate={getDate}
         getTime={getTime}
+        validTemperatures={validTemperatures}
       />
     </ThemeProvider>
   );
