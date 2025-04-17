@@ -127,16 +127,25 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
             />
             </Column>
             <Column align="center" justify="center">
-            <Typography style={styles.subseccion}>
-              Precipitación
-            </Typography>
-            <RainBar
-              label="Hoy"
-              value={weatherData.day_rain}
-              maxValue={100}
-              barWidth={12}
-              isLoading={!weatherData}
-            />
+              <Typography style={styles.subseccion}>
+                Precipitación
+              </Typography>
+              <Row align="center" justify="center" gap={2}>
+              <RainBar
+                label="Hoy"
+                value={weatherData.day_rain}
+                maxValue={100}
+                barWidth={12}
+                isLoading={!weatherData}
+              />
+              <RainBar
+                label="Total año"
+                value={weatherData.total_rain}
+                maxValue={1000}
+                barWidth={16}
+                isLoading={!weatherData}
+              />
+              </Row>
             </Column>
           </Row>
 

@@ -16,6 +16,18 @@ const RainBar = ({
     ? `${value.toFixed(1)} mm` 
     : 'Cargando...';
 
+  // Mapeo de anchos a clases específicas de Tailwind
+  const widthClasses = {
+    12: 'w-12',
+    16: 'w-16',
+    20: 'w-20',
+    24: 'w-24',
+    32: 'w-32'
+  };
+
+  // Obtener la clase de ancho correcta o usar un valor por defecto
+  const widthClass = widthClasses[barWidth] || 'w-12';
+
   return (
     <div className="flex flex-col items-center">
       {/* Etiqueta superior */}
@@ -24,7 +36,7 @@ const RainBar = ({
       </p>
 
       {/* Contenedor de la barra */}
-      <div className={`relative w-${barWidth} h-48 border border-white`}>
+      <div className={`relative ${widthClass} h-48 border border-white`}>
         {/* Etiqueta del valor máximo */}
         <div className="absolute -right-14 top-0 text-xs text-gray-400">
           {maxValue} mm
