@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import axios from 'axios';
 import { BACKEND_URI } from './constants';
+import RainBar from './components/Rainbar';
 
 const Rain = () => {
   const [fabraData, setFabraData] = useState(null);
@@ -67,48 +68,28 @@ const Rain = () => {
   const maxTodayRain = fabraData?.today_rain ? Math.ceil(Math.ceil(fabraData.today_rain) * 10) : 10;
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" width="100%">
+    <Box display="flex" flexDirection="column" alignItems="center" width="100%" marginRight={8}>
       <div className="flex flex-col items-center">
         <div className="flex flex-row items-end space-x-12">
- 
-          {/* Columna de lluvia hoy */}
-          <div className="flex flex-col items-center">
-            <p className="text-sm mb-2 text-white">Hoy</p>
-            <div className="relative w-12 h-48 border border-white">
-              {/* Max value label */}
-              <div className="absolute -right-10 top-0 text-xs text-gray-400">
-                {maxTodayRain} mm
-              </div>
-              <div 
-                className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
-                style={{ height: `${fabraData?.today_rain ? (fabraData.today_rain / maxTodayRain) * 100 : 0}%` }}
-              />
-            </div>
-            <div className="text-base mt-2 text-white">
-              {fabraData?.today_rain !== undefined ? `${fabraData.today_rain.toFixed(1)} mm` : 'Cargando...'}
-            </div>
-          </div>
+          {/* Barra de lluvia hoy */}
+          <RainBar
+            label="Hoy"
+            value={fabraData?.today_rain}
+            maxValue={maxTodayRain}
+            barWidth={12}
+            isLoading={!fabraData}
+          />
 
-          {/* Columna de lluvia Fabra */}
-          <div className="flex flex-col items-center">
-            <p className="text-sm mb-2 text-white">Total año</p>
-            <div className="relative w-16 h-48 border border-white">
-              {/* Max value label */}
-              <div className="absolute -right-14 top-0 text-xs text-gray-400">
-                1.000 mm
-              </div>
-              <div 
-                className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
-                style={{ height: `${fabraData?.yearly_rain ? (fabraData.yearly_rain / 1000) * 100 : 0}%` }}
-              />
-            </div>
-            <div className="text-base mt-2 text-white">
-              {fabraData?.yearly_rain !== undefined ? `${fabraData.yearly_rain.toFixed(1)} mm` : 'Cargando...'}
-              {error && <p className="text-red-500 text-xs">Error: {error}</p>}
-            </div>
-          </div>
-
+          {/* Barra de lluvia anual */}
+          <RainBar
+            label="Total año"
+            value={fabraData?.yearly_rain}
+            maxValue={1000}
+            barWidth={12}
+            isLoading={!fabraData}
+          />
         </div>
+        {error && <p className="text-red-500 text-sm mt-2">Error: {error}</p>}
       </div>
     </Box>
   );

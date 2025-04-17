@@ -1,30 +1,21 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import BurgosWeather from '../BurgosWeather';
+import { Row, Column } from '../components/Layout';
 
 const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
   if (!burgosWeather) {
     return (
-      <Box 
-        display="flex" 
-        flexDirection="column"
-        justifyContent="flex-start"
-        alignItems="center"
-      >
+      <Column width="100%" align="center" justify="flex-start">
         <Typography style={styles.seccion}>
           Cargando datos de Burgos...
         </Typography>
-      </Box>
+      </Column>
     );
   }
 
   return (
-    <Box 
-      display="flex" 
-      flexDirection="column"
-      justifyContent="flex-start"
-      alignItems="center"
-    >
+    <Column width="100%" align="center" justify="flex-start">
       <Typography style={styles.seccion}>
         Datos actuales en Burgos a las {burgosWeather.timestamp ? 
           new Date(burgosWeather.timestamp).toLocaleTimeString('es-ES', {
@@ -72,13 +63,7 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
           Predicción (Burgos)
         </Typography>
 
-        <Box 
-          width="100%" 
-          display="flex"
-          justifyContent="center" 
-          alignItems="center" 
-          marginTop="30px"
-        >
+          <Row width="100%" align="center" justify="center" marginTop="30px">
           <iframe 
             width="500" 
             height="187" 
@@ -86,9 +71,9 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
             frameborder="0"
             title="Predicción Burgos"
           />
-        </Box>
+        </Row>
       </Box>
-    </Box>
+    </Column>
   );
 };
 
