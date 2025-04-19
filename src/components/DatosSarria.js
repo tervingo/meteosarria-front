@@ -7,6 +7,8 @@ import WindDirectionIndicator from '../WindDirectionIndicator';
 import GetWindDir from '../GetWindDir';
 import Rain from '../Rain';
 import GetTempColour from '../GetTempColour';
+import { Row, Column } from './Layout';
+import TemperatureHistoryChart from '../TemperatureHistoryChart';
 
 const DatosSarria = ({ 
   weatherData, 
@@ -17,12 +19,8 @@ const DatosSarria = ({
   validTemperatures 
 }) => {
   return (
-    <Box 
-      display="flex" 
-      flexDirection="column" 
-      justifyContent="flex-start"
-      alignItems="center"
-    >
+
+    <Column justify="flex-start" align="center">
       <Typography style={styles.seccion}>
         Datos actuales en Sarrià a las {getTime(currentTime)}
       </Typography>              
@@ -31,20 +29,20 @@ const DatosSarria = ({
       <Typography style={styles.subseccion}>
         Temperatura exterior
       </Typography>              
-      <Box display="flex" flexDirection="column" alignItems="flex-start">
+      <Column justify="flex-start" align="flex-start">
         <Typography style={{
           ...styles.maxTemp,
           color: (weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) ? 
             GetTempColour(weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp) : 
             'Gray'
         }}>
-          <Box display="flex" flexDirection="row" alignItems="flex-start">
+          <Row justify="flex-start" align="flex-start">
             <Typography style={styles.maxminTempLabel}>
               Tmax hoy 
               ({validTemperatures.maxTempTime ? validTemperatures.maxTempTime.split(' ')[1] : '--'})                      
             </Typography>
-          </Box>
-          <Box display="flex" flexDirection="row" alignItems="flex-end">
+          </Row>
+          <Row align="flex-end">
             {weatherData.max_temperature <= 45 ? weatherData.max_temperature : validTemperatures.maxTemp?.toFixed(1) || '--'}°
             {weatherData.icon && (
               <img 
@@ -56,17 +54,17 @@ const DatosSarria = ({
             <Typography style={styles.description}>
               {weatherData.description}
             </Typography>
-          </Box>
+          </Row>
         </Typography>
 
-        <Box display="flex" flexDirection="row" alignItems="center">
+        <Row justify="flex-start" align="center">
           <Typography style={styles.temperature}>
             {weatherData.external_temperature.toFixed(1)}°
           </Typography>
           <ShowTempDiffs />
-        </Box>
+        </Row>
 
-        <Box display="flex" flexDirection="row" alignItems="center">
+        <Row justify="flex-start" align="center">
           <Typography style={{
             ...styles.minTemp,
             color: (weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp) ? 
@@ -75,13 +73,13 @@ const DatosSarria = ({
           }}>
             {weatherData.min_temperature <= 45 ? weatherData.min_temperature : validTemperatures.minTemp?.toFixed(1) || '--'}°
           </Typography>
-        </Box>
+        </Row>
 
         <Typography style={styles.maxminTempLabel}>
           Tmin hoy
           ({validTemperatures.minTempTime ? validTemperatures.minTempTime.split(' ')[1] : '--'})
         </Typography>
-      </Box>
+      </Column>
 
       {/* Humedad, Presión y radiación  */}                 
       <Box 
@@ -93,10 +91,8 @@ const DatosSarria = ({
         width="100%"
       >
         {/* Humedad  */}
-        <Box 
-          display="flex" 
-          flexDirection="column" 
-          alignItems="center"
+        <Column 
+          align="center"
           width={isMobile ? "100%" : "auto"}
           sx={{ 
             gridArea: '2I', 
@@ -108,19 +104,17 @@ const DatosSarria = ({
           <Typography style={styles.subseccion}>
             Humedad
           </Typography>              
-          <Box display="flex" alignItems="center">
+          <Row justify="flex-start" align="center">
             <Typography style={styles.datosHumedad}>
               {weatherData.humidity}%
             </Typography>
             <ShowHumTrends />
-          </Box>
-        </Box>
+          </Row>
+        </Column>
 
         {/* Presión */}
-        <Box 
-          display="flex" 
-          flexDirection="column" 
-          alignItems="center"
+        <Column 
+          align="center"
           width={isMobile ? "100%" : "auto"}
           sx={{ 
             gridArea: '2C', 
@@ -132,19 +126,17 @@ const DatosSarria = ({
           <Typography style={styles.subseccion}>
             Presión
           </Typography>              
-          <Box display="flex" alignItems="center">
+          <Row justify="flex-start" align="center">
             <Typography style={styles.datosPresion}>
               {weatherData.pressure} hPa
             </Typography>
             <ShowPressTrend />
-          </Box>
-        </Box>
+          </Row>
+        </Column>
 
         {/* Radiación */}
-        <Box 
-          display="flex" 
-          flexDirection="column" 
-          alignItems="center"
+        <Column 
+          align="center"
           width={isMobile ? "100%" : "auto"}
           sx={{ 
             gridArea: '2D', 
@@ -159,7 +151,7 @@ const DatosSarria = ({
           <Typography style={styles.datosRadiacion}>
             {weatherData.solar_radiation} W/m²
           </Typography>
-        </Box>
+        </Column>
       </Box>
 
       {/* Temperatura interior, Viento y Lluvia */}
@@ -177,10 +169,8 @@ const DatosSarria = ({
         }}
       >
         {/* Temperatura interior */}
-        <Box 
-          display="flex" 
-          flexDirection="column" 
-          alignItems="center"
+        <Column 
+          align="center"
           width={isMobile ? "100%" : "auto"}
         >
           <Typography style={styles.subseccion}>
@@ -189,13 +179,11 @@ const DatosSarria = ({
           <Typography style={{...styles.tempInt, marginRight: 0}}>
             {weatherData.internal_temperature.toFixed(1)}°
           </Typography>
-        </Box>
+        </Column>
 
         {/* Viento */}
-        <Box 
-          display="flex" 
-          flexDirection="column" 
-          alignItems="center"
+        <Column 
+          align="center"
           width={isMobile ? "100%" : "auto"}
           sx={{ 
             borderTop: isMobile ? '1px solid darkgrey' : 'none',
@@ -211,13 +199,11 @@ const DatosSarria = ({
             rose={GetWindDir(weatherData.wind_direction)}
             size={isMobile ? 'small' : 'normal'}
           />
-        </Box>
+        </Column>
 
         {/* Lluvia */}
-        <Box 
-          display="flex" 
-          flexDirection="column" 
-          alignItems="center"
+        <Column 
+          align="center"
           width={isMobile ? "100%" : "auto"}
           sx={{ 
             borderTop: isMobile ? '1px solid darkgrey' : 'none',
@@ -231,23 +217,16 @@ const DatosSarria = ({
             rainRate={weatherData.current_rain_rate}
             totalRain={weatherData.total_rain}
           />
-        </Box>
+        </Column>
       </Box>
 
       {/* Predicción */}
-      <Box sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
+      <Column justify="center" align="center" sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
         <Typography style={{...styles.seccion, marginTop: '20px'}}>
           Predicción (Sarrià)
         </Typography>
 
-        <Box 
-          width="100%" 
-          display="flex"
-          flexDirection="column"
-          justifyContent="center" 
-          alignItems="center" 
-          marginTop="30px"
-        >
+        <Column justify="center" align="center" sx={{ marginTop: '30px'}}>
           <iframe 
             width={isMobile ? "100%" : "500"} 
             height="187" 
@@ -255,10 +234,18 @@ const DatosSarria = ({
             frameborder="0"
             title="Predicción Barcelona"
           /> 
-        </Box>    
-      </Box>      
+        </Column>    
+      </Column>
 
-    </Box>
+      {/* Histórico de temperaturas  */}
+      <Column justify="center" align="center" sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
+        <Typography style={{...styles.seccion, marginTop: '20px'}}>
+          Histórico de temperaturas
+        </Typography>
+        <TemperatureHistoryChart />
+      </Column>
+
+    </Column>
   );
 };
 
