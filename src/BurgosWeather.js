@@ -142,7 +142,7 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
                   label="Total año"
                   value={weatherData.total_rain}
                   maxValue={1000}
-                  barWidth={16}
+                  barWidth={12}
                   isLoading={!weatherData}
                 />
               </Row>
