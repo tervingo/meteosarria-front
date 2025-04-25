@@ -33,7 +33,6 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
       </Typography>              
 
       {/* Webcam Catedral de Burgos */}
-
       <Box sx={{ width: '500px', height: '280px' }}>
         <a
           name="windy-webcam-timelapse-player"
@@ -63,12 +62,12 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
           Predicción (Burgos)
         </Typography>
 
-          <Row width="100%" align="center" justify="center" marginTop="30px">
+        <Row width="100%" align="center" justify="center" marginTop="30px">
           <iframe 
             width="500" 
             height="187" 
             src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h" 
-            frameborder="0"
+            frameBorder="0"
             title="Predicción Burgos"
           />
         </Row>

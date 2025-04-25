@@ -1,4 +1,7 @@
-export const BACKEND_URI = "https://meteosarria-back-docker.onrender.com";
+
+export const BACKEND_URI = "https://meteosarria-back.onrender.com";
+//export const BACKEND_URI = "http://localhost:5000";
+
 
 export const RAIN_2025_CANBRUIXA = 135.4;
 
