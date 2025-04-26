@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import BurgosWeather from '../BurgosWeather';
 import { Row, Column } from '../components/Layout';
 
 const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
+  const webcamRef = useRef(null);
+
+  useEffect(() => {
+    // Cargar el script de Windy solo una vez
+    const script = document.createElement('script');
+    script.src = 'https://webcams.windy.com/webcams/public/embed/v2/script/player.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Limpiar el script cuando el componente se desmonte
+      document.body.removeChild(script);
+    };
+  }, []);
+
   if (!burgosWeather) {
     return (
       <Column width="100%" align="center" justify="flex-start">
@@ -33,7 +48,7 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
       </Typography>              
 
       {/* Webcam Catedral de Burgos */}
-      <Box sx={{ width: '500px', height: '280px' }}>
+      <Box sx={{ width: '500px', height: '280px' }} ref={webcamRef}>
         <a
           name="windy-webcam-timelapse-player"
           data-id="1735243432"
@@ -48,7 +63,6 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
         >
           Burgos: Burgos Catedral
         </a>
-        <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
       </Box>
 
       <Typography style={{ ...styles.enlace, marginTop: '-1px' }}>
