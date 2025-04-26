@@ -5,6 +5,7 @@ import IntTemperatureChart from '../IntTemperatureChart';
 import PressChart from '../PressChart';
 import HumChart from '../HumChart';
 import RadChart from '../RadChart';
+import { Column, Row } from './Layout';
 
 const Graficas = ({ 
   styles, 
@@ -14,11 +15,9 @@ const Graficas = ({
   handleTimeRangeChange 
 }) => {
   return (
-    <Box 
-      display="flex" 
-      flexDirection="column" 
-      alignItems="center"
-      justifyContent="flex-start"
+    <Column
+      align="center"
+      justify="flex-start"
       sx={{
         width: '100%',
         '& > *': {
@@ -29,9 +28,8 @@ const Graficas = ({
       <Typography style={styles.seccion}>
         Gráficas (Sarrià)
       </Typography>
-      <Box 
-        display="flex" 
-        justifyContent="flex-start" 
+      <Row
+        justify="flex-start" 
         gap={isTablet ? 3 : 6} 
         mt={4} 
         p={1} 
@@ -73,7 +71,7 @@ const Graficas = ({
             7d
           </Typography>
         </label>
-      </Box>
+      </Row>
 
       <Box sx={{ width: '100%', height: isTablet ? '200px' : '320px' }}>
         <Typography style={styles.subseccion}>
@@ -109,7 +107,7 @@ const Graficas = ({
         </Typography>
         <IntTemperatureChart timeRange={timeRange} isTablet={isTablet} />
       </Box>
-    </Box>
+    </Column>
   );
 };
 

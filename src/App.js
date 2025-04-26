@@ -51,6 +51,7 @@ function AppContent() {
       try {
         const response = await axios.get(BACKEND_URI + '/api/live');
         setWeatherData(response.data);
+        console.log('weatherData Sarrià Meteohub: ', response.data);
         setError(null);
       } catch (error) {
         console.error("Error fetching weather data:", error);
