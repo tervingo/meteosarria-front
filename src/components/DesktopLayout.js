@@ -66,7 +66,7 @@ const DesktopLayout = ({
         {loading && <Typography>Loading weather data...</Typography>}
         {error && <Typography color="error">{error}</Typography>}
         <Typography variant="h6" style={styles.dateTime}>
-          {getDate(currentTime)}
+          {getDate(currentTime)} - {getTime(currentTime)}
         </Typography>
         {weatherData && (
           <Box className="weather-container">

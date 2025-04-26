@@ -6,8 +6,8 @@ export const createStyles = (isMobile, isTablet, weatherData, GetTempColour, Get
     marginRight: isMobile ? '0' : '30px'
   },
   dateTime: {
-    fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '2.5rem',
-    color: 'azure'
+    fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '3rem',
+    color: 'gold'
   },
   location: {
     fontSize: isMobile ? '0.8rem' : '1rem',
