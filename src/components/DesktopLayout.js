@@ -1,4 +1,4 @@
-import { Typography, Container, Box, Card, CardMedia } from '@mui/material';
+import { Typography, Container, Box, Card, CardMedia, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import Menu from '../Menu';
 import DatosBurgos from './DatosBurgos';
@@ -7,6 +7,8 @@ import Graficas from './Graficas';
 import Modelos from './Modelos';
 import Radar from './Radar';
 import TemperatureBackground from '../TemperatureBackground';
+import GetTempColour from '../GetTempColour';
+import { SHOW_COLOUR_BAR } from '../constants';
 
 const DesktopLayout = ({
   weatherData,
@@ -157,6 +159,56 @@ const DesktopLayout = ({
                   isTablet={isTablet}
                 />
               </Box>
+
+              <Box sx={{ 
+                gridArea: '2D', 
+                border: '1px solid darkgrey',
+                overflowX: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 2
+              }}>
+                {SHOW_COLOUR_BAR && (
+                  <TableContainer 
+                    component={Paper} 
+                    sx={{ 
+                      width: '100%',
+                      '& .MuiTable-root': {
+                        width: '100%'
+                      }
+                    }}
+                  >
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          {Array.from({ length: 10 }, (_, i) => {
+                            const temp = -7 + (i * 5);
+                            return (
+                              <TableCell 
+                                key={i}
+                                sx={{ 
+                                  textAlign: 'center',
+                                  padding: 1,
+                                  backgroundColor: GetTempColour(temp),
+                                  color: 'white',
+                                  fontWeight: 'bold',
+                                  fontSize: '1rem',
+                                  width: '10%'
+                                }}
+                              >
+                                {temp}°C
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+              </Box>
+
             </Box>
           </Box>
         )}

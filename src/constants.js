@@ -34,3 +34,5 @@ export const MIN_TIME_X = "88%";
 export const MIN_TIME_Y = "10%";
 export const MIN_TIME_HIS_X = "79%";
 export const MIN_TIME_HIS_Y = "16%";
+
+export const SHOW_COLOUR_BAR = false;

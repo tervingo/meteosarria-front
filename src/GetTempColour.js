@@ -9,7 +9,7 @@ const GetTempColour = (temperature) => {
   } else if (temperature >= 5 && temperature < 10) {
     color = 'DodgerBlue';
   } else if (temperature >= 10 && temperature < 15) {
-    color = 'DeepSkyBlue';
+    color = 'Aqua';
   } else if (temperature >= 15 && temperature < 20) {
     color = 'YellowGreen';
   } else if (temperature >= 20 && temperature < 25) {
