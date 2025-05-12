@@ -16,12 +16,15 @@ import { useMediaQuery } from '@mui/material';
 import { BACKEND_URI, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
 import GetTempColour from './GetTempColour';
 
-const TemperatureChart = ({ timeRange }) => {
+const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsTablet }) => {
   const [data, setData] = useState([]);
   const { setValidTemperatures } = useTemperature();
   
-  const isMobile = useMediaQuery('(max-width:600px)');
-  const isTablet = useMediaQuery('(min-width:601px) and (max-width:960px)');
+  const isMobileHook = useMediaQuery('(max-width:600px)');
+  const isTabletHook = useMediaQuery('(min-width:601px) and (max-width:960px)');
+
+  const isMobile = typeof propIsMobile === 'boolean' ? propIsMobile : isMobileHook;
+  const isTablet = typeof propIsTablet === 'boolean' ? propIsTablet : isTabletHook;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -153,7 +156,7 @@ const TemperatureChart = ({ timeRange }) => {
 
     const getMargin = () => ({
       top: isMobile ? 10 : 10,
-      right: isMobile ? 80 : isTablet ? 60 : 30,
+      right: isMobile ? 5 : isTablet ? 60 : 30,
       left: isMobile ? 5 : isTablet ? 60 : 20,
       bottom: isMobile ? 60 : 20,
     });
@@ -269,11 +272,13 @@ const TemperatureChart = ({ timeRange }) => {
             }}
             labelStyle={{ color: 'silver' }}
           />
-          <Legend 
-            verticalAlign="top" 
-            height={36}
-            wrapperStyle={{ fontSize: getFontSize() }}
-          />
+          {!isMobile && (
+            <Legend 
+              verticalAlign="top" 
+              height={36}
+              wrapperStyle={{ fontSize: getFontSize() }}
+            />
+          )}
           <Line
             type="monotone"
             dataKey="external_temperature"
@@ -291,9 +296,7 @@ const TemperatureChart = ({ timeRange }) => {
   return (
     <div
       style={{
-        // width: isMobile ? WIDTH_MOBILE : isTablet ? WIDTH_TABLET : WIDTH_PC,
         width: '100%',
-        // height: isMobile ? HEIGHT_MOBILE : isTablet ? HEIGHT_TABLET : HEIGHT_PC,
         height: '100%',
         maxWidth: '1200px',
         margin: '0 auto',

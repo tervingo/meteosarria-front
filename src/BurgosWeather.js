@@ -100,6 +100,19 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
               </Row>
             </Column>
 
+            {/* Nubes */}
+            <Column align="center" width={isMobile ? "100%" : "auto"}>
+              <Typography style={styles.subseccion}>
+                Nubosidad
+              </Typography>              
+              <Row align="center" justify="center" gap={2}>
+                <Typography style={styles.datosNubes}>
+                  {weatherData.clouds} %
+                </Typography>
+              </Row>
+            </Column>
+
+
             {/* Icono y descripción */}
             <Column align="center" justify="center">
               {weatherData.icon && (

@@ -49,6 +49,10 @@ export const createStyles = (isMobile, isTablet, weatherData, GetTempColour, Get
     fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
     color: 'orangeRed'
   },
+  datosNubes: {
+    fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
+    color: 'silver'
+  },
   datosRadiacion: {
     fontSize: isMobile ? '2rem' : isTablet ? '2rem' : '2rem',
     color: 'gold'

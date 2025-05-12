@@ -4,7 +4,7 @@ import axios from 'axios';
 import { BACKEND_URI } from './constants';
 import RainBar from './components/Rainbar';
 
-const Rain = () => {
+const Rain = ({totalRain}) => {
   const [fabraData, setFabraData] = useState(null);
   const [error, setError] = useState(null);
 //  const totalAnnualRain = totalRain + RAIN_2025_CANBRUIXA;
@@ -75,6 +75,7 @@ const Rain = () => {
           <RainBar
             label="Hoy"
             value={fabraData?.today_rain}
+            // value={totalRain}
             maxValue={maxTodayRain}
             barWidth={12}
             isLoading={!fabraData}

@@ -73,39 +73,39 @@ const Graficas = ({
         </label>
       </Row>
 
-      <Box sx={{ width: '100%', height: isTablet ? '200px' : '320px' }}>
+      <Box sx={{ width: '100%', height: isMobile ? '200px' : isTablet ? '200px' : '320px' }}>
         <Typography style={styles.subseccion}>
           Temperatura exterior
         </Typography>
-        <TemperatureChart timeRange={timeRange} isTablet={isTablet} />
+        <TemperatureChart timeRange={timeRange} isTablet={isTablet} isMobile={isMobile} />
       </Box>
 
-      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+      <Box sx={{ width: '100%', height: isMobile ? '180px' : isTablet ? '180px' : '320px' }}>
         <Typography style={styles.subseccion}>
           Humedad
         </Typography>
-        <HumChart timeRange={timeRange} isTablet={isTablet} />
+        <HumChart timeRange={timeRange} isTablet={isTablet} isMobile={isMobile} />
       </Box>
 
-      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+      <Box sx={{ width: '100%', height: isMobile ? '180px' : isTablet ? '180px' : '320px' }}>
         <Typography style={styles.subseccion}>
           Presión
         </Typography>
-        <PressChart timeRange={timeRange} isTablet={isTablet} />
+        <PressChart timeRange={timeRange} isTablet={isTablet} isMobile={isMobile} />
       </Box>
 
-      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+      <Box sx={{ width: '100%', height: isMobile ? '180px' : isTablet ? '180px' : '320px' }}>
         <Typography style={styles.subseccion}>
           Radiación
         </Typography>
-        <RadChart timeRange={timeRange} isTablet={isTablet} />
+        <RadChart timeRange={timeRange} isTablet={isTablet} isMobile={isMobile} />
       </Box>
 
-      <Box sx={{ width: '100%', height: isTablet ? '180px' : '320px' }}>
+      <Box sx={{ width: '100%', height: isMobile ? '180px' : isTablet ? '180px' : '320px' }}>
         <Typography style={styles.subseccion}>
           Temperatura interior
         </Typography>
-        <IntTemperatureChart timeRange={timeRange} isTablet={isTablet} />
+        <IntTemperatureChart timeRange={timeRange} isTablet={isTablet} isMobile={isMobile} />
       </Box>
     </Column>
   );
