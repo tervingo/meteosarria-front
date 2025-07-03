@@ -1,5 +1,6 @@
 import { Typography, Container, Box, Card, CardMedia, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
+import { Link } from 'react-router-dom'; // Agregar este import
 import Menu from '../Menu';
 import DatosBurgos from './DatosBurgos';
 import DatosSarria from './DatosSarria';
@@ -62,7 +63,38 @@ const DesktopLayout = ({
         </Box>
       </Box>
 
-      <Menu items={menuItems} />
+      {/* Menú con enlace a estadísticas agregado */}
+      <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+        <Menu items={menuItems} />
+        
+        {/* Enlace a Estadísticas a la derecha del menú */}
+        <Link 
+          to="/estadisticas"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90', // Verde claro como los otros enlaces del menú
+            fontSize: '1rem',
+            fontWeight: '500',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            transition: 'background-color 0.2s, transform 0.2s',
+            marginLeft: '20px'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = 'rgba(144, 238, 144, 0.1)';
+            e.target.style.transform = 'translateY(-1px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = 'transparent';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          <span style={{ fontSize: '1.2rem', marginRight: '6px' }}>📊</span>
+          Estadísticas
+        </Link>
+      </Box>
 
       <Box className="weather-data" mt={3}>
         {loading && <Typography>Loading weather data...</Typography>}
@@ -82,7 +114,7 @@ const DesktopLayout = ({
                   "2I 2C 2D"
                 `,
                 '& > *': {
-                  minWidth: 0, // Previene que los elementos se desborden
+                  minWidth: 0,
                   width: '100%'
                 }
               }}
@@ -239,4 +271,4 @@ const DesktopLayout = ({
   );
 };
 
-export default DesktopLayout; 
+export default DesktopLayout;

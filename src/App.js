@@ -3,8 +3,8 @@ import axios from 'axios';
 import './App.css';
 import { useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Helmet } from 'react-helmet'; // Importar React Helmet
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Asegurar que Link esté importado
+import { Helmet } from 'react-helmet';
 import GetTempColour from './GetTempColour';
 import { BACKEND_URI } from './constants';
 import GetHumColor from './GetHumColor';
@@ -12,6 +12,7 @@ import { TemperatureProvider, useTemperature } from './TemperatureContext';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import CookieConsent from './components/CookieConsent';
 import CookiePolicy from './pages/CookiePolicy';
+import Dashboard from './Dashboard';
 import { createStyles } from './styles';
 import DesktopLayout from './components/DesktopLayout';
 import MobileLayout from './components/MobileLayout';
@@ -28,6 +29,42 @@ const theme = createTheme({
     },
   },
 });
+
+// Componente del icono Dashboard
+const DashboardIcon = ({ style = {} }) => (
+  <Link 
+    to="/estadisticas" 
+    title="Ver estadísticas históricas"
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '40px',
+      height: '40px',
+      background: 'rgba(255, 255, 255, 0.2)',
+      borderRadius: '50%',
+      textDecoration: 'none',
+      fontSize: '1.2rem',
+      color: 'white',
+      transition: 'background 0.2s',
+      margin: '0 5px',
+      ...style
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+    }}
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
+      <rect x="3" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="14" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/>
+    </svg>
+  </Link>
+);
 
 function AppContent() {
   const [weatherData, setWeatherData] = useState(null);
@@ -132,20 +169,19 @@ function AppContent() {
     getDate,
     getTime,
     validTemperatures,
-    isTablet
+    isTablet,
+    // Agregar el icono del dashboard a las props
+    dashboardIcon: <DashboardIcon />
   };
 
   return (
     <ThemeProvider theme={theme}>
-      {/* Agregar Helmet para la ruta principal */}
       <Helmet>
-        {/* <link rel="icon" href="/nubes.ico" /> */}
         <link rel="icon" type="image/x-icon" href={`${process.env.PUBLIC_URL}/nubes.ico`} />
         <link rel="apple-touch-icon" href="/nubes.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/nubes-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/nubes-180x180.png" />
         <link rel="apple-touch-icon" sizes="167x167" href="/nubes-167x167.png" />
-        {/* <link rel="manifest" href="/manifest.json" /> */}
         <meta name="apple-mobile-web-app-title" content="Meteosarria" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -237,7 +273,6 @@ function BcnBurContent() {
         <link rel="apple-touch-icon" sizes="152x152" href="/paramo.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/paramo.png" />
         <link rel="apple-touch-icon" sizes="167x167" href="/paramo.png" />
-        {/* <link rel="manifest" href="/bcnbur-manifest.json" /> */}
         <meta name="apple-mobile-web-app-title" content="MeteoBcnBur" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -264,6 +299,7 @@ function App() {
         <GoogleAnalytics />
         <Routes>
           <Route path="/politica-cookies" element={<CookiePolicy />} />
+          <Route path="/estadisticas" element={<Dashboard />} /> {/* Nueva ruta */}
           <Route path="/bcnbur" element={<BcnBurContent />} />
           <Route path="/" element={<AppContent />} />
         </Routes>
