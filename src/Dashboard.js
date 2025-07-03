@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
@@ -18,16 +18,12 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, [selectedYear]);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
       
       // Llamadas separadas: datos actuales + datos históricos
-      const [liveDataResponse, ...dashboardResponses] = await Promise.all([
+      const [...dashboardResponses] = await Promise.all([
         axios.get(BACKEND_URI + '/api/live'),  // Datos actuales
         axios.get(BACKEND_URI + '/api/dashboard/records'),
         axios.get(BACKEND_URI + '/api/dashboard/tendencia-anual'),
@@ -36,33 +32,41 @@ const Dashboard = () => {
         axios.get(BACKEND_URI + '/api/dashboard/estadisticas')
       ]);
   
-      const liveData = liveDataResponse.data;
-      const resumenData = dashboardResponses[0].data;
-  
-      // Combinar datos actuales con resumen histórico
-      const resumenCompleto = {
-        ...resumenData,
-        temperatura_actual: liveData.external_temperature,
-        humedad_actual: liveData.humidity,
-        timestamp_actual: liveData.timestamp
-      };
-  
+      // Debug: Log responses
+      console.log('Dashboard responses:', {
+        records: dashboardResponses[1]?.data,
+        tendenciaAnual: dashboardResponses[2]?.data,
+        comparativaAño: dashboardResponses[3]?.data,
+        heatmap: dashboardResponses[4]?.data,
+        estadisticas: dashboardResponses[5]?.data
+      });
+ 
       setDashboardData({
-        records: dashboardResponses[0].data,
-        tendenciaAnual: dashboardResponses[1].data,
-        comparativaAño: dashboardResponses[2].data,
-        heatmap: dashboardResponses[3].data,
-        estadisticas: dashboardResponses[4].data
+        records: dashboardResponses[1].data,
+        tendenciaAnual: dashboardResponses[2].data,
+        comparativaAño: dashboardResponses[3].data,
+        heatmap: dashboardResponses[4].data,
+        estadisticas: dashboardResponses[5].data
       });
   
       setError(null);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
       setError('Error cargando datos del dashboard');
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedYear]); // selectedYear como dependencia
+  
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
 
   const formatTemperature = (temp) => {
     return temp !== null ? `${temp}°C` : 'N/A';
@@ -158,7 +162,7 @@ const Dashboard = () => {
     );
   }
 
-  const { records, tendenciaAnual, comparativaAño, heatmap, estadisticas } = dashboardData;
+  const { records, tendenciaAnual, comparativaAño, heatmap, estadisticas } = dashboardData || {};
 
   return (
     <div className="dashboard-container">
@@ -227,11 +231,11 @@ const Dashboard = () => {
               </p>
             </div>
             <ResponsiveContainer width="100%" height={400}>
-              <AreaChart data={tendenciaAnual.años.map((año, idx) => ({
+              <AreaChart data={(tendenciaAnual?.años || []).map((año, idx) => ({
                 año,
-                media: tendenciaAnual.temperaturas_medias[idx],
-                maxima: tendenciaAnual.temperaturas_maximas[idx],
-                minima: tendenciaAnual.temperaturas_minimas[idx]
+                media: tendenciaAnual?.temperaturas_medias?.[idx],
+                maxima: tendenciaAnual?.temperaturas_maximas?.[idx],
+                minima: tendenciaAnual?.temperaturas_minimas?.[idx]
               }))}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="año" />
@@ -260,7 +264,7 @@ const Dashboard = () => {
             value={selectedYear} 
             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
           >
-            {Array.from({length: new Date().getFullYear() - 2009 + 1}, (_, i) => 2009 + i)
+            {Array.from({length: Math.max(0, new Date().getFullYear() - 2009 + 1)}, (_, i) => 2009 + i)
               .reverse()
               .map(year => (
                 <option key={year} value={year}>{year}</option>
@@ -269,13 +273,13 @@ const Dashboard = () => {
         </div>
         
         {comparativaAño && (
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={comparativaAño.meses.map((mes, idx) => ({
-              mes,
-              actual: comparativaAño.año_actual[idx],
-              historico: comparativaAño.promedio_historico[idx],
-              diferencia: comparativaAño.diferencias[idx]
-            }))}>
+                      <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={(comparativaAño?.meses || []).map((mes, idx) => ({
+                mes,
+                actual: comparativaAño?.año_actual?.[idx],
+                historico: comparativaAño?.promedio_historico?.[idx],
+                diferencia: comparativaAño?.diferencias?.[idx]
+              }))}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="mes" />
               <YAxis label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }} />
@@ -295,28 +299,28 @@ const Dashboard = () => {
       {/* Mapa de Calor */}
       <section className="dashboard-section">
         <h2>🗓️ Mapa de Calor Mensual (Últimos 6 años)</h2>
-        {heatmap && heatmap.data && (
+        {heatmap && (
           <div className="heatmap-container">
             <div className="heatmap-grid">
               <div className="heatmap-header">
                 <div></div>
-                {['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'].map(mes => (
+                {(['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'] || []).map(mes => (
                   <div key={mes} className="month-label">{mes}</div>
                 ))}
               </div>
-              {heatmap.años.map(año => (
+              {(heatmap?.años || []).map(año => (
                 <div key={año} className="heatmap-row">
                   <div className="year-label">{año}</div>
                   {Array.from({length: 12}, (_, mes) => {
-                    const data = heatmap.data.find(d => d.año === año && d.mes === mes + 1);
+                    const data = heatmap?.data?.find(d => d.año === año && d.mes === mes + 1);
                     return (
                       <HeatmapCell
                         key={`${año}-${mes}`}
                         year={año}
                         month={mes + 1}
                         temp={data?.temperatura}
-                        minTemp={heatmap.rango_temperaturas.min}
-                        maxTemp={heatmap.rango_temperaturas.max}
+                        minTemp={heatmap?.rango_temperaturas?.min}
+                        maxTemp={heatmap?.rango_temperaturas?.max}
                       />
                     );
                   })}
@@ -335,36 +339,36 @@ const Dashboard = () => {
       {/* Estadísticas Destacadas */}
       <section className="dashboard-section">
       <h2>🏆 Estadísticas del Mes</h2>
-      {estadisticas && (
+      {estadisticas && estadisticas.mes_pasado && estadisticas.rachas && (
         <div className="stats-grid">
           <div className="stat-group">
-            <h3>{estadisticas.mes_pasado.nombre_mes} {estadisticas.mes_pasado.año}</h3>
+            <h3>{estadisticas.mes_pasado?.nombre_mes || 'N/A'} {estadisticas.mes_pasado?.año || 'N/A'}</h3>
             <div className="stat-items">
               <div className="stat-item">
-                <span className="stat-label">Días >25°C:</span>
-                <span className="stat-value">{estadisticas.mes_pasado.dias_calor_25}</span>
+                <span className="stat-label">Días {'>'}25°C:</span>
+                <span className="stat-value">{estadisticas.mes_pasado?.dias_calor_25 || 'N/A'}</span>
               </div>
               <div className="stat-item">
-                <span className="stat-label">Días >30°C:</span>
-                <span className="stat-value">{estadisticas.mes_pasado.dias_calor_30}</span>
+                <span className="stat-label">Días {'>'}30°C:</span>
+                <span className="stat-value">{estadisticas.mes_pasado?.dias_calor_30 || 'N/A'}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Días helada:</span>
-                <span className="stat-value">{estadisticas.mes_pasado.dias_helada}</span>
+                <span className="stat-value">{estadisticas.mes_pasado?.dias_helada || 'N/A'}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Temp. media:</span>
-                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado.temperatura_media)}</span>
+                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado?.temperatura_media)}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Temp. máxima:</span>
-                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado.temperatura_maxima)}</span>
+                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado?.temperatura_maxima)}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Temp. mínima:</span>
-                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado.temperatura_minima)}</span>
+                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado?.temperatura_minima)}</span>
               </div>
-              {estadisticas.mes_pasado.record_mes && (
+              {estadisticas.mes_pasado?.record_mes && (
                 <div className="stat-item record">
                   <span className="stat-label">🏆 Récord mensual!</span>
                 </div>
@@ -377,11 +381,11 @@ const Dashboard = () => {
             <div className="stat-items">
               <div className="stat-item">
                 <span className="stat-label">Sin heladas:</span>
-                <span className="stat-value">{estadisticas.rachas.sin_heladas} días</span>
+                <span className="stat-value">{estadisticas.rachas?.sin_heladas || 'N/A'} días</span>
               </div>
               <div className="stat-item">
-                <span className="stat-label">Días >20°C:</span>
-                <span className="stat-value">{estadisticas.rachas.dias_sobre_20} días</span>
+                <span className="stat-label">Días {'>'}20°C:</span>
+                <span className="stat-value">{estadisticas.rachas?.dias_sobre_20 || 'N/A'} días</span>
               </div>
             </div>
           </div>
