@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 1-12
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -29,7 +30,7 @@ const Dashboard = () => {
         axios.get(BACKEND_URI + '/api/dashboard/tendencia-anual'),
         axios.get(BACKEND_URI + `/api/dashboard/comparativa-año/${selectedYear}`),
         axios.get(BACKEND_URI + '/api/dashboard/heatmap'),
-        axios.get(BACKEND_URI + '/api/dashboard/estadisticas')
+        axios.get(BACKEND_URI + `/api/dashboard/estadisticas/${selectedYear}/${selectedMonth}`)
       ]);
   
       // Debug: Log responses
@@ -61,7 +62,7 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [selectedYear]); // selectedYear como dependencia
+  }, [selectedYear, selectedMonth]); // selectedYear y selectedMonth como dependencias
   
   useEffect(() => {
     fetchDashboardData();
@@ -100,6 +101,11 @@ const Dashboard = () => {
       default: return '➡️';
     }
   };
+
+  const monthNames = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
 
   const MetricCard = ({ title, value, subtitle, icon, color = '#2563eb' }) => (
     <div className="metric-card">
@@ -175,7 +181,7 @@ const Dashboard = () => {
       <header className="dashboard-header">
         <Link to="/" className="back-link">← Volver</Link>
         <div className="header-content">
-          <h1>📊 Estadísticas Históricas</h1>
+          <h1>📊 Estadísticas Históricas  (en construcción)</h1>
           <p>Datos meteorológicos de Sarria • 2009-{new Date().getFullYear()}</p>
         </div>
       </header>
@@ -338,37 +344,89 @@ const Dashboard = () => {
 
       {/* Estadísticas Destacadas */}
       <section className="dashboard-section">
-      <h2>🏆 Estadísticas del Mes</h2>
-      {estadisticas && estadisticas.mes_pasado && estadisticas.rachas && (
+        <h2>🏆 Estadísticas del Mes</h2>
+        
+        {/* Selectores de año y mes */}
+        <div className="month-selector" style={{ 
+          display: 'flex', 
+          gap: '16px', 
+          alignItems: 'center', 
+          marginBottom: '20px',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <label style={{ fontWeight: '500', color: '#374151' }}>Año:</label>
+            <select 
+              value={selectedYear} 
+              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: '1px solid #d1d5db',
+                backgroundColor: 'white',
+                fontSize: '14px',
+                minWidth: '100px'
+              }}
+            >
+              {Array.from({length: Math.max(0, new Date().getFullYear() - 2009 + 1)}, (_, i) => 2009 + i)
+                .reverse()
+                .map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+            </select>
+          </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <label style={{ fontWeight: '500', color: '#374151' }}>Mes:</label>
+            <select 
+              value={selectedMonth} 
+              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: '1px solid #d1d5db',
+                backgroundColor: 'white',
+                fontSize: '14px',
+                minWidth: '140px'
+              }}
+            >
+              {monthNames.map((month, index) => (
+                <option key={index + 1} value={index + 1}>{month}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        
+        {estadisticas && estadisticas.mes_seleccionado && estadisticas.rachas && (
         <div className="stats-grid">
           <div className="stat-group">
-            <h3>{estadisticas.mes_pasado?.nombre_mes || 'N/A'} {estadisticas.mes_pasado?.año || 'N/A'}</h3>
+            <h3>{estadisticas.mes_seleccionado?.nombre_mes || 'N/A'} {estadisticas.mes_seleccionado?.año || 'N/A'}</h3>
             <div className="stat-items">
               <div className="stat-item">
                 <span className="stat-label">Días {'>'}25°C:</span>
-                <span className="stat-value">{estadisticas.mes_pasado?.dias_calor_25 || 'N/A'}</span>
+                <span className="stat-value">{estadisticas.mes_seleccionado?.dias_calor_25 || 'N/A'}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Días {'>'}30°C:</span>
-                <span className="stat-value">{estadisticas.mes_pasado?.dias_calor_30 || 'N/A'}</span>
+                <span className="stat-value">{estadisticas.mes_seleccionado?.dias_calor_30 || 'N/A'}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Días helada:</span>
-                <span className="stat-value">{estadisticas.mes_pasado?.dias_helada || 'N/A'}</span>
+                <span className="stat-value">{estadisticas.mes_seleccionado?.dias_helada || 'N/A'}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Temp. media:</span>
-                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado?.temperatura_media)}</span>
+                <span className="stat-value">{formatTemperature(estadisticas.mes_seleccionado?.temperatura_media)}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Temp. máxima:</span>
-                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado?.temperatura_maxima)}</span>
+                <span className="stat-value">{formatTemperature(estadisticas.mes_seleccionado?.temperatura_maxima)}</span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Temp. mínima:</span>
-                <span className="stat-value">{formatTemperature(estadisticas.mes_pasado?.temperatura_minima)}</span>
+                <span className="stat-value">{formatTemperature(estadisticas.mes_seleccionado?.temperatura_minima)}</span>
               </div>
-              {estadisticas.mes_pasado?.record_mes && (
+              {estadisticas.mes_seleccionado?.record_mes && (
                 <div className="stat-item record">
                   <span className="stat-label">🏆 Récord mensual!</span>
                 </div>

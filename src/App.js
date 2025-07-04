@@ -58,10 +58,10 @@ const DashboardIcon = ({ style = {} }) => (
     }}
   >
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
-      <rect x="3" y="3" width="7" height="7" rx="1"/>
-      <rect x="14" y="3" width="7" height="7" rx="1"/>
-      <rect x="14" y="14" width="7" height="7" rx="1"/>
-      <rect x="3" y="14" width="7" height="7" rx="1"/>
+      {/* Bar chart icon */}
+      <path d="M3 3v18h18"/>
+      <path d="M7 12l3-3 3 3 5-5"/>
+      <path d="M7 9l3-3 3 3 5-5"/>
     </svg>
   </Link>
 );
