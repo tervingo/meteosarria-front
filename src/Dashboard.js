@@ -65,7 +65,7 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, []); // Sin dependencias para que solo se ejecute una vez al montar el componente
+  }, [displayYear, displayMonth]); // Agregadas las dependencias faltantes
   
   useEffect(() => {
     fetchDashboardData();
@@ -219,8 +219,6 @@ const Dashboard = () => {
 
   console.log('franjasDataMax:', franjasDataMax);
   console.log('franjasDataMin:', franjasDataMin);
-  const franjasDataMaxReversed = franjasDataMax.slice().reverse();
-  const franjasDataMinReversed = franjasDataMin.slice().reverse();
 
   return (
     <div className="dashboard-container">
