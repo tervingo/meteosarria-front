@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, Cell, LabelList } from 'recharts';
+import { Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, Cell, LabelList, LineChart, ReferenceArea, Legend } from 'recharts';
 import { BACKEND_URI } from './constants';
 import './Dashboard.css';
 
@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [displayYear, setDisplayYear] = useState(new Date().getFullYear());
   const [displayMonth, setDisplayMonth] = useState(new Date().getMonth() + 1); // 1-12
   const [loadingEstadisticas, setLoadingEstadisticas] = useState(false);
+  const [datosDiarios, setDatosDiarios] = useState(null);
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -76,12 +77,21 @@ const Dashboard = () => {
     try {
       setLoadingEstadisticas(true);
       
-      const response = await axios.get(BACKEND_URI + `/api/dashboard/estadisticas/${year}/${month}`);
+      // Cargar estadísticas y datos diarios en paralelo
+      const [estadisticasResponse, datosDiariosResponse] = await Promise.all([
+        axios.get(BACKEND_URI + `/api/dashboard/estadisticas/${year}/${month}`),
+        axios.get(BACKEND_URI + `/api/dashboard/estadisticas-datos-diarios/${year}/${month}`)
+      ]);
+      
+      console.log('Estadisticas response:', estadisticasResponse.data);
+      console.log('Datos diarios response:', datosDiariosResponse.data);
       
       setDashboardData(prev => ({
         ...prev,
-        estadisticas: response.data
+        estadisticas: estadisticasResponse.data
       }));
+      
+      setDatosDiarios(datosDiariosResponse.data);
       
     } catch (error) {
       console.error('Error fetching estadisticas:', error);
@@ -219,6 +229,8 @@ const Dashboard = () => {
 
   console.log('franjasDataMax:', franjasDataMax);
   console.log('franjasDataMin:', franjasDataMin);
+
+  console.log('datosDiarios', datosDiarios);
 
   return (
     <div className="dashboard-container">
@@ -379,6 +391,14 @@ const Dashboard = () => {
                 <span className="stat-label">Temp. media:</span>
                 <span className="stat-value">{formatTemperature(estadisticas.mes_seleccionado?.temperatura_media)}</span>
               </div>
+              <div className="stat-item">
+                <span className="stat-label">Noches tropicales (Tmin > 20º):</span>
+                <span className="stat-value">{estadisticas.mes_seleccionado?.dias_min_gte_20 || 0} días</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Noches tórridas (Tmin > 25º):</span>
+                <span className="stat-value">{estadisticas.mes_seleccionado?.dias_min_gte_25 || 0} días</span>
+              </div>
               {estadisticas.mes_seleccionado?.record_mes && (
                 <div className="stat-item record">
                   <span className="stat-label">🏆 Récord mensual!</span>
@@ -465,6 +485,102 @@ const Dashboard = () => {
               </ResponsiveContainer>
             </div>
           </div>
+          
+          {/* Gráfica de temperaturas diarias */}
+          {datosDiarios?.datos_diarios?.length > 0 && (
+            <div
+              className="stat-group"
+              style={{ gridColumn: '1 / -1', width: '100%' }}
+            >
+              <h3>Temperaturas diarias - {datosDiarios.nombre_mes} {datosDiarios.año}</h3>
+              <div className="temperature-chart-container" style={{ height: '400px', width: '100%', marginTop: '16px' }}>
+                <ResponsiveContainer width="90%" height="100%">
+                  <LineChart
+                    data={datosDiarios.datos_diarios}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  >
+                    {/* Franjas de temperatura de fondo */}
+                    {[
+                      { start: -5, end: 0, color: '#0066cc' },
+                      { start: 0, end: 5, color: '#4da6ff' },
+                      { start: 5, end: 10, color: '#66b3ff' },
+                      { start: 10, end: 15, color: '#80d0ff' },
+                      { start: 15, end: 20, color: '#ffcc66' },
+                      { start: 20, end: 25, color: '#ff9933' },
+                      { start: 25, end: 30, color: '#ff6600' },
+                      { start: 30, end: 35, color: '#ff3300' },
+                      { start: 35, end: 40, color: '#ff0000' }
+                    ].map((range) => (
+                      <ReferenceArea
+                        key={`${range.start}-${range.end}`}
+                        y1={range.start}
+                        y2={range.end}
+                        fill={range.color}
+                        fillOpacity={0.3}
+                      />
+                    ))}
+                    
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                    <XAxis 
+                      dataKey="dia" 
+                      label={{ value: 'Día del mes', position: 'insideBottom', offset: -10 }}
+                      tick={{ fontSize: 12 }}
+                      interval={0}
+                    />
+                    <YAxis 
+                      label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <Tooltip 
+                      formatter={(value, name) => [
+                        `${value}°C`, 
+                        name === 'maxima' ? 'Máxima' : name === 'minima' ? 'Mínima' : 'Media'
+                      ]}
+                      labelFormatter={(dia) => `Día ${dia}`}
+                      contentStyle={{ 
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        border: '1px solid #999',
+                        borderRadius: '2px',
+                        fontSize: '12px'
+                      }}
+                    />
+                    <Legend 
+                      verticalAlign="top" 
+                      height={36}
+                      wrapperStyle={{ fontSize: '12px' }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="maxima"
+                      name="Máxima"
+                      stroke="#ff6b6b"
+                      strokeWidth={2}
+                      dot={{ fill: '#ff6b6b', strokeWidth: 2, r: 2 }}
+                      connectNulls
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="minima"
+                      name="Mínima"
+                      stroke="#42a5f5"
+                      strokeWidth={2}
+                      dot={{ fill: '#42a5f5', strokeWidth: 2, r: 2 }}
+                      connectNulls
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="media"
+                      name="Media"
+                      stroke="#2e7d32"
+                      strokeWidth={3}
+                      dot={{ fill: '#2e7d32', strokeWidth: 2, r: 2 }}
+                      connectNulls
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </section>
