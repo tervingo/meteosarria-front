@@ -72,6 +72,20 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
+  // Cargar datos diarios del mes actual al montar el componente
+  useEffect(() => {
+    const loadInitialDatosDiarios = async () => {
+      try {
+        const response = await axios.get(BACKEND_URI + `/api/dashboard/estadisticas-datos-diarios/${displayYear}/${displayMonth}`);
+        setDatosDiarios(response.data);
+      } catch (error) {
+        console.error('Error loading initial datos diarios:', error);
+      }
+    };
+
+    loadInitialDatosDiarios();
+  }, [displayYear, displayMonth]);
+
   // Función separada para cargar solo las estadísticas del mes
   const fetchEstadisticasMes = useCallback(async (year, month) => {
     try {
@@ -391,14 +405,14 @@ const Dashboard = () => {
                 <span className="stat-label">Temp. media:</span>
                 <span className="stat-value">{formatTemperature(estadisticas.mes_seleccionado?.temperatura_media)}</span>
               </div>
-              <div className="stat-item">
-                <span className="stat-label">Noches tropicales (Tmin > 20º):</span>
-                <span className="stat-value">{estadisticas.mes_seleccionado?.dias_min_gte_20 || 0} días</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-label">Noches tórridas (Tmin > 25º):</span>
-                <span className="stat-value">{estadisticas.mes_seleccionado?.dias_min_gte_25 || 0} días</span>
-              </div>
+                              <div className="stat-item">
+                  <span className="stat-label">Noches tropicales (Tmin &gt; 20º):</span>
+                  <span className="stat-value">{estadisticas.mes_seleccionado?.dias_min_gte_20 || 0} días</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Noches tórridas (Tmin &gt; 25º):</span>
+                  <span className="stat-value">{estadisticas.mes_seleccionado?.dias_min_gte_25 || 0} días</span>
+                </div>
               {estadisticas.mes_seleccionado?.record_mes && (
                 <div className="stat-item record">
                   <span className="stat-label">🏆 Récord mensual!</span>
@@ -530,6 +544,8 @@ const Dashboard = () => {
                     <YAxis 
                       label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
                       tick={{ fontSize: 12 }}
+                      ticks={[0, 5, 10, 15, 20, 25, 30, 35, 40]}
+                      domain={[0, 40]}
                     />
                     <Tooltip 
                       formatter={(value, name) => [
