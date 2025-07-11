@@ -6,7 +6,7 @@ import ShowPressTrend from '../ShowPressTrend';
 import WindDirectionIndicator from '../WindDirectionIndicator';
 import GetWindDir from '../GetWindDir';
 import Rain from '../Rain';
-import GetTempColour from '../GetTempColour';
+import GetTempColour, { calculateHeatIndexAemet } from '../GetTempColour';
 import { Row, Column } from './Layout';
 import TemperatureHistoryChart from '../TemperatureHistoryChart';
 
@@ -75,10 +75,27 @@ const DatosSarria = ({
           </Typography>
         </Row>
 
-        <Typography style={styles.maxminTempLabel}>
-          Tmin hoy
-          ({validTemperatures.minTempTime ? validTemperatures.minTempTime.split(' ')[1] : '--'})
-        </Typography>
+        <Row justify="space-between" align="center" style={{ width: '100%' }}>
+          <Typography style={styles.maxminTempLabel}>
+            Tmin hoy
+            ({validTemperatures.minTempTime ? validTemperatures.minTempTime.split(' ')[1] : '--'})
+          </Typography>
+          
+          {/* Temperatura de sensación */}
+          {(() => {
+            const heatIndex = calculateHeatIndexAemet(weatherData.external_temperature, weatherData.humidity);
+            return heatIndex ? (
+              <Typography style={{
+                ...styles.maxminTempLabel,
+                fontSize: '1.4 rem',
+                color: '#ff6600',
+                fontWeight: '500'
+              }}>
+                Sensación: {heatIndex}°
+              </Typography>
+            ) : null;
+          })()}
+        </Row>
       </Column>
 
       {/* Humedad, Presión y radiación  */}                 
