@@ -87,7 +87,7 @@ const DatosSarria = ({
             return heatIndex ? (
               <Typography style={{
                 ...styles.maxminTempLabel,
-                fontSize: '1.4 rem',
+                fontSize: '2rem',
                 color: '#ff6600',
                 fontWeight: '500'
               }}>
