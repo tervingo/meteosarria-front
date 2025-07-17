@@ -86,7 +86,16 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
           />
         </Row>
       </Box>
+
+      <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}}>
+      <Typography style={{ ...styles.enlace, marginTop: '-1px' }}>
+        <a href="https://renuncio.com/meteo/" target="_blank" rel='noreferrer'>
+          Renuncio Meteo
+        </a>
+      </Typography>
+      </Box>
     </Column>
+ 
   );
 };
 
