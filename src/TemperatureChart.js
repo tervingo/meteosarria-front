@@ -14,7 +14,7 @@ import {
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
 import { BACKEND_URI, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
-import GetTempColour from './GetTempColour';
+import GetTempColour, { calculateHeatIndexAemet } from './GetTempColour';
 
 const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsTablet }) => {
   const [data, setData] = useState([]);
@@ -49,10 +49,15 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
             currentTemp = lastValidTemperature !== null ? lastValidTemperature : null;
           }
 
+          // Calculate heat index for this data point
+          const heatIndex = currentTemp !== null && entry.humidity && currentTemp >= 26 && entry.humidity >= 40 ? 
+            calculateHeatIndexAemet(currentTemp, entry.humidity) : null;
+
           return {
             fullTimestamp: entry.timestamp,
             dateTime: dateObj,
             external_temperature: currentTemp,
+            heat_index: heatIndex,
           };
         }).filter((item) => item.external_temperature !== null);
 
@@ -118,12 +123,18 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
 
     const absMinTemp = Math.min(...data.map((d) => d.external_temperature));
     const absMaxTemp = Math.max(...data.map((d) => d.external_temperature));
-    // Calcular límites del eje Y
-    // const minTemp = Math.floor(absMinTemp / 5) * 5 - 5; // Redondear hacia abajo al múltiplo de 5 más cercano y restar 5
-    // const maxTemp = Math.ceil(absMaxTemp / 5) * 5 + 5; // Redondear hacia arriba al múltiplo de 5 más cercano y sumar 10
-
-    const minTemp = Math.floor(absMinTemp / 5) * 5; // Redondear hacia abajo al múltiplo de 5 más cercano 
-    const maxTemp = Math.ceil(absMaxTemp / 5) * 5; // Redondear hacia arriba al múltiplo de 5 más cercano 
+    
+    // Calculate min/max for heat index to determine Y-axis range
+    const heatIndexValues = data.map(d => d.heat_index).filter(val => val !== null);
+    const absMinHeatIndex = heatIndexValues.length > 0 ? Math.min(...heatIndexValues) : absMinTemp;
+    const absMaxHeatIndex = heatIndexValues.length > 0 ? Math.max(...heatIndexValues) : absMaxTemp;
+    
+    // Use the wider range for Y-axis
+    const overallMinTemp = Math.min(absMinTemp, absMinHeatIndex);
+    const overallMaxTemp = Math.max(absMaxTemp, absMaxHeatIndex);
+    
+    const minTemp = Math.floor(overallMinTemp / 5) * 5; // Redondear hacia abajo al múltiplo de 5 más cercano 
+    const maxTemp = Math.ceil(overallMaxTemp / 5) * 5; // Redondear hacia arriba al múltiplo de 5 más cercano 
 
     
     // Generar ticks en múltiplos de 5
@@ -263,7 +274,14 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
             {`(${getFechaHora(minTempTime)})`}
           </text>
           <Tooltip 
-            formatter={(value) => [`${value.toFixed(1)}°C`, 'Temperatura']}
+            formatter={(value, name) => {
+              if (name === 'external_temperature') {
+                return [`${value.toFixed(1)}°C`, 'Temperatura'];
+              } else if (name === 'heat_index') {
+                return [`${value.toFixed(1)}°C`, 'Sensación'];
+              }
+              return [value, name];
+            }}
             contentStyle={{ 
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
               border: '1px solid #999',
@@ -288,6 +306,24 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
             dot={false}
             connectNulls
           />
+          {(() => {
+            // Check if there are enough valid heat index values to warrant showing the line
+            const validHeatIndexCount = data.filter(d => d.heat_index !== null).length;
+            const totalDataPoints = data.length;
+            const hasSignificantHeatIndex = validHeatIndexCount > 0 && (validHeatIndexCount / totalDataPoints) > 0.1; // At least 10% of points have heat index
+            
+            return hasSignificantHeatIndex ? (
+              <Line
+                type="monotone"
+                dataKey="heat_index"
+                name="Sensación"
+                stroke="#ff6600"
+                strokeWidth={2}
+                dot={false}
+                connectNulls={false}
+              />
+            ) : null;
+          })()}
         </LineChart>
       </ResponsiveContainer>
     );
