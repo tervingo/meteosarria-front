@@ -32,8 +32,8 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
   return (
     <Column width="100%" align="center" justify="flex-start">
       <Typography style={styles.seccion}>
-        Datos actuales en Burgos a las {burgosWeather.observation_time ? 
-          new Date(burgosWeather.timestamp).toLocaleTimeString('es-ES', {
+        Datos de Burgos (Villafría/AEMET) actualizados a las {burgosWeather.observation_time ? 
+          new Date(burgosWeather.observation_time).toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit'
           }) : '--:--'}
@@ -85,14 +85,6 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
             title="Predicción Burgos"
           />
         </Row>
-      </Box>
-
-      <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}}>
-      <Typography style={{ ...styles.enlace, marginTop: '-1px' }}>
-        <a href="https://renuncio.com/meteo/" target="_blank" rel='noreferrer'>
-          Renuncio Meteo
-        </a>
-      </Typography>
       </Box>
     </Column>
  
