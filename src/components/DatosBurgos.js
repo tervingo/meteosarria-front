@@ -32,14 +32,14 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
   return (
     <Column width="100%" align="center" justify="flex-start">
       <Typography style={styles.seccion}>
-        Datos actuales en Burgos a las {burgosWeather.timestamp ? 
+        Datos actuales en Burgos a las {burgosWeather.observation_time ? 
           new Date(burgosWeather.timestamp).toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit'
           }) : '--:--'}
       </Typography>  
       <Typography style={styles.openweathermap}>
-        Datos de <a href="https://openweathermap.org/" target="_blank" rel='noreferrer' style={styles.enlace}>OpenWeatherMap</a>
+        Datos de <a href="https://www.aemet.es/" target="_blank" rel='noreferrer' style={styles.enlace}>AEMET (Villafría)</a>
       </Typography>
           
       <BurgosWeather weatherData={burgosWeather} isMobile={isMobile} styles={styles}/>
