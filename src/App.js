@@ -13,6 +13,7 @@ import GoogleAnalytics from './components/GoogleAnalytics';
 import CookieConsent from './components/CookieConsent';
 import CookiePolicy from './pages/CookiePolicy';
 import Dashboard from './Dashboard';
+import BurgosStatsPage from './BurgosStatsPage';
 import { createStyles } from './styles';
 import DesktopLayout from './components/DesktopLayout';
 import MobileLayout from './components/MobileLayout';
@@ -300,6 +301,7 @@ function App() {
         <Routes>
           <Route path="/politica-cookies" element={<CookiePolicy />} />
           <Route path="/estadisticas" element={<Dashboard />} /> {/* Nueva ruta */}
+          <Route path="/estadisticas-burgos" element={<BurgosStatsPage />} /> {/* Ruta para estadísticas de Burgos */}
           <Route path="/bcnbur" element={<BcnBurContent />} />
           <Route path="/" element={<AppContent />} />
         </Routes>

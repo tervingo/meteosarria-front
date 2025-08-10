@@ -1,5 +1,6 @@
 import { Typography, Container, Box } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
+import { Link } from 'react-router-dom';
 import Menu from '../Menu';
 import DatosBurgos from './DatosBurgos';
 import DatosSarria from './DatosSarria';
@@ -38,6 +39,51 @@ const MobileLayout = ({
       </Box>
 
       <Menu items={menuItems} />
+      
+      {/* Enlaces a Estadísticas para móvil */}
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        alignItems: 'center', 
+        gap: 1,
+        mb: 2,
+        mt: 2
+      }}>
+        <Link 
+          to="/estadisticas"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            border: '1px solid #90EE90',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          📊 Estadísticas
+        </Link>
+        <Link 
+          to="/estadisticas-burgos"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            border: '1px solid #90EE90',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          📊 Estadísticas de Burgos
+        </Link>
+      </Box>
 
       <Box className="weather-data">
         {loading && <Typography>Loading weather data...</Typography>}

@@ -68,7 +68,7 @@ const DesktopLayout = ({
       <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
         <Menu items={menuItems} />
         
-        {/* Enlace a Estadísticas a la derecha del menú */}
+        {/* Enlaces a Estadísticas a la derecha del menú */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {dashboardIcon}
           <Link 
@@ -94,6 +94,30 @@ const DesktopLayout = ({
           }}
         >
           Estadísticas
+        </Link>
+        <Link 
+          to="/estadisticas-burgos"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90', // Verde claro como los otros enlaces del menú
+            fontSize: '1rem',
+            fontWeight: '500',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            transition: 'background-color 0.2s, transform 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = 'rgba(144, 238, 144, 0.1)';
+            e.target.style.transform = 'translateY(-1px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = 'transparent';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          Estadísticas de Burgos
         </Link>
         </Box>
       </Box>
