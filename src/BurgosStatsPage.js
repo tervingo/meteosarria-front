@@ -16,6 +16,7 @@ const BurgosStatsPage = () => {
     rachasCalurosasAnual: null,
     rachasTorridasAnual: null
   });
+  const [lastRecordDate, setLastRecordDate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -30,7 +31,8 @@ const BurgosStatsPage = () => {
         axios.get(BACKEND_URI + '/api/burgos-estadisticas/dias-calurosos-anual'),
         axios.get(BACKEND_URI + '/api/burgos-estadisticas/dias-torridos-anual'),
         axios.get(BACKEND_URI + '/api/burgos-estadisticas/rachas-calurosas-anual'),
-        axios.get(BACKEND_URI + '/api/burgos-estadisticas/rachas-torridas-anual')
+        axios.get(BACKEND_URI + '/api/burgos-estadisticas/rachas-torridas-anual'),
+        axios.get(BACKEND_URI + '/api/burgos-estadisticas/ultimo-registro')
       ]);
 
       setBurgosData({
@@ -43,6 +45,7 @@ const BurgosStatsPage = () => {
         rachasTorridasAnual: responses[6].data
       });
 
+      setLastRecordDate(responses[7].data.ultimaFecha);
       setError(null);
     } catch (error) {
       console.error('Error fetching Burgos data:', error);
@@ -68,6 +71,16 @@ const BurgosStatsPage = () => {
       month: 'short', 
       year: 'numeric' 
     });
+  };
+
+  const formatDateDDMMYYYY = (dateString) => {
+    if (!dateString) return new Date().getFullYear();
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
   };
 
   const getTemperatureColor = (temp) => {
@@ -139,7 +152,7 @@ const BurgosStatsPage = () => {
         <Link to="/" className="back-link">← Volver</Link>
         <div className="header-content">
           <h1>📊 Estadísticas de Burgos (Villafría)</h1>
-          <p>Datos meteorológicos históricos • 1970-{new Date().getFullYear()}</p>
+          <p>Datos meteorológicos históricos - 1 ene 1970 - {formatDateDDMMYYYY(lastRecordDate)}</p>
         </div>
       </header>
 
