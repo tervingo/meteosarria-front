@@ -180,6 +180,20 @@ const BurgosStatsPage = () => {
               icon="🧊"
               color="#2563eb"
             />
+            <MetricCard
+              title="Temperatura mínima más alta"
+              value={formatTemperature(recordsAbsolutos.temp_min_mas_alta?.valor)}
+              subtitle={formatDate(recordsAbsolutos.temp_min_mas_alta?.fecha)}
+              icon="🌡️"
+              color={getTemperatureColor(recordsAbsolutos.temp_min_mas_alta?.valor)}
+            />
+            <MetricCard
+              title="Temperatura máxima más baja"
+              value={formatTemperature(recordsAbsolutos.temp_max_mas_baja?.valor)}
+              subtitle={formatDate(recordsAbsolutos.temp_max_mas_baja?.fecha)}
+              icon="❄️"
+              color={getTemperatureColor(recordsAbsolutos.temp_max_mas_baja?.valor)}
+            />
           </div>
         )}
       </section>
