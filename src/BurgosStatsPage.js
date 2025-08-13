@@ -14,7 +14,8 @@ const BurgosStatsPage = () => {
     diasCalurososAnual: null,
     diasTorridosAnual: null,
     rachasCalurosasAnual: null,
-    rachasTorridasAnual: null
+    rachasTorridasAnual: null,
+    nochesTropicalesAnual: null
   });
   const [lastRecordDate, setLastRecordDate] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ const BurgosStatsPage = () => {
         axios.get(BACKEND_URI + '/api/burgos-estadisticas/dias-torridos-anual'),
         axios.get(BACKEND_URI + '/api/burgos-estadisticas/rachas-calurosas-anual'),
         axios.get(BACKEND_URI + '/api/burgos-estadisticas/rachas-torridas-anual'),
+        axios.get(BACKEND_URI + '/api/burgos-estadisticas/noches-tropicales-anual'),
         axios.get(BACKEND_URI + '/api/burgos-estadisticas/ultimo-registro')
       ]);
 
@@ -42,10 +44,11 @@ const BurgosStatsPage = () => {
         diasCalurososAnual: responses[3].data,
         diasTorridosAnual: responses[4].data,
         rachasCalurosasAnual: responses[5].data,
-        rachasTorridasAnual: responses[6].data
+        rachasTorridasAnual: responses[6].data,
+        nochesTropicalesAnual: responses[7].data
       });
 
-      setLastRecordDate(responses[7].data.ultimaFecha);
+      setLastRecordDate(responses[8].data.ultimaFecha);
       setError(null);
     } catch (error) {
       console.error('Error fetching Burgos data:', error);
@@ -138,7 +141,7 @@ const BurgosStatsPage = () => {
     );
   }
 
-  const { recordsAbsolutos, recordsPorDecada, tempMediaPorDecada, diasCalurososAnual, diasTorridosAnual, rachasCalurosasAnual, rachasTorridasAnual } = burgosData;
+  const { recordsAbsolutos, recordsPorDecada, tempMediaPorDecada, diasCalurososAnual, diasTorridosAnual, rachasCalurosasAnual, rachasTorridasAnual, nochesTropicalesAnual } = burgosData;
 
   return (
     <div className="dashboard-container">
@@ -357,6 +360,36 @@ const BurgosStatsPage = () => {
                   stroke="#ff0000"
                   strokeWidth={2}
                   dot={{ fill: '#ff0000', strokeWidth: 2, r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </section>
+
+      {/* Noches Tropicales por Año */}
+      <section className="dashboard-section">
+        <h2>🌙 Noches con Temperatura Mínima > 20°C por Año</h2>
+        {nochesTropicalesAnual && nochesTropicalesAnual.length > 0 && (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={nochesTropicalesAnual}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="año" />
+                <YAxis 
+                  label={{ value: 'Número de noches', angle: -90, position: 'insideLeft' }}
+                  allowDecimals={false}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value} noches`, 'Noches > 20°C']}
+                  labelFormatter={(año) => `Año ${año}`}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="noches_min_gt_20"
+                  stroke="#ff6600"
+                  strokeWidth={2}
+                  dot={{ fill: '#ff6600', strokeWidth: 2, r: 3 }}
                 />
               </LineChart>
             </ResponsiveContainer>
