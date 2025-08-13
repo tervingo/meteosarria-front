@@ -6,6 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { BACKEND_URI } from './constants';
 import './Dashboard.css';
 
+
 const BurgosStatsPage = () => {
   const [burgosData, setBurgosData] = useState({
     recordsAbsolutos: null,
@@ -49,6 +50,7 @@ const BurgosStatsPage = () => {
       });
 
       setLastRecordDate(responses[8].data.ultimaFecha);
+      console.log('Última Fecha BD', responses[8].data.ultimaFecha);
       setError(null);
     } catch (error) {
       console.error('Error fetching Burgos data:', error);
