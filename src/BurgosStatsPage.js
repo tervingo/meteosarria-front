@@ -585,29 +585,36 @@ const BurgosStatsPage = () => {
         <h2>📅 Valores Extremos por Década</h2>
         {recordsPorDecada && recordsPorDecada.length > 0 && (
           <div className="chart-container">
-            <div className="decade-records">
-              {recordsPorDecada.map((decada) => (
-                <div key={decada.decada} className="decade-card">
-                  <h3>{decada.decada}s</h3>
-                  <div className="decade-temps">
-                    <div className="temp-record">
-                      <span className="temp-label">Máx:</span>
-                      <span className="temp-value" style={{ color: getTemperatureColor(decada.temp_max) }}>
-                        {formatTemperature(decada.temp_max)}
-                      </span>
-                      <span className="temp-date">{formatDate(decada.fecha_max)}</span>
-                    </div>
-                    <div className="temp-record">
-                      <span className="temp-label">Mín:</span>
-                      <span className="temp-value" style={{ color: '#2563eb' }}>
-                        {formatTemperature(decada.temp_min)}
-                      </span>
-                      <span className="temp-date">{formatDate(decada.fecha_min)}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={recordsPorDecada.map(decada => ({
+                decada: `${decada.decada}s`,
+                temp_max: decada.temp_max,
+                temp_min: decada.temp_min,
+                fecha_max: decada.fecha_max,
+                fecha_min: decada.fecha_min
+              }))}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="decada" />
+                <YAxis 
+                  label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
+                  domain={['dataMin - 2', 'dataMax + 2']}
+                />
+                <Tooltip 
+                  formatter={(value, name, props) => {
+                    const isMax = name === 'temp_max';
+                    const fecha = isMax ? props.payload.fecha_max : props.payload.fecha_min;
+                    return [
+                      `${value}°C`, 
+                      isMax ? 'Temperatura Máxima' : 'Temperatura Mínima',
+                      fecha ? ` (${formatDate(fecha)})` : ''
+                    ];
+                  }}
+                  labelFormatter={(decada) => `Década ${decada}`}
+                />
+                <Bar dataKey="temp_max" fill="#ff6b6b" name="temp_max" />
+                <Bar dataKey="temp_min" fill="#42a5f5" name="temp_min" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         )}
       </section>

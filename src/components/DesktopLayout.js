@@ -93,7 +93,7 @@ const DesktopLayout = ({
             e.target.style.transform = 'translateY(0)';
           }}
         >
-          Estadísticas
+          Estadísticas de Sarrià
         </Link>
         <Link 
           to="/estadisticas-burgos"
