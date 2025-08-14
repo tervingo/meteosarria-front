@@ -597,7 +597,8 @@ const BurgosStatsPage = () => {
                 <XAxis dataKey="decada" />
                 <YAxis 
                   label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
-                  domain={['dataMin - 2', 'dataMax + 2']}
+                  domain={[-20, 40]}
+                  ticks={[-20, -10, 0, 10, 20, 30, 40]}
                 />
                 <Tooltip 
                   formatter={(value, name, props) => {
@@ -611,8 +612,22 @@ const BurgosStatsPage = () => {
                   }}
                   labelFormatter={(decada) => `Década ${decada}`}
                 />
-                <Bar dataKey="temp_max" fill="#ff6b6b" name="temp_max" />
-                <Bar dataKey="temp_min" fill="#42a5f5" name="temp_min" />
+                <Bar dataKey="temp_max" fill="#ff6b6b" name="temp_max">
+                  <LabelList 
+                    dataKey="temp_max" 
+                    position="top" 
+                    style={{ fontSize: '12px', fill: '#374151', fontWeight: 'bold' }}
+                    formatter={(value) => `${value}°C`}
+                  />
+                </Bar>
+                <Bar dataKey="temp_min" fill="#42a5f5" name="temp_min">
+                  <LabelList 
+                    dataKey="temp_min" 
+                    position="top" 
+                    style={{ fontSize: '12px', fill: '#374151', fontWeight: 'bold' }}
+                    formatter={(value) => `${value}°C`}
+                  />
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
