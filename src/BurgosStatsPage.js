@@ -277,6 +277,60 @@ const BurgosStatsPage = () => {
         )}
       </section>
 
+      {/* Récords por Década */}
+      <section className="dashboard-section">
+        <h2>📅 Valores Extremos por Década</h2>
+        {recordsPorDecada && recordsPorDecada.length > 0 && (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={recordsPorDecada.map(decada => ({
+                decada: `${decada.decada}s`,
+                temp_max: decada.temp_max,
+                temp_min: decada.temp_min,
+                fecha_max: decada.fecha_max,
+                fecha_min: decada.fecha_min
+              }))}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="decada" />
+                <YAxis 
+                  label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
+                  domain={[-20, 40]}
+                  ticks={[-30, -20, -10, 0, 10, 20, 30, 40, 50]}
+                />
+                <Tooltip 
+                  formatter={(value, name, props) => {
+                    const isMax = name === 'temp_max';
+                    const fecha = isMax ? props.payload.fecha_max : props.payload.fecha_min;
+                    return [
+                      `${value}°C`, 
+                      isMax ? 'Temperatura Máxima' : 'Temperatura Mínima',
+                      fecha ? ` (${formatDate(fecha)})` : ''
+                    ];
+                  }}
+                  labelFormatter={(decada) => `Década ${decada}`}
+                />
+                <Bar dataKey="temp_max" fill="orangeRed" name="temp_max" barSize={25}>
+                  <LabelList 
+                    dataKey="temp_max" 
+                    position="top" 
+                    style={{ fontSize: '12px', fill: '#374151', fontWeight: 'bold' }}
+                    formatter={(value) => `${value}°C`}
+                  />
+                </Bar>
+                <Bar dataKey="temp_min" fill="royalBlue" name="temp_min" barSize={25}>
+                  <LabelList 
+                    dataKey="temp_min" 
+                    position="top" 
+                    style={{ fontSize: '12px', fill: '#374151', fontWeight: 'bold' }}
+                    formatter={(value) => `${value}°C`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </section>
+
       {/* Estadísticas del Mes */}
       <section className="dashboard-section">
         <h2>🏆 Estadísticas del Mes</h2>
@@ -580,61 +634,7 @@ const BurgosStatsPage = () => {
       )}
     </section>
 
-      {/* Récords por Década */}
-      <section className="dashboard-section">
-        <h2>📅 Valores Extremos por Década</h2>
-        {recordsPorDecada && recordsPorDecada.length > 0 && (
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={recordsPorDecada.map(decada => ({
-                decada: `${decada.decada}s`,
-                temp_max: decada.temp_max,
-                temp_min: decada.temp_min,
-                fecha_max: decada.fecha_max,
-                fecha_min: decada.fecha_min
-              }))}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="decada" />
-                <YAxis 
-                  label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
-                  domain={[-20, 40]}
-                  ticks={[-20, -10, 0, 10, 20, 30, 40]}
-                />
-                <Tooltip 
-                  formatter={(value, name, props) => {
-                    const isMax = name === 'temp_max';
-                    const fecha = isMax ? props.payload.fecha_max : props.payload.fecha_min;
-                    return [
-                      `${value}°C`, 
-                      isMax ? 'Temperatura Máxima' : 'Temperatura Mínima',
-                      fecha ? ` (${formatDate(fecha)})` : ''
-                    ];
-                  }}
-                  labelFormatter={(decada) => `Década ${decada}`}
-                />
-                <Bar dataKey="temp_max" fill="#ff6b6b" name="temp_max">
-                  <LabelList 
-                    dataKey="temp_max" 
-                    position="top" 
-                    style={{ fontSize: '12px', fill: '#374151', fontWeight: 'bold' }}
-                    formatter={(value) => `${value}°C`}
-                  />
-                </Bar>
-                <Bar dataKey="temp_min" fill="#42a5f5" name="temp_min">
-                  <LabelList 
-                    dataKey="temp_min" 
-                    position="top" 
-                    style={{ fontSize: '12px', fill: '#374151', fontWeight: 'bold' }}
-                    formatter={(value) => `${value}°C`}
-                  />
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-      </section>
-
-      {/* Temperatura Media por Década */}
+    {/* Temperatura Media por Década */}
       <section className="dashboard-section">
         <h2>📈 Temperatura Media por Década</h2>
         {tempMediaPorDecada && tempMediaPorDecada.length > 0 && (
