@@ -17,7 +17,10 @@ const Dashboard = () => {
     diasTorridosAnual: null,
     rachasCalurosasAnual: null,
     rachasTorridasAnual: null,
-    nochesTropicalesAnual: null
+    nochesTropicalesAnual: null,
+    rachasTropicalesAnual: null,
+    nochesTorridasAnual: null,
+    rachasTorridasNocturnasAnual: null
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,7 +47,10 @@ const Dashboard = () => {
         axios.get(BACKEND_URI + '/api/dashboard/dias-torridos-anual'),
         axios.get(BACKEND_URI + '/api/dashboard/rachas-calurosas-anual'),
         axios.get(BACKEND_URI + '/api/dashboard/rachas-torridas-anual'),
-        axios.get(BACKEND_URI + '/api/dashboard/noches-tropicales-anual')
+        axios.get(BACKEND_URI + '/api/dashboard/noches-tropicales-anual'),
+        axios.get(BACKEND_URI + '/api/dashboard/rachas-tropicales-anual'),
+        axios.get(BACKEND_URI + '/api/dashboard/noches-torridas-anual'),
+        axios.get(BACKEND_URI + '/api/dashboard/rachas-torridas-nocturnas-anual')
       ]);
   
       // Debug: Log responses
@@ -58,7 +64,10 @@ const Dashboard = () => {
         diasTorridosAnual: dashboardResponses[7]?.data,
         rachasCalurosasAnual: dashboardResponses[8]?.data,
         rachasTorridasAnual: dashboardResponses[9]?.data,
-        nochesTropicalesAnual: dashboardResponses[10]?.data
+        nochesTropicalesAnual: dashboardResponses[10]?.data,
+        rachasTropicalesAnual: dashboardResponses[11]?.data,
+        nochesTorridasAnual: dashboardResponses[12]?.data,
+        rachasTorridasNocturnasAnual: dashboardResponses[13]?.data
       });
  
       setDashboardData({
@@ -71,7 +80,10 @@ const Dashboard = () => {
         diasTorridosAnual: dashboardResponses[7].data,
         rachasCalurosasAnual: dashboardResponses[8].data,
         rachasTorridasAnual: dashboardResponses[9].data,
-        nochesTropicalesAnual: dashboardResponses[10].data
+        nochesTropicalesAnual: dashboardResponses[10].data,
+        rachasTropicalesAnual: dashboardResponses[11].data,
+        nochesTorridasAnual: dashboardResponses[12].data,
+        rachasTorridasNocturnasAnual: dashboardResponses[13].data
       });
   
       setError(null);
@@ -234,7 +246,7 @@ const Dashboard = () => {
     );
   }
 
-  const { records, tendenciaAnual, comparativaAño, heatmap, estadisticas, diasCalurososAnual, diasTorridosAnual, rachasCalurosasAnual, rachasTorridasAnual, nochesTropicalesAnual } = dashboardData || {};
+  const { records, tendenciaAnual, comparativaAño, heatmap, estadisticas, diasCalurososAnual, diasTorridosAnual, rachasCalurosasAnual, rachasTorridasAnual, nochesTropicalesAnual, rachasTropicalesAnual, nochesTorridasAnual, rachasTorridasNocturnasAnual } = dashboardData || {};
 
   console.log('mes_seleccionado:', estadisticas.mes_seleccionado);
 
@@ -888,6 +900,96 @@ const Dashboard = () => {
                   stroke="#ff6600"
                   strokeWidth={2}
                   dot={{ fill: '#ff6600', strokeWidth: 2, r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </section>
+
+      {/* Rachas Tropicales por Año */}
+      <section className="dashboard-section">
+        <h2>🌙 Días Consecutivos con Temp Mín > 20°C por Año</h2>
+        {rachasTropicalesAnual && rachasTropicalesAnual.length > 0 && (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={rachasTropicalesAnual}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="año" />
+                <YAxis 
+                  label={{ value: 'Días consecutivos', angle: -90, position: 'insideLeft' }}
+                  allowDecimals={false}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value} días`, 'Racha Tmin > 20°C']}
+                  labelFormatter={(año) => `Año ${año}`}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="racha_min_gt_20"
+                  stroke="#ff8800"
+                  strokeWidth={2}
+                  dot={{ fill: '#ff8800', strokeWidth: 2, r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </section>
+
+      {/* Noches Tórridas por Año */}
+      <section className="dashboard-section">
+        <h2>🔥 Noches con Temperatura Mínima > 25°C por Año</h2>
+        {nochesTorridasAnual && nochesTorridasAnual.length > 0 && (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={nochesTorridasAnual}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="año" />
+                <YAxis 
+                  label={{ value: 'Número de noches', angle: -90, position: 'insideLeft' }}
+                  allowDecimals={false}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value} noches`, 'Noches > 25°C']}
+                  labelFormatter={(año) => `Año ${año}`}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="noches_min_gt_25"
+                  stroke="#cc3300"
+                  strokeWidth={2}
+                  dot={{ fill: '#cc3300', strokeWidth: 2, r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </section>
+
+      {/* Rachas Tórridas Nocturnas por Año */}
+      <section className="dashboard-section">
+        <h2>🔥 Días Consecutivos con Temp Mín > 25°C por Año</h2>
+        {rachasTorridasNocturnasAnual && rachasTorridasNocturnasAnual.length > 0 && (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={rachasTorridasNocturnasAnual}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="año" />
+                <YAxis 
+                  label={{ value: 'Días consecutivos', angle: -90, position: 'insideLeft' }}
+                  allowDecimals={false}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value} días`, 'Racha Tmin > 25°C']}
+                  labelFormatter={(año) => `Año ${año}`}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="racha_min_gt_25"
+                  stroke="#990000"
+                  strokeWidth={2}
+                  dot={{ fill: '#990000', strokeWidth: 2, r: 3 }}
                 />
               </LineChart>
             </ResponsiveContainer>
