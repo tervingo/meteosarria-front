@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, Clock, Thermometer, AlertCircle } from 'lucide-react';
 import { BACKEND_URI } from '../constants';
 
@@ -12,7 +12,7 @@ const WeatherComparison = () => {
 
   const API_BASE = `${BACKEND_URI}/api`;
 
-  const fetchCurrentWeather = async () => {
+  const fetchCurrentWeather = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/weather/current`);
       const result = await response.json();
@@ -28,9 +28,9 @@ const WeatherComparison = () => {
       setError('Error de conexión con el servidor');
       console.error('Error fetching current weather:', err);
     }
-  };
+  }, [API_BASE]);
 
-  const fetchWeatherHistory = async () => {
+  const fetchWeatherHistory = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/weather/history`);
       const result = await response.json();
@@ -43,7 +43,7 @@ const WeatherComparison = () => {
     } catch (err) {
       console.error('Error fetching weather history:', err);
     }
-  };
+  }, [API_BASE]);
 
   const manualRefresh = async () => {
     setLoading(true);
@@ -89,7 +89,7 @@ const WeatherComparison = () => {
     });
   };
 
-  const calculateNextUpdate = () => {
+  const calculateNextUpdate = useCallback(() => {
     if (lastUpdate) {
       const nextUpdateTime = new Date(lastUpdate.getTime() + 10 * 60 * 1000);
       const now = new Date();
@@ -97,7 +97,7 @@ const WeatherComparison = () => {
       return diff;
     }
     return 0;
-  };
+  }, [lastUpdate]);
 
   const formatCountdown = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -114,7 +114,7 @@ const WeatherComparison = () => {
     };
 
     loadData();
-  }, []);
+  }, [fetchCurrentWeather, fetchWeatherHistory]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -122,7 +122,7 @@ const WeatherComparison = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [lastUpdate]);
+  }, [calculateNextUpdate]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -131,7 +131,7 @@ const WeatherComparison = () => {
     }, 10 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchCurrentWeather, fetchWeatherHistory]);
 
   if (loading && !currentWeather) {
     return (
