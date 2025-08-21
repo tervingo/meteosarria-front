@@ -180,7 +180,7 @@ const WeatherComparison = () => {
         </div>
 
         {currentWeather && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-red-700 mb-2">AEMET</h3>
               <div className="text-3xl font-bold text-red-600">
@@ -214,6 +214,18 @@ const WeatherComparison = () => {
               </div>
               {currentWeather.google_weather_burgos_center?.raw_data?.mock && (
                 <p className="text-sm text-green-500 mt-1">Datos de prueba</p>
+              )}
+            </div>
+
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-purple-700 mb-2">Google Weather (Sarrià)</h3>
+              <div className="text-3xl font-bold text-purple-600">
+                {currentWeather.google_weather_sarria?.temperature ? 
+                  `${currentWeather.google_weather_sarria.temperature}°C` : 
+                  'No disponible'}
+              </div>
+              {currentWeather.google_weather_sarria?.raw_data?.mock && (
+                <p className="text-sm text-purple-500 mt-1">Datos de prueba</p>
               )}
             </div>
           </div>
@@ -251,6 +263,7 @@ const WeatherComparison = () => {
                   <th className="text-center py-3 px-4 font-semibold text-red-700">AEMET</th>
                   <th className="text-center py-3 px-4 font-semibold text-blue-700">Google (Villafría)</th>
                   <th className="text-center py-3 px-4 font-semibold text-green-700">Google (Burgos Centro)</th>
+                  <th className="text-center py-3 px-4 font-semibold text-purple-700">Google (Sarrià)</th>
                   <th className="text-center py-3 px-4 font-semibold text-gray-700">Diferencia</th>
                 </tr>
               </thead>
@@ -259,6 +272,7 @@ const WeatherComparison = () => {
                   const aemetTemp = record.aemet?.temperature;
                   const googleVillafriaTemp = record.google_weather_villafria?.temperature || record.google_weather?.temperature;
                   const googleBurgosCenterTemp = record.google_weather_burgos_center?.temperature;
+                  const googleSarriaTemp = record.google_weather_sarria?.temperature;
                   const diff = (aemetTemp && googleVillafriaTemp) ? 
                     (aemetTemp - googleVillafriaTemp).toFixed(1) : null;
                   
@@ -274,6 +288,9 @@ const WeatherComparison = () => {
                       </td>
                       <td className="py-3 px-4 text-center text-green-600 font-semibold">
                         {googleBurgosCenterTemp ? `${googleBurgosCenterTemp}°C` : '-'}
+                      </td>
+                      <td className="py-3 px-4 text-center text-purple-600 font-semibold">
+                        {googleSarriaTemp ? `${googleSarriaTemp}°C` : '-'}
                       </td>
                       <td className="py-3 px-4 text-center">
                         {diff ? (
