@@ -118,7 +118,7 @@ function AppContent() {
     };
 
     fetchBurgosWeather();
-    const burgosIntervalId = setInterval(fetchBurgosWeather, 900000); // 15 minutes
+    const burgosIntervalId = setInterval(fetchBurgosWeather, 600000); // 10 minutes
 
     return () => clearInterval(burgosIntervalId);
   }, []);
@@ -229,7 +229,7 @@ function BcnBurContent() {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 60000);
+    const intervalId = setInterval(fetchData, 600000); // 10 minutes
 
     return () => {
       console.log('BcnBurContent unmounted');
