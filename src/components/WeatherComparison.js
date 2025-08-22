@@ -191,10 +191,10 @@ const WeatherComparison = () => {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          Comparación Meteorológica Villafría
+          Datos Meteorológicos Burgos Centro
         </h1>
         <p className="text-gray-600">
-          Datos de AEMET vs Google Weather • Lat: {42.36542}° Lon: {-3.61669}°
+          Google Weather API • Lat: {42.34106}° Lon: {-3.70184}°
         </p>
       </div>
 
@@ -240,54 +240,64 @@ const WeatherComparison = () => {
           </div>
         </div>
 
-        {currentWeather && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-red-700 mb-2">AEMET</h3>
-              <div className="text-3xl font-bold text-red-600">
-                {currentWeather.aemet?.temperature ? 
-                  `${currentWeather.aemet.temperature}°C` : 
-                  'No disponible'}
-              </div>
-              {currentWeather.aemet?.raw_data?.mock && (
-                <p className="text-sm text-red-500 mt-1">Datos de prueba</p>
-              )}
-            </div>
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-blue-700 mb-2">Google Weather (Villafría)</h3>
-              <div className="text-3xl font-bold text-blue-600">
-                {currentWeather.google_weather_villafria?.temperature ? 
-                  `${currentWeather.google_weather_villafria.temperature}°C` : 
-                  'No disponible'}
-              </div>
-              {currentWeather.google_weather_villafria?.raw_data?.mock && (
-                <p className="text-sm text-blue-500 mt-1">Datos de prueba</p>
-              )}
-            </div>
-
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-green-700 mb-2">Google Weather (Burgos Centro)</h3>
-              <div className="text-3xl font-bold text-green-600">
+        {currentWeather && currentWeather.google_weather_burgos_center && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-blue-700 mb-2">Temperatura</h3>
+              <div className="text-4xl font-bold text-blue-600">
                 {currentWeather.google_weather_burgos_center?.temperature ? 
                   `${currentWeather.google_weather_burgos_center.temperature}°C` : 
                   'No disponible'}
               </div>
-              {currentWeather.google_weather_burgos_center?.raw_data?.mock && (
-                <p className="text-sm text-green-500 mt-1">Datos de prueba</p>
+            </div>
+
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-green-700 mb-2">Humedad</h3>
+              <div className="text-4xl font-bold text-green-600">
+                {currentWeather.google_weather_burgos_center?.humidity ? 
+                  `${currentWeather.google_weather_burgos_center.humidity}%` : 
+                  'No disponible'}
+              </div>
+            </div>
+
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-purple-700 mb-2">Presión</h3>
+              <div className="text-4xl font-bold text-purple-600">
+                {currentWeather.google_weather_burgos_center?.pressure ? 
+                  `${Math.round(currentWeather.google_weather_burgos_center.pressure)} hPa` : 
+                  'No disponible'}
+              </div>
+            </div>
+
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-orange-700 mb-2">Viento</h3>
+              <div className="text-2xl font-bold text-orange-600">
+                {currentWeather.google_weather_burgos_center?.wind_speed ? 
+                  `${Math.round(currentWeather.google_weather_burgos_center.wind_speed * 3.6)} km/h` : 
+                  'No disponible'}
+              </div>
+              {currentWeather.google_weather_burgos_center?.wind_direction && (
+                <div className="text-sm text-orange-500 mt-1">
+                  {Math.round(currentWeather.google_weather_burgos_center.wind_direction)}°
+                </div>
               )}
             </div>
 
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-purple-700 mb-2">Google Weather (Sarrià)</h3>
-              <div className="text-3xl font-bold text-purple-600">
-                {currentWeather.google_weather_sarria?.temperature ? 
-                  `${currentWeather.google_weather_sarria.temperature}°C` : 
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Nubes</h3>
+              <div className="text-4xl font-bold text-gray-600">
+                {currentWeather.google_weather_burgos_center?.clouds !== undefined ? 
+                  `${Math.round(currentWeather.google_weather_burgos_center.clouds)}%` : 
                   'No disponible'}
               </div>
-              {currentWeather.google_weather_sarria?.raw_data?.mock && (
-                <p className="text-sm text-purple-500 mt-1">Datos de prueba</p>
-              )}
+            </div>
+
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-indigo-700 mb-2">Descripción</h3>
+              <div className="text-lg font-semibold text-indigo-600">
+                {currentWeather.google_weather_burgos_center?.weather_description || 
+                  'Google Weather'}
+              </div>
             </div>
           </div>
         )}
@@ -329,44 +339,35 @@ const WeatherComparison = () => {
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Fecha</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Hora</th>
-                  <th className="text-center py-3 px-4 font-semibold text-red-700">AEMET</th>
-                  <th className="text-center py-3 px-4 font-semibold text-blue-700">Google (Villafría)</th>
-                  <th className="text-center py-3 px-4 font-semibold text-green-700">Google (Burgos Centro)</th>
-                  <th className="text-center py-3 px-4 font-semibold text-purple-700">Google (Sarrià)</th>
-                  <th className="text-center py-3 px-4 font-semibold text-gray-700">Diferencia</th>
+                  <th className="text-center py-3 px-4 font-semibold text-blue-700">Temperatura</th>
+                  <th className="text-center py-3 px-4 font-semibold text-green-700">Humedad</th>
+                  <th className="text-center py-3 px-4 font-semibold text-purple-700">Presión</th>
+                  <th className="text-center py-3 px-4 font-semibold text-orange-700">Viento</th>
+                  <th className="text-center py-3 px-4 font-semibold text-gray-700">Nubes</th>
                 </tr>
               </thead>
               <tbody>
                 {weatherHistory.map((record, index) => {
-                  const aemetTemp = record.aemet?.temperature;
-                  const googleVillafriaTemp = record.google_weather_villafria?.temperature || record.google_weather?.temperature;
-                  const googleBurgosCenterTemp = record.google_weather_burgos_center?.temperature;
-                  const googleSarriaTemp = record.google_weather_sarria?.temperature;
-                  const diff = (aemetTemp && googleVillafriaTemp) ? 
-                    (aemetTemp - googleVillafriaTemp).toFixed(1) : null;
+                  const burgosData = record.google_weather_burgos_center;
                   
                   return (
                     <tr key={record._id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                       <td className="py-3 px-4">{formatDate(record.timestamp)}</td>
                       <td className="py-3 px-4">{formatTime(record.timestamp)}</td>
-                      <td className="py-3 px-4 text-center text-red-600 font-semibold">
-                        {aemetTemp ? `${aemetTemp}°C` : '-'}
-                      </td>
                       <td className="py-3 px-4 text-center text-blue-600 font-semibold">
-                        {googleVillafriaTemp ? `${googleVillafriaTemp}°C` : '-'}
+                        {burgosData?.temperature ? `${burgosData.temperature}°C` : '-'}
                       </td>
                       <td className="py-3 px-4 text-center text-green-600 font-semibold">
-                        {googleBurgosCenterTemp ? `${googleBurgosCenterTemp}°C` : '-'}
+                        {burgosData?.humidity ? `${burgosData.humidity}%` : '-'}
                       </td>
                       <td className="py-3 px-4 text-center text-purple-600 font-semibold">
-                        {googleSarriaTemp ? `${googleSarriaTemp}°C` : '-'}
+                        {burgosData?.pressure ? `${Math.round(burgosData.pressure)} hPa` : '-'}
                       </td>
-                      <td className="py-3 px-4 text-center">
-                        {diff ? (
-                          <span className={diff > 0 ? 'text-red-500' : diff < 0 ? 'text-blue-500' : 'text-gray-500'}>
-                            {diff > 0 ? '+' : ''}{diff}°C
-                          </span>
-                        ) : '-'}
+                      <td className="py-3 px-4 text-center text-orange-600 font-semibold">
+                        {burgosData?.wind_speed ? `${Math.round(burgosData.wind_speed * 3.6)} km/h` : '-'}
+                      </td>
+                      <td className="py-3 px-4 text-center text-gray-600 font-semibold">
+                        {burgosData?.clouds !== undefined ? `${Math.round(burgosData.clouds)}%` : '-'}
                       </td>
                     </tr>
                   );
