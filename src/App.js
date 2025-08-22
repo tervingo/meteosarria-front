@@ -75,6 +75,7 @@ function AppContent() {
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [timeRange, setTimeRange] = useState('24h');
+  const [lastBurgosUpdate, setLastBurgosUpdate] = useState(null);
   const { validTemperatures } = useTemperature();
 
   // Media queries for responsive design
@@ -109,6 +110,7 @@ function AppContent() {
   useEffect(() => {
     const fetchBurgosWeather = async () => {
       try {
+        setLastBurgosUpdate(new Date()); // Registrar cuándo se hace la petición
         const response = await axios.get(BACKEND_URI + '/api/burgos-weather');
         setBurgosWeather(response.data);
         console.log('burgosWeather: ', response.data);
@@ -161,6 +163,7 @@ function AppContent() {
   const layoutProps = {
     weatherData,
     burgosWeather,
+    lastBurgosUpdate,
     loading,
     error,
     currentTime,
@@ -204,6 +207,7 @@ function BcnBurContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [lastBurgosUpdate, setLastBurgosUpdate] = useState(null);
   const { validTemperatures } = useTemperature();
 
   useEffect(() => {
@@ -211,6 +215,7 @@ function BcnBurContent() {
     const fetchData = async () => {
       try {
         console.log('Fetching data...');
+        setLastBurgosUpdate(new Date()); // Registrar cuándo se hace la petición
         const [weatherResponse, burgosResponse] = await Promise.all([
           axios.get(BACKEND_URI + '/api/live'),
           axios.get(BACKEND_URI + '/api/burgos-weather')
@@ -283,6 +288,7 @@ function BcnBurContent() {
       <BcnBurLayout
         weatherData={weatherData}
         burgosWeather={burgosWeather}
+        lastBurgosUpdate={lastBurgosUpdate}
         loading={loading}
         error={error}
         currentTime={currentTime}

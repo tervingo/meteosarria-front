@@ -12,6 +12,7 @@ import TemperatureBackground from '../TemperatureBackground';
 const MobileLayout = ({
   weatherData,
   burgosWeather,
+  lastBurgosUpdate,
   loading,
   error,
   currentTime,
@@ -120,6 +121,7 @@ const MobileLayout = ({
             <Box sx={{ border: '1px solid darkgrey', padding: 2 }}>
               <DatosBurgos 
                 burgosWeather={burgosWeather}
+                lastBurgosUpdate={lastBurgosUpdate}
                 styles={styles}
                 isMobile={true}
               />

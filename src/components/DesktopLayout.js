@@ -14,6 +14,7 @@ import { SHOW_COLOUR_BAR } from '../constants';
 const DesktopLayout = ({
   weatherData,
   burgosWeather,
+  lastBurgosUpdate,
   loading,
   error,
   currentTime,
@@ -186,6 +187,7 @@ const DesktopLayout = ({
               }}>
                 <DatosBurgos 
                   burgosWeather={burgosWeather}
+                  lastBurgosUpdate={lastBurgosUpdate}
                   styles={styles}
                   isMobile={false}
                   isTablet={isTablet}
