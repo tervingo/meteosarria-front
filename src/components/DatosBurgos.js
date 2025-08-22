@@ -32,14 +32,16 @@ const DatosBurgos = ({ burgosWeather, styles, isMobile }) => {
   return (
     <Column width="100%" align="center" justify="flex-start">
       <Typography style={styles.seccion}>
-        Datos de Burgos (Villafría/AEMET) actualizados a las {burgosWeather.observation_time ? 
-          new Date(burgosWeather.observation_time).toLocaleTimeString('es-ES', {
+        Datos de Burgos (Plaza Mayor) <br/>
+        actualizados a las {burgosWeather.observation_time ? 
+          new Date(burgosWeather.observation_time + ' UTC').toLocaleTimeString('es-ES', {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            timeZone: 'Europe/Madrid'
           }) : '--:--'}
       </Typography>  
       <Typography style={styles.openweathermap}>
-        Datos de <a href="https://www.aemet.es/" target="_blank" rel='noreferrer' style={styles.enlace}>AEMET (Villafría)</a>
+        Datos de Google Weather (42°20'28" N, 3°42'07" W)
       </Typography>
           
       <BurgosWeather weatherData={burgosWeather} isMobile={isMobile} styles={styles}/>
