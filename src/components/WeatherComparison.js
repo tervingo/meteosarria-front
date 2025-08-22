@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, Clock, Thermometer, AlertCircle } from 'lucide-react';
+import { RefreshCw, Clock, Thermometer, AlertCircle, Play, Pause } from 'lucide-react';
 import { BACKEND_URI } from '../constants';
 
 const WeatherComparison = () => {
@@ -9,6 +9,8 @@ const WeatherComparison = () => {
   const [error, setError] = useState(null);
   const [nextUpdate, setNextUpdate] = useState(0);
   const [lastUpdate, setLastUpdate] = useState(null);
+  const [schedulerStatus, setSchedulerStatus] = useState({ running: true, status: 'running' });
+  const [schedulerLoading, setSchedulerLoading] = useState(false);
 
   const API_BASE = `${BACKEND_URI}/api`;
 
@@ -44,6 +46,46 @@ const WeatherComparison = () => {
       console.error('Error fetching weather history:', err);
     }
   }, [API_BASE]);
+
+  const fetchSchedulerStatus = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE}/weather/scheduler/status`);
+      const result = await response.json();
+      
+      if (result.success) {
+        setSchedulerStatus(result.status);
+      }
+    } catch (err) {
+      console.error('Error fetching scheduler status:', err);
+    }
+  }, [API_BASE]);
+
+  const toggleScheduler = async () => {
+    setSchedulerLoading(true);
+    try {
+      const endpoint = schedulerStatus.running ? 'stop' : 'start';
+      const response = await fetch(`${API_BASE}/weather/scheduler/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setSchedulerStatus(result.status);
+        setError(null);
+      } else {
+        setError(result.error || 'Error al controlar el recolector automático');
+      }
+    } catch (err) {
+      setError('Error de conexión con el servidor');
+      console.error('Error toggling scheduler:', err);
+    } finally {
+      setSchedulerLoading(false);
+    }
+  };
 
   const manualRefresh = async () => {
     setLoading(true);
@@ -110,11 +152,12 @@ const WeatherComparison = () => {
       setLoading(true);
       await fetchCurrentWeather();
       await fetchWeatherHistory();
+      await fetchSchedulerStatus();
       setLoading(false);
     };
 
     loadData();
-  }, [fetchCurrentWeather, fetchWeatherHistory]);
+  }, [fetchCurrentWeather, fetchWeatherHistory, fetchSchedulerStatus]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -169,14 +212,32 @@ const WeatherComparison = () => {
             <Thermometer className="text-blue-500" />
             Temperatura Actual
           </h2>
-          <button
-            onClick={manualRefresh}
-            disabled={loading}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-          >
-            <RefreshCw className={loading ? 'animate-spin' : ''} size={16} />
-            Actualizar
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleScheduler}
+              disabled={schedulerLoading}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 ${
+                schedulerStatus.running
+                  ? 'bg-red-600 text-white hover:bg-red-700'
+                  : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
+            >
+              {schedulerStatus.running ? (
+                <Pause className={schedulerLoading ? 'animate-spin' : ''} size={16} />
+              ) : (
+                <Play className={schedulerLoading ? 'animate-spin' : ''} size={16} />
+              )}
+              {schedulerStatus.running ? 'Pausar' : 'Reanudar'} Recolección
+            </button>
+            <button
+              onClick={manualRefresh}
+              disabled={loading}
+              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            >
+              <RefreshCw className={loading ? 'animate-spin' : ''} size={16} />
+              Actualizar
+            </button>
+          </div>
         </div>
 
         {currentWeather && (
@@ -232,16 +293,24 @@ const WeatherComparison = () => {
         )}
 
         <div className="mt-6 flex items-center justify-between text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <Clock size={16} />
-            <span>
-              Última actualización: {lastUpdate ? formatTime(lastUpdate.toISOString()) : 'Nunca'}
-            </span>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <Clock size={16} />
+              <span>
+                Última actualización: {lastUpdate ? formatTime(lastUpdate.toISOString()) : 'Nunca'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${schedulerStatus.running ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span>
+                Recolección automática: {schedulerStatus.running ? 'Activa' : 'Pausada'}
+              </span>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <RefreshCw size={16} />
             <span>
-              Próxima actualización en: {formatCountdown(nextUpdate)}
+              {schedulerStatus.running ? `Próxima actualización en: ${formatCountdown(nextUpdate)}` : 'Recolección pausada'}
             </span>
           </div>
         </div>
