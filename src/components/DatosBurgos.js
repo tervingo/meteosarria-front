@@ -148,7 +148,7 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
           actualizados a las {burgosWeather.observation_time ? 
             (() => {
               try {
-                const date = new Date(burgosWeather.observation_time + ' UTC');
+                const date = new Date(burgosWeather.observation_time.replace(' ', 'T') + 'Z');
                 if (isNaN(date.getTime())) return '--:--';
                 const hours = date.getHours().toString().padStart(2, '0');
                 const minutes = date.getMinutes().toString().padStart(2, '0');

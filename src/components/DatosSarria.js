@@ -18,6 +18,7 @@ const DatosSarria = ({
   getTime, 
   validTemperatures 
 }) => {
+  console.log('currentTime', currentTime);
   return (
 
     <Column justify="flex-start" align="center">
