@@ -146,11 +146,18 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
         <Typography style={styles.seccion}>
           Datos de Burgos (Plaza Mayor) <br/>
           actualizados a las {burgosWeather.observation_time ? 
-            new Date(burgosWeather.observation_time + ' UTC').toLocaleTimeString('es-ES', {
-              hour: '2-digit',
-              minute: '2-digit',
-              timeZone: 'Europe/Madrid'
-            }) : '--:--'}
+            (() => {
+              try {
+                const date = new Date(burgosWeather.observation_time + ' UTC');
+                return date.toLocaleTimeString('es-ES', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: 'Europe/Madrid'
+                });
+              } catch {
+                return '--:--';
+              }
+            })() : '--:--'}
         </Typography>
         <UpdateIndicator 
           lastUpdate={lastBurgosUpdate} 
