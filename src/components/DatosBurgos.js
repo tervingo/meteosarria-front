@@ -18,13 +18,13 @@ const UpdateIndicator = ({ lastUpdate, updateInterval = 600000 }) => {
     const cycleProgress = (elapsed % updateInterval) / updateInterval * 100;
     
     // Debug
-    console.log('UpdateIndicator debug:', {
+/*     console.log('UpdateIndicator debug:', {
       lastUpdate,
       lastUpdateTime,
       elapsed,
       cycleProgress,
       progressPercent: Math.min(cycleProgress, 100)
-    });
+    }); */
     
     return Math.min(cycleProgress, 100);
   }, [lastUpdate, updateInterval]);
