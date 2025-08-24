@@ -36,6 +36,8 @@ const BurgosTemperatureChart = ({ timeRange = '24h', isMobile: propIsMobile, isT
           case '7d':
             limit = 1008; // 7 days * 144 records/day
             break;
+          default:
+            limit = 144;
         }
         
         const response = await axios.get(`${BACKEND_URI}/api/weather/history`, {
