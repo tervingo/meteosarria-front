@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, Typography } from '@mui/material';
 import BurgosWeather from '../BurgosWeather';
+import BurgosTemperatureChart from '../BurgosTemperatureChart';
 import { Row, Column } from '../components/Layout';
 
 // Componente indicador circular minimalista
@@ -168,6 +169,17 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
       </Typography>
           
       <BurgosWeather weatherData={burgosWeather} isMobile={isMobile} styles={styles}/>
+      
+      {/* Histórico de temperaturas de Burgos */}
+      <Column justify="center" align="center" sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
+        <Typography style={{...styles.seccion, marginTop: '20px'}}>
+          Histórico de temperaturas (Burgos)
+        </Typography>
+        <Column justify="center" align="center" sx={{ marginTop: '20px', width: '100%'}}>
+          <BurgosTemperatureChart timeRange="24h" isMobile={isMobile} />
+        </Column>    
+      </Column>
+
       <Typography style={styles.subseccion}>
         WebCam
       </Typography>              
