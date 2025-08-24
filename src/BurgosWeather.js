@@ -22,7 +22,10 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
   useEffect(() => {
     const fetchTodayTemperatures = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URI}/api/weather/history`);
+        // Request enough data to cover full day (144 records = 24h at 10min intervals)
+        const response = await axios.get(`${BACKEND_URI}/api/weather/history`, {
+          params: { limit: 200 }
+        });
         const data = response.data.data;
 
         if (!data || data.length === 0) return;
@@ -35,12 +38,32 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
 
         // Filter today's data from 00:00 until now (considering UTC timestamps in DB)
         const todayData = data.filter(entry => {
-          const entryUTC = new Date(entry.timestamp);
-          // Convert UTC timestamp to Madrid local time
-          const entryLocal = new Date(entryUTC.toLocaleString('en-US', { timeZone: 'Europe/Madrid' }));
+          // Parse UTC timestamp correctly
+          let utcDate;
+          if (typeof entry.timestamp === 'string') {
+            if (!entry.timestamp.endsWith('Z') && !entry.timestamp.includes('+')) {
+              utcDate = new Date(entry.timestamp + 'Z');
+            } else {
+              utcDate = new Date(entry.timestamp);
+            }
+          } else {
+            utcDate = new Date(entry.timestamp);
+          }
+          
+          // Convert UTC to Madrid local time using proper offset
+          const now = new Date();
+          const utcNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+          const madridNow = new Date(utcNow.toLocaleString('en-US', { timeZone: 'Europe/Madrid' }));
+          const actualOffset = (madridNow.getTime() - utcNow.getTime()) / (60 * 60 * 1000);
+          
+          const entryLocal = new Date(utcDate.getTime() + actualOffset * 60 * 60 * 1000);
           
           // Check if entry is from today (00:00 to now)
-          return entryLocal >= startOfDay && entryLocal <= today;
+          const isToday = entryLocal.getDate() === startOfDay.getDate() &&
+                         entryLocal.getMonth() === startOfDay.getMonth() &&
+                         entryLocal.getFullYear() === startOfDay.getFullYear();
+          
+          return isToday;
         });
 
         console.log(`Found ${todayData.length} records for today`);
@@ -53,6 +76,13 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
         let maxTempTime = null;
         let minTempTime = null;
 
+        // Debug: log a few temperatures to verify data
+        console.log('Sample temperatures from today:');
+        todayData.slice(0, 5).forEach(entry => {
+          const temp = getCurrentTemperature(entry);
+          console.log(`  ${entry.timestamp}: ${temp}°C`);
+        });
+        
         todayData.forEach(entry => {
           const temp = getCurrentTemperature(entry);
           if (temp !== null && temp !== undefined && !isNaN(temp)) {
@@ -66,6 +96,10 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
             }
           }
         });
+        
+        console.log('Calculated from', todayData.length, 'records:');
+        console.log('  Max temp:', maxTemp, 'at', maxTempTime);
+        console.log('  Min temp:', minTemp, 'at', minTempTime);
 
         // Format times to local Madrid timezone
         const formatTime = (utcTimestamp) => {
