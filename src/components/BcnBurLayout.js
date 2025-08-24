@@ -1,9 +1,42 @@
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import GetTempColour from '../GetTempColour';
 import GetHumColor from '../GetHumColor';
 import ShowTempDiffs from '../ShowTempDiffs';
+import BurgosTempDiffs from './BurgosTempDiffs';
+import axios from 'axios';
+import { BACKEND_URI } from '../constants';
 const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime, getDate, getTime, validTemperatures }) => {
+  const [burgosExtremes, setBurgosExtremes] = useState({
+    maxTemp: null,
+    minTemp: null,
+    maxTempTime: null,
+    minTempTime: null
+  });
 
+  useEffect(() => {
+    const fetchBurgosExtremes = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URI}/api/burgos-daily-extremes`);
+        const data = response.data;
+
+        if (data.success && data.extremes) {
+          setBurgosExtremes({
+            maxTemp: data.extremes.max_temperature,
+            minTemp: data.extremes.min_temperature,
+            maxTempTime: data.extremes.max_temperature_time,
+            minTempTime: data.extremes.min_temperature_time
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching Burgos daily extremes for BcnBurLayout:', error);
+      }
+    };
+
+    if (burgosWeather) {
+      fetchBurgosExtremes();
+    }
+  }, [burgosWeather]);
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -160,24 +193,35 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
               {/* Max Temp */}
               <Typography style={{
                 ...styles.maxminTemp,
-                color: (burgosWeather.max_temperature <= 45 ? burgosWeather.max_temperature : validTemperatures.maxTemp) ? 
-                  GetTempColour(burgosWeather.max_temperature <= 45 ? burgosWeather.max_temperature : validTemperatures.maxTemp) : 
-                  'Gray'
+                color: burgosExtremes.maxTemp ? GetTempColour(burgosExtremes.maxTemp) : 'Gray'
               }}>
-              {burgosWeather.max_temperature.toFixed(1)}°C
-                </Typography>
+                {burgosExtremes.maxTemp?.toFixed(1) || '--'}°C
+                {burgosExtremes.maxTempTime && (
+                  <Typography component="span" sx={{ fontSize: '0.8rem', color: 'lightblue', marginLeft: '5px' }}>
+                    ({burgosExtremes.maxTempTime})
+                  </Typography>
+                )}
+              </Typography>
               {/* Min Temp */}
               <Typography style={{
                 ...styles.maxminTemp,
-                color: (burgosWeather.min_temperature <= 45 ? burgosWeather.min_temperature : validTemperatures.minTemp) ? 
-                  GetTempColour(burgosWeather.min_temperature <= 45 ? burgosWeather.min_temperature : validTemperatures.minTemp) : 
-                  'Gray'
+                color: burgosExtremes.minTemp ? GetTempColour(burgosExtremes.minTemp) : 'Gray'
               }}>
-                {burgosWeather.min_temperature.toFixed(1)}°C
+                {burgosExtremes.minTemp?.toFixed(1) || '--'}°C
+                {burgosExtremes.minTempTime && (
+                  <Typography component="span" sx={{ fontSize: '0.8rem', color: 'lightblue', marginLeft: '5px' }}>
+                    ({burgosExtremes.minTempTime})
+                  </Typography>
+                )}
               </Typography>
-
             </Box>
-           </Box>
+          </Box>
+          
+          {/* Temperature Differences for Burgos */}
+          <Box sx={styles.tempDiffContainer}>
+            <BurgosTempDiffs />
+          </Box>
+         
           <Box sx={styles.humPressContainer}>
             <Box sx={styles.dataRow}>
               <Typography sx={{ ...styles.dataValue, color: GetHumColor(burgosWeather.humidity) }}>
