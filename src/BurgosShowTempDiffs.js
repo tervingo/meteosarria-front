@@ -16,7 +16,10 @@ const BurgosShowTempDiffs = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URI}/api/weather/history`);
+        // Request enough data for 24h analysis (144 records for every 10 minutes)
+        const response = await axios.get(`${BACKEND_URI}/api/weather/history`, {
+          params: { limit: 150 }
+        });
         const fetchedData = response.data.data;
 
         if (!fetchedData || fetchedData.length === 0) {
@@ -24,22 +27,51 @@ const BurgosShowTempDiffs = () => {
           return;
         }
 
-        // Process data to find the most recent, 15 minutes ago, 1 hour ago, and 24 hours ago timestamps
-        const now = new Date();
-        const fifteenMinutesAgo = new Date(now.getTime() - 15 * 60 * 1000);
-        const oneHourAgo = new Date(now.getTime() - 3600 * 1000);
-        const twentyFourHoursAgo = new Date(now.getTime() - 24 * 3600 * 1000);
+        // Use the most recent available data as "current" instead of searching for "now"
+        // This avoids finding the same record for current and past times
+        const currentData = fetchedData[0]; // Most recent record (already sorted by timestamp DESC)
+        
+        // Get the timestamp of the most recent data and calculate relative times from it
+        let currentUTC;
+        if (typeof currentData.timestamp === 'string') {
+          if (!currentData.timestamp.endsWith('Z') && !currentData.timestamp.includes('+')) {
+            currentUTC = new Date(currentData.timestamp + 'Z');
+          } else {
+            currentUTC = new Date(currentData.timestamp);
+          }
+        } else {
+          currentUTC = new Date(currentData.timestamp);
+        }
+        
+        const fifteenMinutesAgoUTC = new Date(currentUTC.getTime() - 15 * 60 * 1000);
+        const oneHourAgoUTC = new Date(currentUTC.getTime() - 3600 * 1000);
+        const twentyFourHoursAgoUTC = new Date(currentUTC.getTime() - 24 * 3600 * 1000);
+        
+        console.log('Using most recent data as current:', currentUTC.toISOString());
+        console.log('Looking for relative times (UTC):');
+        console.log('  15 min ago:', fifteenMinutesAgoUTC.toISOString());
+        console.log('  1h ago:', oneHourAgoUTC.toISOString());
+        console.log('  24h ago:', twentyFourHoursAgoUTC.toISOString());
 
-        // Find the closest data points to these timestamps
-        const currentData = findDataClosestToTime(fetchedData, now);
-        const fifteenMinutesAgoData = findDataClosestToTime(fetchedData, fifteenMinutesAgo);
-        const oneHourAgoData = findDataClosestToTime(fetchedData, oneHourAgo);
-        const twentyFourHoursAgoData = findDataClosestToTime(fetchedData, twentyFourHoursAgo);
+        // Find the closest data points to these relative UTC timestamps
+        const fifteenMinutesAgoData = findDataClosestToTime(fetchedData, fifteenMinutesAgoUTC);
+        const oneHourAgoData = findDataClosestToTime(fetchedData, oneHourAgoUTC);
+        const twentyFourHoursAgoData = findDataClosestToTime(fetchedData, twentyFourHoursAgoUTC);
 
-        console.log('Burgos Current data:', currentData);
-        console.log('Burgos 15 minutes ago data:', fifteenMinutesAgoData);
-        console.log('Burgos 1 hour ago data:', oneHourAgoData);
-        console.log('Burgos 24 hours ago data:', twentyFourHoursAgoData);
+        console.log('Burgos Current data:', currentData?.timestamp, getCurrentTemperature(currentData));
+        console.log('Burgos 15 minutes ago data:', fifteenMinutesAgoData?.timestamp, getCurrentTemperature(fifteenMinutesAgoData));
+        console.log('Burgos 1 hour ago data:', oneHourAgoData?.timestamp, getCurrentTemperature(oneHourAgoData));
+        console.log('Burgos 24 hours ago data:', twentyFourHoursAgoData?.timestamp, getCurrentTemperature(twentyFourHoursAgoData));
+        
+        // Debug: Show available data range
+        if (fetchedData.length > 0) {
+          const oldestEntry = fetchedData[fetchedData.length - 1];
+          const newestEntry = fetchedData[0];
+          console.log('Available data range:');
+          console.log('  Oldest:', oldestEntry.timestamp);
+          console.log('  Newest:', newestEntry.timestamp);
+          console.log('  Total records:', fetchedData.length);
+        }
 
         // Calculate temperature differences and trend
         if (currentData && fifteenMinutesAgoData) {
@@ -68,8 +100,12 @@ const BurgosShowTempDiffs = () => {
           const currentTemp = getCurrentTemperature(currentData);
           const oneHourAgoTemp = getCurrentTemperature(oneHourAgoData);
           
+          console.log('1h calculation:', 'current:', currentTemp, 'hour ago:', oneHourAgoTemp);
+          
           if (currentTemp !== null && oneHourAgoTemp !== null) {
-            setHourlyDifference((currentTemp - oneHourAgoTemp).toFixed(1));
+            const diff = (currentTemp - oneHourAgoTemp).toFixed(1);
+            console.log('1h difference:', diff);
+            setHourlyDifference(diff);
           }
         } else {
           console.log("Could not find Burgos temperature data from 1 hour ago.");
@@ -79,8 +115,12 @@ const BurgosShowTempDiffs = () => {
           const currentTemp = getCurrentTemperature(currentData);
           const twentyFourHoursAgoTemp = getCurrentTemperature(twentyFourHoursAgoData);
           
+          console.log('24h calculation:', 'current:', currentTemp, '24h ago:', twentyFourHoursAgoTemp);
+          
           if (currentTemp !== null && twentyFourHoursAgoTemp !== null) {
-            setDailyDifference((currentTemp - twentyFourHoursAgoTemp).toFixed(1));
+            const diff = (currentTemp - twentyFourHoursAgoTemp).toFixed(1);
+            console.log('24h difference:', diff);
+            setDailyDifference(diff);
           }
         } else {
           console.log("Could not find Burgos temperature data from 24 hours ago.");
@@ -118,17 +158,26 @@ const BurgosShowTempDiffs = () => {
     let minTimeDiff = Infinity;
 
     data.forEach(entry => {
-      let dateObj;
+      let utcDate;
       
       if (entry.timestamp) {
-        // Handle ISO format timestamp
-        dateObj = new Date(entry.timestamp);
+        // Parse UTC timestamp from database
+        if (typeof entry.timestamp === 'string') {
+          // Add Z if missing to ensure it's interpreted as UTC
+          if (!entry.timestamp.endsWith('Z') && !entry.timestamp.includes('+')) {
+            utcDate = new Date(entry.timestamp + 'Z');
+          } else {
+            utcDate = new Date(entry.timestamp);
+          }
+        } else {
+          utcDate = new Date(entry.timestamp);
+        }
       } else {
         console.warn("Entry without timestamp:", entry);
         return;
       }
 
-      const timeDiff = Math.abs(dateObj.getTime() - targetTime.getTime());
+      const timeDiff = Math.abs(utcDate.getTime() - targetTime.getTime());
       if (timeDiff < minTimeDiff) {
         minTimeDiff = timeDiff;
         closestData = entry;
