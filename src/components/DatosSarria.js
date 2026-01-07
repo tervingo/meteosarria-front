@@ -6,7 +6,7 @@ import ShowPressTrend from '../ShowPressTrend';
 import WindDirectionIndicator from '../WindDirectionIndicator';
 import GetWindDir from '../GetWindDir';
 import Rain from '../Rain';
-import GetTempColour, { calculateHeatIndexAemet } from '../GetTempColour';
+import GetTempColour, { calculateHeatIndexAemet, calculateWindChill } from '../GetTempColour';
 import { Row, Column } from './Layout';
 import TemperatureHistoryChart from '../TemperatureHistoryChart';
 
@@ -84,16 +84,32 @@ const DatosSarria = ({
           {/* Temperatura de sensación */}
           {(() => {
             const heatIndex = calculateHeatIndexAemet(weatherData.external_temperature, weatherData.humidity);
-            return heatIndex ? (
-              <Typography style={{
-                ...styles.maxminTempLabel,
-                fontSize: '2rem',
-                color: '#ff6600',
-                fontWeight: '500'
-              }}>
-                Sensación: {heatIndex}°
-              </Typography>
-            ) : null;
+            const windChill = calculateWindChill(weatherData.external_temperature, weatherData.wind_speed * 3.6); // Convertir m/s a km/h
+
+            if (heatIndex) {
+              return (
+                <Typography style={{
+                  ...styles.maxminTempLabel,
+                  fontSize: '2rem',
+                  color: '#ff6600',
+                  fontWeight: '500'
+                }}>
+                  Sensación: {heatIndex}°
+                </Typography>
+              );
+            } else if (windChill) {
+              return (
+                <Typography style={{
+                  ...styles.maxminTempLabel,
+                  fontSize: '2rem',
+                  color: '#00b4d8',
+                  fontWeight: '500'
+                }}>
+                  Sensación: {windChill}°
+                </Typography>
+              );
+            }
+            return null;
           })()}
         </Row>
       </Column>

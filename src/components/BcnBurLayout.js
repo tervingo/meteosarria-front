@@ -183,7 +183,7 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
         {/* Burgos Data */}
         <Paper elevation={3} sx={styles.stationCard}>
           <Box sx={styles.stationHeader}>
-            <Typography variant="h4">Burgos</Typography>
+            <Typography variant="h4">Burgos (Plaza Mayor)</Typography>
           </Box>
           <Box sx={styles.dataRow}>
             <Typography sx={{ ...styles.tempValue, color: GetTempColour(burgosWeather.temperature) }}>

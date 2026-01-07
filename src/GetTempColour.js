@@ -55,8 +55,25 @@ export const calculateHeatIndexAemet = (temperature, humidity) => {
 
   // STC = -8,78469476 + 1,61139411·T + 2,338548839·HR - 0,14611605·T·HR - 0,012308094·T2 - 0,016424828·HR2 + + 0,002211732·T2·R + 0,00072546·T·HR2 - 0,000003582·T2·HR2
   const stc = -8.78469476 + 1.61139411*temperature + 2.338548839*humidity - 0.14611605*temperature*humidity - 0.012308094*temperature*temperature - 0.016424828*humidity*humidity + 0.002211732*temperature*temperature*humidity + 0.00072546*temperature*humidity*humidity - 0.000003582*temperature*temperature*humidity*humidity;
-  
+
   return Math.round(stc * 10) / 10; // Redondear a 1 decimal
+};
+
+// Función para calcular la sensación térmica por viento (Wind Chill)
+// Usa la fórmula JAG/TI (Joint Action Group for Temperature Indices)
+// Esta es la fórmula oficial utilizada por AEMET, Environment Canada y NWS
+export const calculateWindChill = (temperature, windSpeed) => {
+  // Solo calcular para temperaturas < 10°C y velocidad del viento > 4.8 km/h
+  if (temperature >= 10 || windSpeed < 4.8) {
+    return null;
+  }
+
+  // Fórmula JAG/TI:
+  // WC = 13.12 + 0.6215·T - 11.37·V^0.16 + 0.3965·T·V^0.16
+  // Donde T = temperatura en °C, V = velocidad del viento en km/h
+  const windChill = 13.12 + 0.6215 * temperature - 11.37 * Math.pow(windSpeed, 0.16) + 0.3965 * temperature * Math.pow(windSpeed, 0.16);
+
+  return Math.round(windChill * 10) / 10; // Redondear a 1 decimal
 };
 
 
