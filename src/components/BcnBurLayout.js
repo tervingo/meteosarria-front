@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Paper } from '@mui/material';
-import GetTempColour from '../GetTempColour';
+import GetTempColour, { calculateHeatIndexAemet, calculateWindChill } from '../GetTempColour';
 import GetHumColor from '../GetHumColor';
 import ShowTempDiffs from '../ShowTempDiffs';
 import BurgosTempDiffs from './BurgosTempDiffs';
@@ -160,6 +160,32 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             </Box>
            </Box>
            <Box sx={styles.tempDiffContainer}>
+            {/* Sensation Temperature */}
+            {(() => {
+              const heatIndex = calculateHeatIndexAemet(weatherData.external_temperature, weatherData.humidity);
+              const windChill = calculateWindChill(weatherData.external_temperature, weatherData.wind_speed * 3.6);
+
+              if (heatIndex) {
+                return (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Typography sx={{ fontSize: '2rem' }}>🔥</Typography>
+                    <Typography sx={{ fontSize: '1.5rem', color: 'orangeRed', fontWeight: '500' }}>
+                      {heatIndex}°
+                    </Typography>
+                  </Box>
+                );
+              } else if (windChill) {
+                return (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Typography sx={{ fontSize: '2rem' }}>❄️</Typography>
+                    <Typography sx={{ fontSize: '1.5rem', color: 'dodgerblue', fontWeight: '500' }}>
+                      {windChill}°
+                    </Typography>
+                  </Box>
+                );
+              }
+              return null;
+            })()}
             <ShowTempDiffs />
            </Box>
          
@@ -216,9 +242,35 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
               </Typography>
             </Box>
           </Box>
-          
+
           {/* Temperature Differences for Burgos */}
           <Box sx={styles.tempDiffContainer}>
+            {/* Sensation Temperature */}
+            {(() => {
+              const heatIndex = calculateHeatIndexAemet(burgosWeather.temperature, burgosWeather.humidity);
+              const windChill = calculateWindChill(burgosWeather.temperature, burgosWeather.wind_speed * 3.6);
+
+              if (heatIndex) {
+                return (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Typography sx={{ fontSize: '2rem' }}>🔥</Typography>
+                    <Typography sx={{ fontSize: '1.5rem', color: 'orangeRed', fontWeight: '500' }}>
+                      {heatIndex}°
+                    </Typography>
+                  </Box>
+                );
+              } else if (windChill) {
+                return (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Typography sx={{ fontSize: '2rem' }}>❄️</Typography>
+                    <Typography sx={{ fontSize: '1.5rem', color: 'dodgerblue', fontWeight: '500' }}>
+                      {windChill}°
+                    </Typography>
+                  </Box>
+                );
+              }
+              return null;
+            })()}
             <BurgosTempDiffs />
           </Box>
          
