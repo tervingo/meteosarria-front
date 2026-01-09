@@ -7,7 +7,7 @@ import WindDirectionIndicator from './WindDirectionIndicator';
 import { Row, Column } from './components/Layout';
 import RainBar from './components/Rainbar';
 import BurgosTempDiffs from './components/BurgosTempDiffs';
-import { calculateHeatIndexAemet } from './GetTempColour';
+import { calculateHeatIndexAemet, calculateWindChill } from './GetTempColour';
 import axios from 'axios';
 import { BACKEND_URI } from './constants';
 
@@ -154,16 +154,32 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
           {/* Temperatura de sensación */}
           {(() => {
             const heatIndex = calculateHeatIndexAemet(weatherData.temperature, weatherData.humidity);
-            return heatIndex ? (
-              <Typography style={{
-                ...bur_styles.maxminTempLabel,
-                fontSize: '2rem',
-                color: '#ff6600',
-                fontWeight: '500'
-              }}>
-                Sensación: {heatIndex}°
-              </Typography>
-            ) : null;
+            const windChill = calculateWindChill(weatherData.temperature, weatherData.wind_speed * 3.6); // Convertir m/s a km/h
+
+            if (heatIndex) {
+              return (
+                <Typography style={{
+                  ...bur_styles.maxminTempLabel,
+                  fontSize: '2rem',
+                  color: '#ff6600',
+                  fontWeight: '500'
+                }}>
+                  Sensación: {heatIndex}°
+                </Typography>
+              );
+            } else if (windChill) {
+              return (
+                <Typography style={{
+                  ...bur_styles.maxminTempLabel,
+                  fontSize: '2rem',
+                  color: '#00b4d8',
+                  fontWeight: '500'
+                }}>
+                  Sensación: {windChill}°
+                </Typography>
+              );
+            }
+            return null;
           })()}
         </Row>
       </Column>
