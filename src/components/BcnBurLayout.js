@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import GetTempColour, { calculateHeatIndexAemet, calculateWindChill } from '../GetTempColour';
 import GetHumColor from '../GetHumColor';
+import GetWindDir from '../GetWindDir';
 import ShowTempDiffs from '../ShowTempDiffs';
 import BurgosTempDiffs from './BurgosTempDiffs';
 import axios from 'axios';
@@ -201,6 +202,13 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             <Box sx={styles.dataRow}>
               <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{weatherData.pressure} hPa</Typography>
             </Box>
+
+            {/* Wind */}
+            <Box sx={styles.dataRow}>
+              <Typography sx={{ fontSize: '1.8rem', color: 'azure' }}>
+                {GetWindDir(weatherData.wind_direction)} {(weatherData.wind_speed * 3.6).toFixed(1)} km/h
+              </Typography>
+            </Box>
           </Box>
         </Paper>
 
@@ -282,6 +290,13 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             </Box>
             <Box sx={styles.dataRow}>
               <Typography sx={{ ...styles.dataValue, color: 'orange' }}>{burgosWeather.pressure} hPa</Typography>
+            </Box>
+
+            {/* Wind */}
+            <Box sx={styles.dataRow}>
+              <Typography sx={{ fontSize: '1.8rem', color: 'azure' }}>
+                {GetWindDir(burgosWeather.wind_direction)} {(burgosWeather.wind_speed * 3.6).toFixed(1)} km/h
+              </Typography>
             </Box>
           </Box>
         </Paper>
