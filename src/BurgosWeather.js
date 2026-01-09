@@ -160,8 +160,8 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
               return (
                 <Typography style={{
                   ...bur_styles.maxminTempLabel,
-                  fontSize: '2rem',
-                  color: '#ff6600',
+                  fontSize: '1.8rem',
+                  color: 'orangeRed',
                   fontWeight: '500'
                 }}>
                   Sensación: {heatIndex}°
@@ -171,8 +171,8 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
               return (
                 <Typography style={{
                   ...bur_styles.maxminTempLabel,
-                  fontSize: '2rem',
-                  color: '#00b4d8',
+                  fontSize: '1.8rem',
+                  color: 'dodgerblue',
                   fontWeight: '500'
                 }}>
                   Sensación: {windChill}°
