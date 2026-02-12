@@ -154,7 +154,7 @@ function AppContent() {
     { label: 'Webcam Collserola', url: 'https://www.3cat.cat/el-temps/collserola-barcelona/camera/2/' },
     { label: 'Meteociel', url: 'https://meteociel.fr' },
     { label: 'Windy', url: 'https://www.windy.com' },
-    { label: 'Modelos', url: 'https://www.tropicaltidbits.com/analysis/models/?model=ecmwf&region=eu' },
+    { label: 'Modelos', url: 'https://www.tropicaltidbits.com/analysis/models/?model=ecmwf&region=eu&pkg=T850a' },
   ];
 
   // Create styles using the imported function
