@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 const Modelos = ({ styles, isMobile }) => {
   return (
@@ -19,7 +20,9 @@ const Modelos = ({ styles, isMobile }) => {
           width: '100%', 
           marginTop: '20px',
           display: 'flex',
-          justifyContent: 'center'
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 2
         }}
       >
         <iframe
@@ -33,6 +36,23 @@ const Modelos = ({ styles, isMobile }) => {
           frameBorder="0"
           title="Weather Map"
         />
+        <Button
+          variant="outlined"
+          startIcon={<OpenInNewIcon />}
+          href="https://www.tropicaltidbits.com/analysis/models/?model=ecmwf&region=eu&pkg=T850a&runtime=2026021200"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            color: styles?.seccion?.color || '#90EE90',
+            borderColor: styles?.seccion?.color || '#90EE90',
+            '&:hover': {
+              borderColor: styles?.seccion?.color || '#90EE90',
+              backgroundColor: 'rgba(144, 238, 144, 0.1)'
+            }
+          }}
+        >
+          Ver modelos ECMWF en Tropical Tidbits
+        </Button>
       </Box>
     </Box>
   );

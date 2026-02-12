@@ -1,4 +1,4 @@
-import { Typography, Container, Box, Card, CardMedia, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
+import { Typography, Container, Box, Card, CardMedia } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import { Link } from 'react-router-dom'; // Agregar este import
 import Menu from '../Menu';
@@ -8,8 +8,6 @@ import Graficas from './Graficas';
 import Modelos from './Modelos';
 import Radar from './Radar';
 import TemperatureBackground from '../TemperatureBackground';
-import GetTempColour from '../GetTempColour';
-import { SHOW_COLOUR_BAR } from '../constants';
 
 const DesktopLayout = ({
   weatherData,
@@ -220,53 +218,25 @@ const DesktopLayout = ({
                 />
               </Box>
 
+              {/* ANOMALÍAS DE TEMPERATURA - VENTUSKY */}
               <Box sx={{ 
                 gridArea: '2D', 
                 border: '1px solid darkgrey',
                 overflowX: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 2
+                position: 'relative',
+                height: '100%'
               }}>
-                {SHOW_COLOUR_BAR && (
-                  <TableContainer 
-                    component={Paper} 
-                    sx={{ 
-                      width: '100%',
-                      '& .MuiTable-root': {
-                        width: '100%'
-                      }
-                    }}
-                  >
-                    <Table>
-                      <TableBody>
-                        <TableRow>
-                          {Array.from({ length: 10 }, (_, i) => {
-                            const temp = -7 + (i * 5);
-                            return (
-                              <TableCell 
-                                key={i}
-                                sx={{ 
-                                  textAlign: 'center',
-                                  padding: 1,
-                                  backgroundColor: GetTempColour(temp),
-                                  color: 'white',
-                                  fontWeight: 'bold',
-                                  fontSize: '1rem',
-                                  width: '10%'
-                                }}
-                              >
-                                {temp}°C
-                              </TableCell>
-                            );
-                          })}
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                )}
+                <iframe 
+                  src="https://www.ventusky.com/es/temperatura-mapa/anomalia-2m#p=41.5;-1;4" 
+                  title="Anomalías de Temperatura - Ventusky"
+                  width="100%" 
+                  height="100%" 
+                  frameBorder="0"
+                  style={{
+                    border: 'none',
+                    display: 'block'
+                  }}
+                />
               </Box>
 
             </Box>
