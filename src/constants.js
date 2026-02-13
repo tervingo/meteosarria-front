@@ -3,7 +3,8 @@ export const BACKEND_URI = "https://meteosarria-back.onrender.com";
 //export const BACKEND_URI = "http://localhost:5000";
 
 
-export const RAIN_2025_CANBRUIXA = 135.4;
+export const RAIN_2025_CANBRUIXA = 608.6; // Total precipitation for Sarrià in 2025 (mm)
+export const RAIN_2025_BURGOS = 573.7; // Total precipitation for Burgos in 2025 (mm)
 
 export const WIDTH_PC = '580px';
 export const WIDTH_MOBILE = '500px';

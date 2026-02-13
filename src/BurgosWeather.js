@@ -9,7 +9,7 @@ import RainBar from './components/Rainbar';
 import BurgosTempDiffs from './components/BurgosTempDiffs';
 import { calculateHeatIndexAemet, calculateWindChill } from './GetTempColour';
 import axios from 'axios';
-import { BACKEND_URI } from './constants';
+import { BACKEND_URI, RAIN_2025_BURGOS } from './constants';
 
 const BurgosWeather = ({ weatherData, isMobile, styles }) => {
   const [validTemperatures, setValidTemperatures] = useState({
@@ -266,10 +266,12 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
                 />
                 <RainBar
                   label="Total año"
-                  value={weatherData.total_rain}
-                  maxValue={1000}
+                  value={Math.max(0, weatherData.total_rain - RAIN_2025_BURGOS)}
+                  maxValue={Math.max(1000, RAIN_2025_BURGOS + 200)}
                   barWidth={12}
                   isLoading={!weatherData}
+                  referenceValue={RAIN_2025_BURGOS}
+                  referenceLabel="2025"
                 />
               </Row>
             </Column>

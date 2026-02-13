@@ -6,10 +6,15 @@ const RainBar = ({
   value,           
   maxValue,        
   barWidth = 12,   
-  isLoading = false
+  isLoading = false,
+  referenceValue = null,
+  referenceLabel = null
 }) => {
   // Calcular el porcentaje de altura de la barra
   const barHeight = value ? (value / maxValue) * 100 : 0;
+  
+  // Calcular el porcentaje de altura de la línea de referencia
+  const referenceHeight = referenceValue ? (referenceValue / maxValue) * 100 : 0;
   
   // Formatear el valor para mostrar
   const formattedValue = value !== undefined && !isLoading 
@@ -42,6 +47,31 @@ const RainBar = ({
           {maxValue} mm
         </div>
 
+        {/* Línea de referencia 2025 (si existe) */}
+        {referenceValue !== null && referenceValue !== undefined && (
+          <>
+            <div 
+              className="absolute left-0 right-0 border-t-2 border-blue-300 transition-all duration-300"
+              style={{ 
+                bottom: `${referenceHeight}%`,
+                borderColor: '#60A5FA'
+              }}
+            />
+            {/* Etiqueta de la línea de referencia */}
+            <div 
+              className="absolute text-xs text-blue-300 whitespace-nowrap"
+              style={{ 
+                bottom: `${referenceHeight}%`,
+                left: '100%',
+                marginLeft: '8px',
+                transform: 'translateY(50%)'
+              }}
+            >
+              {referenceLabel || '2025'}: {referenceValue.toFixed(1)} mm
+            </div>
+          </>
+        )}
+
         {/* Barra de lluvia */}
         <div 
           className="absolute bottom-0 left-0 right-0 bg-blue-500 transition-all duration-300"
@@ -66,7 +96,9 @@ RainBar.propTypes = {
   value: PropTypes.number,
   maxValue: PropTypes.number.isRequired,
   barWidth: PropTypes.number,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  referenceValue: PropTypes.number,
+  referenceLabel: PropTypes.string
 };
 
 // Valores por defecto

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import axios from 'axios';
-import { BACKEND_URI } from './constants';
+import { BACKEND_URI, RAIN_2025_CANBRUIXA } from './constants';
 import RainBar from './components/Rainbar';
 
 const Rain = ({totalRain}) => {
@@ -67,6 +67,12 @@ const Rain = ({totalRain}) => {
   // Calculate max value for today's rain (round up to next nice number)
   const maxTodayRain = fabraData?.today_rain ? Math.ceil(Math.ceil(fabraData.today_rain) * 10) : 10;
 
+  // Calculate 2026 value by subtracting 2025 total from current yearly total
+  // The yearly_rain from API is cumulative from Jan 1, 2026, so we need to add 2025 total for comparison
+  // But for display, we want to show only 2026 value, so we subtract 2025
+  const yearlyRain2026 = fabraData?.yearly_rain ? Math.max(0, fabraData.yearly_rain - RAIN_2025_CANBRUIXA) : 0;
+  const maxYearlyRain = Math.max(1000, RAIN_2025_CANBRUIXA + 200); // Ensure max value includes 2025 reference
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center" width="100%" marginRight={8}>
       <div className="flex flex-col items-center">
@@ -84,10 +90,12 @@ const Rain = ({totalRain}) => {
           {/* Barra de lluvia anual */}
           <RainBar
             label="Total año"
-            value={fabraData?.yearly_rain}
-            maxValue={1000}
+            value={yearlyRain2026}
+            maxValue={maxYearlyRain}
             barWidth={12}
             isLoading={!fabraData}
+            referenceValue={RAIN_2025_CANBRUIXA}
+            referenceLabel="2025"
           />
         </div>
         {error && <p className="text-red-500 text-sm mt-2">Error: {error}</p>}
