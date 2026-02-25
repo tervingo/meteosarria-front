@@ -121,14 +121,14 @@ export default function GraphcastPage() {
 
   return (
     <div style={s.page}>
-      <Helmet><title>GraphCast – Meteosarria</title></Helmet>
+      <Helmet><title>AIFS – Meteosarria</title></Helmet>
 
       {/* Cabecera */}
       <div style={s.header}>
         <Link to="/" style={s.back}>← Inicio</Link>
         <div>
-          <h1 style={s.title}>Predicción GraphCast 10 días</h1>
-          <p style={s.subtitle}>ECMWF Open Data · Península Ibérica · 0.25°</p>
+          <h1 style={s.title}>Predicción AIFS 10 días</h1>
+          <p style={s.subtitle}>ECMWF AI Forecast System · Open Data · Península Ibérica · 0.25°</p>
         </div>
       </div>
 

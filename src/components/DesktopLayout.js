@@ -140,7 +140,7 @@ const DesktopLayout = ({
             e.target.style.transform = 'translateY(0)';
           }}
         >
-          GraphCast
+          AIFS
         </Link>
         </Box>
       </Box>
