@@ -46,7 +46,7 @@ export default function GraphcastPage() {
     run_date: null, run_time: null, available_steps: {},
   });
   const [selectedVar,  setSelectedVar]  = useState('t2m');
-  const [selectedStep, setSelectedStep] = useState(6);
+  const [selectedStep, setSelectedStep] = useState(24);
   const [launching,    setLaunching]    = useState(false);
 
   const pollRef = useRef(null);
@@ -166,14 +166,14 @@ export default function GraphcastPage() {
             </span>
           </span>
           <input
-            type="range" min={6} max={240} step={6}
+            type="range" min={24} max={240} step={24}
             value={effectiveStep}
             onChange={e => setSelectedStep(Number(e.target.value))}
             style={s.slider}
             disabled={status.state !== 'ready'}
           />
           <div style={s.sliderLbls}>
-            <span>+6h</span><span>+5 días</span><span>+10 días</span>
+            <span>+1 día</span><span>+5 días</span><span>+10 días</span>
           </div>
         </div>
       </div>
