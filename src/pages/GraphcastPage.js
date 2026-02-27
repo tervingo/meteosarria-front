@@ -24,10 +24,10 @@ const PALETTES = {
   wind: 'linear-gradient(to right,#FFFFFF,#FFFF00,#FF8000,#FF0000,#8B0000)',
 };
 
-const LEGEND_RANGE = {
-  t2m:  ['-10 °C', '45 °C'],
-  tp:   ['0 mm',   '50 mm'],
-  wind: ['0 m/s',  '30 m/s'],
+const LEGEND_TICKS = {
+  t2m:  ['-10°C', '0°C', '15°C', '30°C', '45°C'],
+  tp:   ['0mm',   '12mm', '25mm', '38mm', '50mm'],
+  wind: ['0m/s',  '8m/s', '16m/s', '23m/s', '30m/s'],
 };
 
 const STATE_UI = {
@@ -48,8 +48,10 @@ export default function GraphcastPage() {
   const [selectedVar,  setSelectedVar]  = useState('t2m');
   const [selectedStep, setSelectedStep] = useState(24);
   const [launching,    setLaunching]    = useState(false);
+  const [playing,      setPlaying]      = useState(false);
 
   const pollRef = useRef(null);
+  const playRef = useRef(null);
 
   // ── Polling de estado ──────────────────────────────────────────────────────
 
@@ -95,6 +97,32 @@ export default function GraphcastPage() {
       setLaunching(false);
     }
   };
+
+  // ── Play automático ────────────────────────────────────────────────────────
+
+  const stopPlay = useCallback(() => {
+    clearInterval(playRef.current);
+    playRef.current = null;
+    setPlaying(false);
+  }, []);
+
+  const handlePlay = useCallback(() => {
+    if (playing) { stopPlay(); return; }
+
+    // Si ya está al final, reinicia desde el principio
+    setSelectedStep(prev => prev >= 240 ? 24 : prev);
+    setPlaying(true);
+
+    playRef.current = setInterval(() => {
+      setSelectedStep(prev => {
+        if (prev >= 240) { stopPlay(); return prev; }
+        return prev + 24;
+      });
+    }, 5000);
+  }, [playing, stopPlay]);
+
+  // Limpieza al desmontar
+  useEffect(() => () => clearInterval(playRef.current), []);
 
   // ── Derivados ──────────────────────────────────────────────────────────────
 
@@ -162,16 +190,30 @@ export default function GraphcastPage() {
             Horizonte:&nbsp;
             <strong style={{ color: '#fff' }}>+{effectiveStep}h</strong>
             <span style={{ color: '#90EE90', marginLeft: 6, fontSize: '0.8rem' }}>
-              ({(effectiveStep / 24).toFixed(1)} días)
+              (día {effectiveStep / 24})
             </span>
           </span>
-          <input
-            type="range" min={24} max={240} step={24}
-            value={effectiveStep}
-            onChange={e => setSelectedStep(Number(e.target.value))}
-            style={s.slider}
-            disabled={status.state !== 'ready'}
-          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <input
+              type="range" min={24} max={240} step={24}
+              value={effectiveStep}
+              onChange={e => { stopPlay(); setSelectedStep(Number(e.target.value)); }}
+              style={{ ...s.slider, flex: 1 }}
+              disabled={status.state !== 'ready'}
+            />
+            <button
+              onClick={handlePlay}
+              disabled={status.state !== 'ready'}
+              title={playing ? 'Pausar' : 'Reproducir pronóstico día a día'}
+              style={{
+                ...s.playBtn,
+                ...(status.state !== 'ready' ? s.playBtnOff : {}),
+                ...(playing ? s.playBtnActive : {}),
+              }}
+            >
+              {playing ? '⏸' : '▶'}
+            </button>
+          </div>
           <div style={s.sliderLbls}>
             <span>+1 día</span><span>+5 días</span><span>+10 días</span>
           </div>
@@ -251,12 +293,13 @@ export default function GraphcastPage() {
         {/* Leyenda */}
         <div style={s.legend}>
           <span style={s.legendTitle}>
-            {VARIABLES[selectedVar]?.label} ({VARIABLES[selectedVar]?.unit})
+            {VARIABLES[selectedVar]?.label} — escala de colores
           </span>
           <div style={{ ...s.legendBar, background: PALETTES[selectedVar] }} />
-          <div style={s.legendLbls}>
-            <span>{LEGEND_RANGE[selectedVar]?.[0]}</span>
-            <span>{LEGEND_RANGE[selectedVar]?.[1]}</span>
+          <div style={s.legendTicks}>
+            {(LEGEND_TICKS[selectedVar] ?? []).map((lbl, i) => (
+              <span key={i} style={s.legendTick}>{lbl}</span>
+            ))}
           </div>
         </div>
       </div>
@@ -322,14 +365,26 @@ const s = {
     borderRadius: 8, padding: '10px 24px', fontSize: '1rem',
     fontWeight: 600, cursor: 'pointer', alignSelf: 'flex-start',
   },
-  btnOff:   { background: '#444', cursor: 'not-allowed' },
+  btnOff: { background: '#444', cursor: 'not-allowed' },
+
+  playBtn: {
+    background: '#1a1d27', border: '1px solid #555', color: '#90EE90',
+    borderRadius: 6, width: 36, height: 36, fontSize: '1rem',
+    cursor: 'pointer', display: 'flex', alignItems: 'center',
+    justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s',
+  },
+  playBtnOff:    { color: '#444', borderColor: '#333', cursor: 'not-allowed' },
+  playBtnActive: { background: '#2c1a3a', borderColor: '#8e44ad', color: '#c39bd3' },
 
   legend:      { display: 'flex', flexDirection: 'column', gap: 4 },
   legendTitle: { fontSize: '0.78rem', color: '#aaa' },
-  legendBar:   { height: 12, borderRadius: 4, width: 220, maxWidth: '100%' },
-  legendLbls:  { display: 'flex', justifyContent: 'space-between',
-                 width: 220, maxWidth: '100%',
-                 fontSize: '0.72rem', color: '#666' },
+  legendBar:   { height: 14, borderRadius: 4, width: '100%', maxWidth: 360 },
+  legendTicks: {
+    display: 'flex', justifyContent: 'space-between',
+    width: '100%', maxWidth: 360,
+    fontSize: '0.72rem', color: '#888',
+  },
+  legendTick:  { flex: 1, textAlign: 'center' },
 };
 
 // Inyectar keyframe del spinner una sola vez
