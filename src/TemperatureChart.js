@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useMediaQuery } from '@mui/material';
-import { BACKEND_URI, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MAX_TIME_Y, MIN_VALUE_X, MIN_VALUE_Y, MIN_TIME_X, MIN_TIME_Y } from './constants';
+import { BACKEND_URI, MAX_VALUE_X, MAX_VALUE_Y, MAX_TIME_X, MIN_VALUE_X, MIN_TIME_X } from './constants';
 import GetTempColour, { calculateHeatIndexAemet } from './GetTempColour';
 
 const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsTablet }) => {
@@ -166,11 +166,18 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
     };
 
     const getMargin = () => ({
-      top: isMobile ? 10 : 10,
+      // Reserve extra top space (desktop/tablet) so the Tmáx/Tmín labels sit
+      // in a row ABOVE the legend instead of overlapping it.
+      top: isMobile ? 10 : 20,
       right: isMobile ? 5 : isTablet ? 60 : 30,
       left: isMobile ? 5 : isTablet ? 60 : 20,
       bottom: isMobile ? 60 : 20,
     });
+
+    // Y position for the extreme-value labels. On mobile there is no legend,
+    // so keep them near the top. On desktop/tablet place them in the reserved
+    // top margin gap, above the legend row (see getMargin()).
+    const labelY = isMobile ? MAX_VALUE_Y : 14;
 
     const getTickInterval = () => {
       if (isMobile) return Math.ceil(data.length / 4);
@@ -239,7 +246,7 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
           {/* Etiquetas de extremos */}
           <text
             x = {MAX_VALUE_X}
-            y = {MAX_VALUE_Y}
+            y = {labelY}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -248,7 +255,7 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
           </text>
           <text
             x = {MAX_TIME_X}
-            y = {MAX_TIME_Y}
+            y = {labelY}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -257,7 +264,7 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
           </text>
           <text
             x = {MIN_VALUE_X}
-            y = {MIN_VALUE_Y}
+            y = {labelY}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -266,7 +273,7 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
           </text>
           <text
             x = {MIN_TIME_X}
-            y = {MIN_TIME_Y}
+            y = {labelY}
             fill="azure"
             fontSize={getFontSize()}
             textAnchor="end"
@@ -291,9 +298,9 @@ const TemperatureChart = ({ timeRange, isMobile: propIsMobile, isTablet: propIsT
             labelStyle={{ color: 'silver' }}
           />
           {!isMobile && (
-            <Legend 
-              verticalAlign="top" 
-              height={36}
+            <Legend
+              verticalAlign="top"
+              height={24}
               wrapperStyle={{ fontSize: getFontSize() }}
             />
           )}
