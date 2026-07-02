@@ -114,10 +114,11 @@ const DatosSarria = ({
         </Row>
       </Column>
 
-      {/* Humedad, Presión y radiación  */}                 
-      <Box 
-        display="flex" 
-        flexDirection={isMobile ? "column" : "row"} 
+      {/* Humedad, Presión y radiación  */}
+      <Box
+        display="flex"
+        flexDirection={isMobile ? "column" : "row"}
+        flexWrap="wrap"
         alignItems="center"
         justifyContent="center"
         gap={2}
@@ -188,9 +189,10 @@ const DatosSarria = ({
       </Box>
 
       {/* Temperatura interior, Viento y Lluvia */}
-      <Box 
-        display="flex" 
-        flexDirection={isMobile ? "column" : "row"} 
+      <Box
+        display="flex"
+        flexDirection={isMobile ? "column" : "row"}
+        flexWrap="wrap"
         alignItems="flex-start"
         justifyContent="center"
         width="100%"
@@ -260,13 +262,14 @@ const DatosSarria = ({
         </Typography>
 
         <Column justify="center" align="center" sx={{ marginTop: '30px'}}>
-          <iframe 
-            width={isMobile ? "100%" : "500"} 
-            height="187" 
-            src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h" 
+          <iframe
+            width="100%"
+            height="187"
+            style={{ maxWidth: '500px' }}
+            src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h"
             frameborder="0"
             title="Predicción Barcelona"
-          /> 
+          />
         </Column>    
       </Column>
 

@@ -184,8 +184,8 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
         </Row>
       </Column>
 
-          {/* Humedad, Presión  */}                 
-          <Row width="auto" align="flex-start" justify="center" gap={2}>
+          {/* Humedad, Presión  */}
+          <Row width="100%" align="flex-start" justify="center" gap={2} flexWrap="wrap">
             {/* Humedad  */}
             <Column 
               align="center"
@@ -240,7 +240,7 @@ const BurgosWeather = ({ weatherData, isMobile, styles }) => {
               </Typography>
             </Column>
           </Row>
-          <Row align="center" justify="center" gap={2}>
+          <Row align="center" justify="center" gap={2} flexWrap="wrap">
             <Column align="center" justify="center">
             <Typography style={styles.subseccion}>
               Viento

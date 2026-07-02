@@ -185,7 +185,7 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
       </Typography>              
 
       {/* Webcam Catedral de Burgos */}
-      <Box sx={{ width: '500px', height: '280px' }} ref={webcamRef}>
+      <Box sx={{ width: '100%', maxWidth: '500px', height: '280px' }} ref={webcamRef}>
         <a
           name="windy-webcam-timelapse-player"
           data-id="1735243432"
@@ -214,10 +214,11 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
         </Typography>
 
         <Row width="100%" align="center" justify="center" marginTop="30px">
-          <iframe 
-            width="500" 
-            height="187" 
-            src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h" 
+          <iframe
+            width="100%"
+            height="187"
+            style={{ maxWidth: '500px' }}
+            src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h"
             frameBorder="0"
             title="Predicción Burgos"
           />

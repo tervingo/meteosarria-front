@@ -153,15 +153,19 @@ const DesktopLayout = ({
         </Typography>
         {weatherData && (
           <Box className="weather-container">
-            <Box 
-              display="grid" 
-              gap={2} 
+            <Box
+              display="grid"
+              gap={2}
               sx={{
-                gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-                gridTemplateAreas: `
-                  "1I 1C 1D"
-                  "2I 2C 2D"
-                `,
+                // Responsive column count so the layout never overflows on
+                // tablets/iPads: 1 col on narrow tablets, 2 cols on iPad
+                // (portrait ~960-1280px), 3 cols on wide desktops (>=1280px).
+                // Items flow in source order (no fixed gridTemplateAreas).
+                gridTemplateColumns: {
+                  sm: '1fr',
+                  md: 'repeat(2, minmax(0, 1fr))',
+                  lg: 'repeat(3, minmax(0, 1fr))'
+                },
                 '& > *': {
                   minWidth: 0,
                   width: '100%'
@@ -169,9 +173,8 @@ const DesktopLayout = ({
               }}
             >
               {/* GRÁFICAS - 1I */}
-              <Box sx={{ 
-                gridArea: '1I', 
-                height: '100%', 
+              <Box sx={{
+                height: '100%',
                 border: '1px solid darkgrey',
                 overflowX: 'hidden'
               }}>
@@ -185,8 +188,7 @@ const DesktopLayout = ({
               </Box>
 
               {/* SARRIÀ - 1C */}
-              <Box sx={{ 
-                gridArea: '1C', 
+              <Box sx={{
                 border: '1px solid azure',
                 overflowX: 'hidden'
               }}>
@@ -202,8 +204,7 @@ const DesktopLayout = ({
               </Box>
 
               {/* BURGOS - 1D */}
-              <Box sx={{ 
-                gridArea: '1D', 
+              <Box sx={{
                 border: '1px solid darkgrey',
                 overflowX: 'hidden'
               }}>
@@ -217,8 +218,7 @@ const DesktopLayout = ({
               </Box>
 
               {/* MODELOS */}
-              <Box sx={{ 
-                gridArea: '2I', 
+              <Box sx={{
                 border: '1px solid darkgrey',
                 overflowX: 'hidden'
               }}>
@@ -230,8 +230,7 @@ const DesktopLayout = ({
               </Box>
 
               {/* RADAR */}
-              <Box sx={{ 
-                gridArea: '2C', 
+              <Box sx={{
                 border: '1px solid darkgrey',
                 overflowX: 'hidden'
               }}>
@@ -243,12 +242,12 @@ const DesktopLayout = ({
               </Box>
 
               {/* ANOMALÍAS DE TEMPERATURA - VENTUSKY */}
-              <Box sx={{ 
-                gridArea: '2D', 
+              <Box sx={{
                 border: '1px solid darkgrey',
                 overflowX: 'hidden',
                 position: 'relative',
-                height: '100%'
+                height: '100%',
+                minHeight: '400px'
               }}>
                 <iframe 
                   src="https://www.ventusky.com/es/temperatura-mapa/anomalia-2m#p=41.5;-1;4" 
