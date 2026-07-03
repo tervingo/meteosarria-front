@@ -9,6 +9,7 @@ import Rain from '../Rain';
 import GetTempColour, { calculateHeatIndexAemet, calculateWindChill } from '../GetTempColour';
 import { Row, Column } from './Layout';
 import TemperatureHistoryChart from '../TemperatureHistoryChart';
+import SunTimes from '../SunTimes';
 
 const DatosSarria = ({ 
   weatherData, 
@@ -23,12 +24,15 @@ const DatosSarria = ({
     <Column justify="flex-start" align="center">
       <Typography style={styles.seccion}>
         Datos actuales en Sarrià a las {getTime(currentTime)}
-      </Typography>              
+      </Typography>
+
+      {/* Salida / puesta de sol (Barcelona) */}
+      <SunTimes lat={41.3950387} lon={2.1225328} />
 
       {/* Temperatura  */}
       <Typography style={styles.subseccion}>
         Temperatura exterior
-      </Typography>              
+      </Typography>
       <Column justify="flex-start" align="flex-start">
         <Typography style={{
           ...styles.maxTemp,

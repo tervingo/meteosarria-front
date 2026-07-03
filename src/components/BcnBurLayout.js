@@ -7,6 +7,7 @@ import ShowTempDiffs from '../ShowTempDiffs';
 import BurgosTempDiffs from './BurgosTempDiffs';
 import axios from 'axios';
 import { BACKEND_URI } from '../constants';
+import SunTimes from '../SunTimes';
 const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime, getDate, getTime, validTemperatures }) => {
   const [burgosExtremes, setBurgosExtremes] = useState({
     maxTemp: null,
@@ -133,6 +134,9 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
             <Typography variant="h4">Sarrià</Typography>
           </Box>
 
+          {/* Salida / puesta de sol (Barcelona) */}
+          <SunTimes lat={41.3950387} lon={2.1225328} />
+
           {/* Exterior Temperature */}
           <Box sx={styles.dataRow}>
             <Typography sx={{ ...styles.tempValue, color: GetTempColour(weatherData.external_temperature) }}>
@@ -217,8 +221,12 @@ const BcnBurLayout = ({ weatherData, burgosWeather, loading, error, currentTime,
         {/* Burgos Data */}
         <Paper elevation={3} sx={styles.stationCard}>
           <Box sx={styles.stationHeader}>
-            <Typography variant="h4">Burgos (Plaza Mayor)</Typography>
+            <Typography variant="h4">Burgos</Typography>
           </Box>
+
+          {/* Salida / puesta de sol (Burgos) */}
+          <SunTimes lat={42.3411} lon={-3.7019} />
+
           <Box sx={styles.dataRow}>
             <Typography sx={{ ...styles.tempValue, color: GetTempColour(burgosWeather.temperature) }}>
               {burgosWeather.temperature.toFixed(1)}°C

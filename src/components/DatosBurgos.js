@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import BurgosWeather from '../BurgosWeather';
 import BurgosTemperatureChart from '../BurgosTemperatureChart';
 import { Row, Column } from '../components/Layout';
+import SunTimes from '../SunTimes';
 
 // Componente indicador circular minimalista
 const UpdateIndicator = ({ lastUpdate, updateInterval = 600000 }) => {
@@ -167,7 +168,10 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
       <Typography style={styles.openweathermap}>
         Datos de Google Weather (42°20'28" N, 3°42'07" W)
       </Typography>
-          
+
+      {/* Salida / puesta de sol (Burgos) */}
+      <SunTimes lat={42.3411} lon={-3.7019} />
+
       <BurgosWeather weatherData={burgosWeather} isMobile={isMobile} styles={styles}/>
       
       {/* Histórico de temperaturas de Burgos */}
