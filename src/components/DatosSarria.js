@@ -10,6 +10,7 @@ import GetTempColour, { calculateHeatIndexAemet, calculateWindChill } from '../G
 import { Row, Column } from './Layout';
 import TemperatureHistoryChart from '../TemperatureHistoryChart';
 import SunTimes from '../SunTimes';
+import AiForecastTable from './AiForecastTable';
 
 const DatosSarria = ({ 
   weatherData, 
@@ -266,15 +267,8 @@ const DatosSarria = ({
         </Typography>
 
         <Column justify="center" align="center" sx={{ marginTop: '30px'}}>
-          <iframe
-            width="100%"
-            height="187"
-            style={{ maxWidth: '500px' }}
-            src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=41.3950387&detailLon=2.1225328&metricTemp=°C&metricRain=mm&metricWind=km/h"
-            frameborder="0"
-            title="Predicción Barcelona"
-          />
-        </Column>    
+          <AiForecastTable city="barcelona" styles={styles} isMobile={isMobile} />
+        </Column>
       </Column>
 
       {/* Histórico de temperaturas  */}

@@ -4,6 +4,7 @@ import BurgosWeather from '../BurgosWeather';
 import BurgosTemperatureChart from '../BurgosTemperatureChart';
 import { Row, Column } from '../components/Layout';
 import SunTimes from '../SunTimes';
+import AiForecastTable from './AiForecastTable';
 
 // Componente indicador circular minimalista
 const UpdateIndicator = ({ lastUpdate, updateInterval = 600000 }) => {
@@ -218,14 +219,7 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
         </Typography>
 
         <Row width="100%" align="center" justify="center" marginTop="30px">
-          <iframe
-            width="100%"
-            height="187"
-            style={{ maxWidth: '500px' }}
-            src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=42.343926001&detailLon=-3.696977&metricTemp=°C&metricRain=mm&metricWind=km/h"
-            frameBorder="0"
-            title="Predicción Burgos"
-          />
+          <AiForecastTable city="burgos" styles={styles} isMobile={isMobile} />
         </Row>
       </Box>
     </Column>
