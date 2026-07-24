@@ -20,6 +20,7 @@ import MobileLayout from './components/MobileLayout';
 import BcnBurLayout from './components/BcnBurLayout';
 import TrackingApp from './components/TrackingApp';
 import GraphcastPage from './pages/GraphcastPage';
+import ForecastPage from './pages/ForecastPage';
 
 const theme = createTheme({
   breakpoints: {
@@ -312,6 +313,7 @@ function App() {
           <Route path="/estadisticas-burgos" element={<BurgosStatsPage />} /> {/* Ruta para estadísticas de Burgos */}
           <Route path="/comparacion-meteorologica" element={<TrackingApp />} /> {/* Ruta para comparación meteorológica */}
           <Route path="/graphcast" element={<GraphcastPage />} />
+          <Route path="/prediccion/:city" element={<ForecastPage />} />
           <Route path="/bcnbur" element={<BcnBurContent />} />
           <Route path="/" element={<AppContent />} />
         </Routes>

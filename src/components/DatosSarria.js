@@ -10,7 +10,6 @@ import GetTempColour, { calculateHeatIndexAemet, calculateWindChill } from '../G
 import { Row, Column } from './Layout';
 import TemperatureHistoryChart from '../TemperatureHistoryChart';
 import SunTimes from '../SunTimes';
-import AiForecastTable from './AiForecastTable';
 
 const DatosSarria = ({ 
   weatherData, 
@@ -259,17 +258,6 @@ const DatosSarria = ({
           />
         </Column>
       </Box>
-
-      {/* Predicción */}
-      <Column justify="center" align="center" sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>
-        <Typography style={{...styles.seccion, marginTop: '20px'}}>
-          Predicción (Sarrià)
-        </Typography>
-
-        <Column justify="center" align="center" sx={{ marginTop: '30px'}}>
-          <AiForecastTable city="barcelona" styles={styles} isMobile={isMobile} />
-        </Column>
-      </Column>
 
       {/* Histórico de temperaturas  */}
       <Column justify="center" align="center" sx={{ width: '100%', marginTop: '30px', borderTop:'1px solid darkgrey'}}>

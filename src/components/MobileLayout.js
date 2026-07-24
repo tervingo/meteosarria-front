@@ -84,6 +84,40 @@ const MobileLayout = ({
         >
           📊 Estadísticas de Burgos
         </Link>
+        <Link
+          to="/prediccion/barcelona"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            border: '1px solid #90EE90',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          🌦️ Predicción Barcelona
+        </Link>
+        <Link
+          to="/prediccion/burgos"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            border: '1px solid #90EE90',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          🌦️ Predicción Burgos
+        </Link>
       </Box>
 
       <Box className="weather-data">

@@ -119,6 +119,54 @@ const DesktopLayout = ({
           Estadísticas de Burgos
         </Link>
         <Link
+          to="/prediccion/barcelona"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90', // Verde claro como los otros enlaces del menú
+            fontSize: '1rem',
+            fontWeight: '500',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            transition: 'background-color 0.2s, transform 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = 'rgba(144, 238, 144, 0.1)';
+            e.target.style.transform = 'translateY(-1px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = 'transparent';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          Predicción Barcelona
+        </Link>
+        <Link
+          to="/prediccion/burgos"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#90EE90', // Verde claro como los otros enlaces del menú
+            fontSize: '1rem',
+            fontWeight: '500',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            transition: 'background-color 0.2s, transform 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = 'rgba(144, 238, 144, 0.1)';
+            e.target.style.transform = 'translateY(-1px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = 'transparent';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          Predicción Burgos
+        </Link>
+        <Link
           to="/graphcast"
           style={{
             display: 'flex',

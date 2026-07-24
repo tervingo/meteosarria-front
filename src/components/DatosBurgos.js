@@ -2,9 +2,8 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, Typography } from '@mui/material';
 import BurgosWeather from '../BurgosWeather';
 import BurgosTemperatureChart from '../BurgosTemperatureChart';
-import { Row, Column } from '../components/Layout';
+import { Column } from '../components/Layout';
 import SunTimes from '../SunTimes';
-import AiForecastTable from './AiForecastTable';
 
 // Componente indicador circular minimalista
 const UpdateIndicator = ({ lastUpdate, updateInterval = 600000 }) => {
@@ -213,15 +212,6 @@ const DatosBurgos = ({ burgosWeather, lastBurgosUpdate, styles, isMobile }) => {
         </a>
       </Typography>
 
-      <Box sx={{ width: '100%', marginTop: '20px', borderTop:'1px solid darkgrey'}}>
-        <Typography style={styles.seccion}>
-          Predicción (Burgos)
-        </Typography>
-
-        <Row width="100%" align="center" justify="center" marginTop="30px">
-          <AiForecastTable city="burgos" styles={styles} isMobile={isMobile} />
-        </Row>
-      </Box>
     </Column>
  
   );
