@@ -93,7 +93,7 @@ const s = {
   header: { display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' },
   back: { color: '#90EE90', textDecoration: 'none', fontSize: '0.95rem', whiteSpace: 'nowrap' },
   title: { margin: 0, fontSize: '1.5rem', fontWeight: 700, color: '#fff' },
-  clock: { color: '#aaa', fontSize: '0.9rem', whiteSpace: 'nowrap' },
+  clock: { color: '#ff8c00', fontSize: '1.2rem', whiteSpace: 'nowrap' },
   section: {
     background: '#1a1d27', borderRadius: 8, padding: '16px',
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
