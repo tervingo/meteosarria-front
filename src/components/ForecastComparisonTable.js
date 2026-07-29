@@ -41,11 +41,15 @@ const formatCell = (value) => {
   return base;
 };
 
+const shortDayLabel = (row) => `${row.day.slice(0, 2).toLowerCase()} ${row.date}`;
+
 const buildChartData = (rows) => rows.map((row) => {
-  const point = { date: row.date, day: row.day };
+  const point = { date: shortDayLabel(row) };
   PROVIDERS.forEach((p) => {
     const v = row[p.key];
-    point[p.key] = v && v.tmax !== null && v.tmax !== undefined ? v.tmax : null;
+    const hasValue = v && v.tmax !== null && v.tmax !== undefined;
+    point[p.key] = hasValue ? v.tmax : null;
+    point[`${p.key}_min`] = hasValue && v.tmin !== null && v.tmin !== undefined ? v.tmin : null;
   });
   return point;
 });
@@ -120,7 +124,7 @@ const ForecastComparisonTable = ({ city, styles, isMobile }) => {
       )}
 
       <Typography style={{ ...styles.resumen, marginTop: '20px', marginBottom: '4px' }}>
-        Temperatura máxima estimada por proveedor
+        Temperatura estimada por proveedor (línea continua = máxima, discontinua = mínima)
       </Typography>
       <Box sx={{ width: '100%', height: isMobile ? 320 : 400 }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -157,6 +161,20 @@ const ForecastComparisonTable = ({ city, styles, isMobile }) => {
                 name={p.label}
                 stroke={p.color}
                 strokeWidth={2}
+                dot={{ r: 4, strokeWidth: 2, stroke: '#1a1d27' }}
+                connectNulls={false}
+              />
+            ))}
+            {PROVIDERS.map((p) => (
+              <Line
+                key={`${p.key}_min`}
+                type="monotone"
+                dataKey={`${p.key}_min`}
+                name={`${p.label} (mín)`}
+                legendType="none"
+                stroke={p.color}
+                strokeWidth={2}
+                strokeDasharray="5 4"
                 dot={{ r: 4, strokeWidth: 2, stroke: '#1a1d27' }}
                 connectNulls={false}
               />
