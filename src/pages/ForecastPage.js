@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useMediaQuery } from '@mui/material';
-import AiForecastTable from '../components/AiForecastTable';
-import AemetForecastTable from '../components/AemetForecastTable';
+import ForecastComparisonTable from '../components/ForecastComparisonTable';
 
 const CONFIG = {
-  burgos: { label: 'Burgos', windyLat: 42.343926001, windyLon: -3.696977 },
-  barcelona: { label: 'Barcelona (Sarrià)', windyLat: 41.3950387, windyLon: 2.1225328 },
+  burgos: { label: 'Burgos' },
+  barcelona: { label: 'Barcelona (Sarrià)' },
 };
 
 const miniStyles = { resumen: { color: '#aaa', fontSize: '0.85rem', maxWidth: '600px' } };
@@ -45,8 +44,6 @@ const ForecastPage = () => {
     );
   }
 
-  const windySrc = `https://embed.windy.com/embed.html?type=forecast&location=coordinates&detail=true&detailLat=${info.windyLat}&detailLon=${info.windyLon}&metricTemp=°C&metricRain=mm&metricWind=km/h`;
-
   return (
     <div style={s.page}>
       <Helmet><title>Predicción {info.label} – Meteosarria</title></Helmet>
@@ -58,24 +55,8 @@ const ForecastPage = () => {
       </div>
 
       <section style={s.section}>
-        <h2 style={s.sectionTitle}>Modelos numéricos (Open-Meteo) + comentario IA</h2>
-        <AiForecastTable city={city} styles={miniStyles} isMobile={isMobile} />
-      </section>
-
-      <section style={s.section}>
-        <h2 style={s.sectionTitle}>Windy</h2>
-        <iframe
-          width="100%"
-          height="187"
-          style={{ maxWidth: '500px', border: 0 }}
-          src={windySrc}
-          title={`Predicción Windy ${info.label}`}
-        />
-      </section>
-
-      <section style={s.section}>
-        <h2 style={s.sectionTitle}>AEMET</h2>
-        <AemetForecastTable city={city} styles={miniStyles} isMobile={isMobile} />
+        <h2 style={s.sectionTitle}>Comparativa de previsiones (Open-Meteo + IA, AEMET, ECMWF, GFS, ICON)</h2>
+        <ForecastComparisonTable city={city} styles={miniStyles} isMobile={isMobile} />
       </section>
     </div>
   );
